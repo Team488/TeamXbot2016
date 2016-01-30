@@ -9,6 +9,7 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
+import xbot.common.controls.sensors.NavImu.ImuType;
 import xbot.common.controls.sensors.XGyro;
 import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
@@ -34,13 +35,22 @@ public class PoseSubsystem extends BaseSubsystem {
     @Inject
     public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating PoseSubsystem");
-        imu = factory.getGyro();
-        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> VoltageMaps.placeholder(voltage));
+        imu = factory.getGyro(ImuType.navX);
+        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
-        
+        currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
         // the same as the current value, to avoid any sudden changes later
         lastImuHeading = imu.getYaw();
+        currentHeading = new ContiguousDouble(-180, 180);
+    }
+    
+    public static class TemporaryVoltageMap
+    {
+        public static final double placeholder(double voltage)
+        {
+            return 10*voltage;
+        }
     }
     
     /**
