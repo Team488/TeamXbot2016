@@ -7,6 +7,9 @@ import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 
+import competition.subsystems.collector.commands.CollectorEjectCommand;
+import competition.subsystems.collector.commands.CollectorIntakeCommand;
+
 @Singleton
 public class OperatorCommandMap {
     // For mapping operator interface buttons to commands
@@ -26,4 +29,14 @@ public class OperatorCommandMap {
         operatorInterface.leftButtons.getifAvailable(2).whileHeld(headingDrive);
     }
     
+    @Inject
+    public void setupCollectorCommands(
+            OperatorInterface operatorInterface,
+            CollectorIntakeCommand collectorIntakeCommand,
+            CollectorEjectCommand collectorEjectCommand
+            )
+    {
+        operatorInterface.rightButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
+        operatorInterface.leftButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
+    }
 }
