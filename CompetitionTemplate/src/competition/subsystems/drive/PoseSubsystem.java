@@ -42,7 +42,7 @@ public class PoseSubsystem extends BaseSubsystem {
         // Right when the system is initialized, we need to have the old value be
         // the same as the current value, to avoid any sudden changes later
         lastImuHeading = imu.getYaw();
-        currentHeading = new ContiguousDouble(-180, 180);
+        currentHeading = new ContiguousDouble(FACING_AWAY_FROM_DRIVERS, -180, 180);
     }
     
     public static class TemporaryVoltageMap
@@ -59,8 +59,8 @@ public class PoseSubsystem extends BaseSubsystem {
      * is disabled, but the drivers/programmers want to see the robot heading
      */
     public void updateCurrentHeading() {
-        // Old heading - current heading gets the delta heading
-        double imuDeltaYaw = imu.getYaw().difference(lastImuHeading);
+        // Old heading - current heading gets the delta heading        
+        double imuDeltaYaw = lastImuHeading.difference(imu.getYaw());
 
         // add the delta to our current
         currentHeading.shiftValue(imuDeltaYaw);
