@@ -24,6 +24,10 @@ public class HeadingModule {
         targetHeading = new ContiguousDouble(-180, 180);
     }
     
+    public void reset() {
+        headingDrivePid.reset();
+    }
+    
     public double calculateHeadingPower(double desiredHeading) {
         // We need to calculate our own error function. Why?
         // PID works great, but it assumes there is a linear relationship between your current state and

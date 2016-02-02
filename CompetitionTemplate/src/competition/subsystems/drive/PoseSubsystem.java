@@ -30,7 +30,7 @@ public class PoseSubsystem extends BaseSubsystem {
     
     private DoubleProperty leftSensorMountingDistanceInches;
     
-    public final double FACING_AWAY_FROM_DRIVERS = 90;
+    public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {

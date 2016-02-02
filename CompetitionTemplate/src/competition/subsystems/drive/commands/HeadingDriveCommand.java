@@ -43,7 +43,7 @@ public class HeadingDriveCommand extends BaseCommand {
     
     @Override
     public void initialize() {
-        
+        headingModule.reset();
     }
 
     @Override
