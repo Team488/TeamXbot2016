@@ -26,6 +26,9 @@ public class DriveSubsystem extends BaseSubsystem {
     public BooleanProperty tipPreventionEnabled;
     public DoubleProperty tipPreventionPower;
     private boolean tippedRecently = false;
+    
+    private DoubleProperty leftPowerProp;
+    private DoubleProperty rightPowerProp;
         
     @Inject
     public DriveSubsystem(WPIFactory factory, PropertyManager propManager, PoseSubsystem pose)
@@ -38,12 +41,15 @@ public class DriveSubsystem extends BaseSubsystem {
         this.rightFrontDrive = factory.getSpeedController(2);
         this.rightRearDrive = factory.getSpeedController(3);
         
-        this.rightFrontDrive.setInverted(true);
-        this.rightRearDrive.setInverted(true);
+        this.leftFrontDrive.setInverted(true);
+        this.leftRearDrive.setInverted(true);
         
         this.pose = pose;
         tipPreventionEnabled = propManager.createEphemeralProperty("TipPreventionEnabled", true);
         tipPreventionPower = propManager.createPersistentProperty("TipPreventionPower", 1.0);
+        
+        leftPowerProp = propManager.createEphemeralProperty("LeftPower", 0.0);
+        rightPowerProp = propManager.createEphemeralProperty("RightPower", 0.0);
     }
     
     public void tankDrive(double leftPower, double rightPower) {
@@ -53,6 +59,9 @@ public class DriveSubsystem extends BaseSubsystem {
         
         this.rightFrontDrive.set(rightPower);
         this.rightRearDrive.set(rightPower);
+        
+        leftPowerProp.set(leftPower);
+        rightPowerProp.set(rightPower);
     }
     
     public void tankDriveSafely(double leftPower, double rightPower) {
