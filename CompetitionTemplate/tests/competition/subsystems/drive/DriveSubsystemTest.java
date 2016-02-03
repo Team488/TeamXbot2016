@@ -7,23 +7,11 @@ import org.junit.Test;
 
 import xbot.common.injection.BaseWPITest;
 
-public class DriveSubsystemTest extends BaseWPITest {
-    
-    DriveSubsystem driveSubsystem;
-    PoseSubsystem pose;
-    
+public class DriveSubsystemTest extends BaseDriveTest {
+        
     @Before
     public void setup() {
-        driveSubsystem = this.injector.getInstance(DriveSubsystem.class);
-        this.pose = this.injector.getInstance(PoseSubsystem.class);
-    }
-    
-    private void checkChassisPower(double expectedLeftPower, double expectedRightPower) {
-        DriveSubsystem driveSubsystem = this.injector.getInstance(DriveSubsystem.class);
-        assertEquals(expectedLeftPower, driveSubsystem.leftFrontDrive.get(), 0.001);
-        assertEquals(expectedLeftPower, driveSubsystem.leftRearDrive.get(), 0.001);
-        assertEquals(expectedRightPower, driveSubsystem.rightFrontDrive.get(), 0.001);
-        assertEquals(expectedRightPower, driveSubsystem.rightRearDrive.get(), 0.001);
+        super.setup();
     }
     
     @Test

@@ -7,28 +7,12 @@ import org.junit.Test;
 
 import xbot.common.injection.BaseWPITest;
 
-public class PoseSubsystemTest extends BaseWPITest {
-    
-    PoseSubsystem pose;
-    
+public class PoseSubsystemTest extends BaseDriveTest {
+        
     @Before
     public void setup() {
-        this.pose = this.injector.getInstance(PoseSubsystem.class);
-    }
-    
-    private void verifyRobotHeading(double expectedHeading) {
-        assertEquals(expectedHeading, pose.getCurrentHeading().getValue(), 0.001);
-    }
-    
-    private void setMockGyroHeading(double heading) {
-        mockRobotIO.setGyroHeading(heading);
-    }
-    
-    private void changeMockGyroHeading(double delta) {
-        double oldHeading = mockRobotIO.getGyroHeading();
-        double newHeading = oldHeading + delta;
-        setMockGyroHeading(newHeading);
-    }
+        super.setup();
+    }    
     
     @Test
     public void testInitialHeading() {
@@ -56,7 +40,23 @@ public class PoseSubsystemTest extends BaseWPITest {
     
     @Test
     public void testCalibrateAndMove() {
+        changeMockGyroHeading(45);
+        verifyRobotHeading(135);
         
+        pose.setCurrentHeading(90);
+        verifyRobotHeading(90);
+        
+        changeMockGyroHeading(-45);
+        verifyRobotHeading(45);
+    }
+    
+    @Test
+    public void testCrossBounds () {
+        changeMockGyroHeading(180);
+        verifyRobotHeading(-90);
+        
+        changeMockGyroHeading(100);
+        verifyRobotHeading(10);
     }
 }
 

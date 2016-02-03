@@ -7,6 +7,7 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.ContiguousDouble;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.PropertyManager;
 
@@ -16,7 +17,7 @@ public class HeadingDriveCommand extends BaseCommand {
     final DriveSubsystem driveSubsystem;
     final PoseSubsystem pose;
     
-    private ContiguousDouble targetHeading;
+    private ContiguousHeading targetHeading;
     private double targetPower;
     private HeadingModule headingModule;
     
@@ -29,6 +30,8 @@ public class HeadingDriveCommand extends BaseCommand {
         this.driveSubsystem = driveSubsystem;
         this.pose = pose;
         this.headingModule = headingModule; 
+        
+        targetHeading = new ContiguousHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         
         this.requires(this.driveSubsystem);
     }

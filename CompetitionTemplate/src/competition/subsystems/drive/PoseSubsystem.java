@@ -14,6 +14,7 @@ import xbot.common.controls.sensors.XGyro;
 import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
@@ -23,10 +24,10 @@ public class PoseSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
     public DistanceSensor leftDistanceSensor;
-    private ContiguousDouble currentHeading;
+    private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
-    private ContiguousDouble lastImuHeading;
+    private ContiguousHeading lastImuHeading;
     
     private DoubleProperty leftSensorMountingDistanceInches;
     
@@ -42,7 +43,7 @@ public class PoseSubsystem extends BaseSubsystem {
         // Right when the system is initialized, we need to have the old value be
         // the same as the current value, to avoid any sudden changes later
         lastImuHeading = imu.getYaw();
-        currentHeading = new ContiguousDouble(FACING_AWAY_FROM_DRIVERS, -180, 180);
+        currentHeading = new ContiguousHeading(FACING_AWAY_FROM_DRIVERS);
     }
     
     public static class TemporaryVoltageMap
@@ -71,7 +72,7 @@ public class PoseSubsystem extends BaseSubsystem {
         currentHeadingProp.set(currentHeading.getValue());
     }
     
-    public ContiguousDouble getCurrentHeading() {
+    public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
         return currentHeading;
     }
