@@ -28,7 +28,6 @@ public class CollectorEjectCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
         
     }
 
