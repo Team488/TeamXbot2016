@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import edu.wpi.first.wpilibj.I2C.Port;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
 import xbot.common.controls.sensors.NavImu.ImuType;
@@ -15,6 +16,7 @@ import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
@@ -25,11 +27,15 @@ public class PoseSubsystem extends BaseSubsystem {
     public XGyro imu;
     public DistanceSensor leftDistanceSensor;
     private ContiguousHeading currentHeading;
-    private DoubleProperty currentHeadingProp;
-    
     private ContiguousHeading lastImuHeading;
     
+    private DoubleProperty currentHeadingProp;
+    private BooleanProperty imuConnectedProp;
+    
+    
     private DoubleProperty leftSensorMountingDistanceInches;
+    private DoubleProperty lidarDistance;
+    
     
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
@@ -37,8 +43,13 @@ public class PoseSubsystem extends BaseSubsystem {
     public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        
+        leftDistanceSensor = factory.getLidar(Port.kOnboard);
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
+        lidarDistance = propManager.createEphemeralProperty("LidarDistance", 0.00);
+        
+        imuConnectedProp = propManager.createEphemeralProperty("IMU Connected", false);
+        
         currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
         // the same as the current value, to avoid any sudden changes later
@@ -70,6 +81,8 @@ public class PoseSubsystem extends BaseSubsystem {
         lastImuHeading = imu.getYaw();
         
         currentHeadingProp.set(currentHeading.getValue());
+        lidarDistance.set(leftDistanceSensor.getDistance());
+        imuConnectedProp.set(imu.isConnected());
     }
     
     public ContiguousHeading getCurrentHeading() {
