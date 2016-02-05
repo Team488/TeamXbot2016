@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
+import xbot.common.controls.actuators.XSpeedController;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.properties.PropertyManager;
 
@@ -13,10 +14,12 @@ import xbot.common.properties.PropertyManager;
 public class ArmSubsystem extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(ArmSubsystem.class);
+    public XSpeedController armMotor;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating ArmSubsystem");
+        armMotor = factory.getSpeedController(4);
     }
 
     public boolean isArmAtMinimumHeight() {
