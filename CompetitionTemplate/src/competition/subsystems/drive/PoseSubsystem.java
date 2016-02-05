@@ -9,10 +9,12 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
+import xbot.common.controls.sensors.NavImu.ImuType;
 import xbot.common.controls.sensors.XGyro;
 import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
@@ -22,25 +24,34 @@ public class PoseSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
     public DistanceSensor leftDistanceSensor;
-    private ContiguousDouble currentHeading;
+    private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
-    private ContiguousDouble lastImuHeading;
+    private ContiguousHeading lastImuHeading;
     
     private DoubleProperty leftSensorMountingDistanceInches;
     
-    public final double FACING_AWAY_FROM_DRIVERS = 90;
+    public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating PoseSubsystem");
-        imu = factory.getGyro();
-        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> VoltageMaps.placeholder(voltage));
+        imu = factory.getGyro(ImuType.navX);
+        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
-        
+        currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
         // the same as the current value, to avoid any sudden changes later
         lastImuHeading = imu.getYaw();
+        currentHeading = new ContiguousHeading(FACING_AWAY_FROM_DRIVERS);
+    }
+    
+    public static class TemporaryVoltageMap
+    {
+        public static final double placeholder(double voltage)
+        {
+            return 10*voltage;
+        }
     }
     
     /**
@@ -49,8 +60,8 @@ public class PoseSubsystem extends BaseSubsystem {
      * is disabled, but the drivers/programmers want to see the robot heading
      */
     public void updateCurrentHeading() {
-        // Old heading - current heading gets the delta heading
-        double imuDeltaYaw = imu.getYaw().difference(lastImuHeading);
+        // Old heading - current heading gets the delta heading        
+        double imuDeltaYaw = lastImuHeading.difference(imu.getYaw());
 
         // add the delta to our current
         currentHeading.shiftValue(imuDeltaYaw);
@@ -61,7 +72,7 @@ public class PoseSubsystem extends BaseSubsystem {
         currentHeadingProp.set(currentHeading.getValue());
     }
     
-    public ContiguousDouble getCurrentHeading() {
+    public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
         return currentHeading;
     }

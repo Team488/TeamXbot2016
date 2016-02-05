@@ -7,7 +7,9 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.ContiguousDouble;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
+import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
 
@@ -16,9 +18,11 @@ public class HeadingDriveCommand extends BaseCommand {
     final DriveSubsystem driveSubsystem;
     final PoseSubsystem pose;
     
-    private ContiguousDouble targetHeading;
+    private ContiguousHeading targetHeading;
     private double targetPower;
     private HeadingModule headingModule;
+    
+    private DoubleProperty forwardPower;
     
     @Inject
     public HeadingDriveCommand(DriveSubsystem driveSubsystem, 
@@ -29,6 +33,9 @@ public class HeadingDriveCommand extends BaseCommand {
         this.driveSubsystem = driveSubsystem;
         this.pose = pose;
         this.headingModule = headingModule; 
+        
+        targetHeading = new ContiguousHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
+        forwardPower = propMan.createEphemeralProperty("ForwardPower", 0.0);
         
         this.requires(this.driveSubsystem);
     }
@@ -43,15 +50,15 @@ public class HeadingDriveCommand extends BaseCommand {
     
     @Override
     public void initialize() {
-        
+        headingModule.reset();
     }
 
     @Override
     public void execute() {
         double rotationalPower = headingModule.calculateHeadingPower(targetHeading.getValue());
         
-        double leftPower = targetPower - rotationalPower;
-        double rightPower = targetPower + rotationalPower;
+        double leftPower = forwardPower.get() - rotationalPower;
+        double rightPower = forwardPower.get() + rotationalPower;
         
         driveSubsystem.tankDriveSafely(leftPower, rightPower);
     }

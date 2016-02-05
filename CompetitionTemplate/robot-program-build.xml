@@ -21,7 +21,7 @@
 
   <!-- TODO: Do we want this commented out? -->
   <!-- Original commit that made this change said "Something is wrong with deploying the build on my computer, so disabling copying log config" -->
-  <!-- <ant antfile="../log4jConfig/deployLogging.xml" target="sendConfig" inheritall="false"/> -->
+  <ant antfile="lib/log4jConfig/deployLogging.xml" target="sendConfig" inheritall="false"/>
 
   <!-- Run the WPILib script to deploy our program (including common lib JAR and custom libs) -->
   <import file="${commonlib.root}/wpilib-scripts/wpilib-build.xml" />

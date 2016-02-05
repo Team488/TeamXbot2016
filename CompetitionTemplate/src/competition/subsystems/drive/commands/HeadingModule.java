@@ -3,6 +3,7 @@ package competition.subsystems.drive.commands;
 import com.google.inject.Inject;
 
 import xbot.common.math.ContiguousDouble;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.PropertyManager;
 import competition.subsystems.drive.DriveSubsystem;
@@ -13,7 +14,7 @@ public class HeadingModule {
     final PoseSubsystem pose;
     private PIDManager headingDrivePid;
     
-    private ContiguousDouble targetHeading;
+    private ContiguousHeading targetHeading;
     
     @Inject
     public HeadingModule(PoseSubsystem pose, PropertyManager propMan)
@@ -21,7 +22,11 @@ public class HeadingModule {
         this.pose = pose;
         
         headingDrivePid = new PIDManager("HeadingModule", propMan, 1, 0, 0);
-        targetHeading = new ContiguousDouble(-180, 180);
+        targetHeading = new ContiguousHeading();
+    }
+    
+    public void reset() {
+        headingDrivePid.reset();
     }
     
     public double calculateHeadingPower(double desiredHeading) {
