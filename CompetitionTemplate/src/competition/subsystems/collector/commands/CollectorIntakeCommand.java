@@ -1,19 +1,16 @@
 package competition.subsystems.collector.commands;
 
 import competition.subsystems.collector.CollectorSubsystem;
-import competition.operator_interface.OperatorInterface;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
 public class CollectorIntakeCommand extends BaseCommand{
     CollectorSubsystem collectorSubsystem;
-    OperatorInterface operatorInterface;
     DoubleProperty intakePower;
 
-    public CollectorIntakeCommand(CollectorSubsystem collectorSubsystem, OperatorInterface oi, PropertyManager propManager) {
+    public CollectorIntakeCommand(CollectorSubsystem collectorSubsystem, PropertyManager propManager) {
         this.collectorSubsystem = collectorSubsystem;
-        operatorInterface = oi;
         intakePower = propManager.createPersistentProperty("CollectorIntakePower", 1.0);
     }
     
