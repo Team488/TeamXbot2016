@@ -8,7 +8,6 @@ public class CollectorSubsystem {
     
     public CollectorSubsystem(WPIFactory factory){
         this.collectorMotor = factory.getSpeedController(5);
-
     }
     
     public void setIntakePower(double power) {

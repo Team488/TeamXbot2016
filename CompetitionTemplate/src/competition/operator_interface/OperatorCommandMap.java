@@ -9,6 +9,8 @@ import competition.subsystems.drive.commands.HeadingDriveCommand;
 
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
+import competition.subsystems.shifting.commands.ShiftHighCommand;
+import competition.subsystems.shifting.commands.ShiftLowCommand;
 
 @Singleton
 public class OperatorCommandMap {
@@ -39,4 +41,16 @@ public class OperatorCommandMap {
         operatorInterface.rightButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
         operatorInterface.leftButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
     }
+    
+    @Inject
+    public void setupShiftingCommands(
+            OperatorInterface operatorInterface,
+            ShiftHighCommand shiftHighCommand,
+            ShiftLowCommand shiftLowCommand)
+    {
+        operatorInterface.rightButtons.getifAvailable(3).whileHeld(shiftHighCommand);
+        operatorInterface.leftButtons.getifAvailable(4).whileHeld(shiftLowCommand);
+    }
+    
+    
 }
