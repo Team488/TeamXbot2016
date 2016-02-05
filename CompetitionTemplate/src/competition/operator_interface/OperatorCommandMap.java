@@ -35,8 +35,7 @@ public class OperatorCommandMap {
     public void setupCollectorCommands(
             OperatorInterface operatorInterface,
             CollectorIntakeCommand collectorIntakeCommand,
-            CollectorEjectCommand collectorEjectCommand
-            )
+            CollectorEjectCommand collectorEjectCommand)
     {
         operatorInterface.rightButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
         operatorInterface.leftButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
@@ -48,8 +47,8 @@ public class OperatorCommandMap {
             ShiftHighCommand shiftHighCommand,
             ShiftLowCommand shiftLowCommand)
     {
-        operatorInterface.rightButtons.getifAvailable(3).whileHeld(shiftHighCommand);
-        operatorInterface.leftButtons.getifAvailable(4).whileHeld(shiftLowCommand);
+        operatorInterface.rightButtons.getifAvailable(3).whenPressed(shiftHighCommand);
+        operatorInterface.leftButtons.getifAvailable(4).whenPressed(shiftLowCommand);
     }
     
     
