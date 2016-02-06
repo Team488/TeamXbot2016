@@ -3,6 +3,8 @@ package competition.operator_interface;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.subsystems.arm.arm_commands.LowerArmCommand;
+import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
@@ -51,5 +53,13 @@ public class OperatorCommandMap {
         operatorInterface.leftButtons.getifAvailable(4).whenPressed(shiftLowCommand);
     }
     
-    
+    @Inject
+    public void setupArmCommands (
+            OperatorInterface operatorInterface,
+            RaiseArmCommand raiseArmCommand,
+            LowerArmCommand lowerArmCommand)
+    {
+        operatorInterface.rightButtons.getifAvailable(1).whileHeld(raiseArmCommand);
+        operatorInterface.leftButtons.getifAvailable(2).whileHeld(lowerArmCommand);
+    }
 }
