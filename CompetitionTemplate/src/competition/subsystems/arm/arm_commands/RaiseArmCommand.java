@@ -2,12 +2,16 @@ package competition.subsystems.arm.arm_commands;
 
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyManager;
 
 public class RaiseArmCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
+    DoubleProperty raiseArmPower;
 
-    public RaiseArmCommand(ArmSubsystem armSubsystem) {
+    public RaiseArmCommand(ArmSubsystem armSubsystem, PropertyManager propManager) {
         this.armSubsystem = armSubsystem;
+        raiseArmPower = propManager.createPersistentProperty("ArmRaisingPower", 1.0);
     }
 
     @Override
@@ -17,7 +21,7 @@ public class RaiseArmCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        armSubsystem.armMotorPower(1);
+        armSubsystem.armMotorPower(raiseArmPower.get());
     }
     
     @Override
