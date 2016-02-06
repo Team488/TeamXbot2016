@@ -45,4 +45,7 @@ public class ArmSubsystem extends BaseSubsystem {
     public void retractArm() {
         
     }
+    public void armMotorPower(double power) {
+        armMotor.set(power);
+    }
 }

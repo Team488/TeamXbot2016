@@ -3,10 +3,10 @@ package competition.subsystems.arm.arm_commands;
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 
-public class RaiseArm extends BaseCommand {
+public class RaiseArmCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
 
-    public RaiseArm(ArmSubsystem armSubsystem) {
+    public RaiseArmCommand(ArmSubsystem armSubsystem) {
         this.armSubsystem = armSubsystem;
     }
 
@@ -17,16 +17,17 @@ public class RaiseArm extends BaseCommand {
 
     @Override
     public void execute() {
-        if (armSubsystem.isArmAtMaximumHeight()){
-            end();
-        }else {
-            armSubsystem.armMotor.set(1);
-        }
+        armSubsystem.armMotorPower(1);
+    }
+    
+    @Override
+    public boolean isFinished() {
+        return armSubsystem.isArmAtMaximumHeight();
     }
     
     @Override
     public void end() {
-        armSubsystem.armMotor.set(0);
+        armSubsystem.armMotorPower(0);
     }
         
 }
