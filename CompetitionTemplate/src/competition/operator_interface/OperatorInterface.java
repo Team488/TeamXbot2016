@@ -24,8 +24,10 @@ public class OperatorInterface {
         leftJoystick = factory.getJoystick(1);
         rightJoystick = factory.getJoystick(2);
 
+        leftJoystick.setXInversion(true);
         leftJoystick.setYInversion(true);
         rightJoystick.setXInversion(true);
+        rightJoystick.setYInversion(true);
         
         leftButtons = new JoystickButtonManager(8, factory, leftJoystick);
         rightButtons = new JoystickButtonManager(8, factory, rightJoystick);
