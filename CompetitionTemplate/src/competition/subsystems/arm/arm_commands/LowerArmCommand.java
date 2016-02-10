@@ -1,4 +1,6 @@
 package competition.subsystems.arm.arm_commands;
+import com.google.inject.Inject;
+
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
@@ -8,6 +10,7 @@ public class LowerArmCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
     DoubleProperty lowerArmPower;
 
+    @Inject
     public LowerArmCommand(ArmSubsystem armSubsystem, PropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         lowerArmPower = propManager.createPersistentProperty("ArmLoweringPower", -1.0);
