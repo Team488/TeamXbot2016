@@ -40,7 +40,7 @@ public class OperatorCommandMap {
             CollectorEjectCommand collectorEjectCommand)
     {
         operatorInterface.rightButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
-        operatorInterface.leftButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(collectorEjectCommand);
     }
     
     @Inject
@@ -59,7 +59,7 @@ public class OperatorCommandMap {
             RaiseArmCommand raiseArmCommand,
             LowerArmCommand lowerArmCommand)
     {
-        operatorInterface.rightButtons.getifAvailable(1).whileHeld(raiseArmCommand);
-        operatorInterface.leftButtons.getifAvailable(2).whileHeld(lowerArmCommand);
+        operatorInterface.rightButtons.getifAvailable(7).whileHeld(raiseArmCommand);
+        operatorInterface.leftButtons.getifAvailable(8).whileHeld(lowerArmCommand);
     }
 }
