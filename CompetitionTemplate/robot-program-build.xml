@@ -20,8 +20,6 @@
   <ant antfile="${commonlib.root}/commonlib-build.xml" target="jar-with-test-code" inheritAll="false" />
 
   <target name="deploy-logs-and-code" depends="deploy">
-  	<!-- TODO: Do we want this commented out? -->
-  	<!-- Original commit that made this change said "Something is wrong with deploying the build on my computer, so disabling copying log config" -->
   	<ant antfile="lib/log4jConfig/deployLogging.xml" target="sendConfig" inheritall="false"/>
   </target>
 	
