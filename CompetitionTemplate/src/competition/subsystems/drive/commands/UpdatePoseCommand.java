@@ -29,7 +29,7 @@ public class UpdatePoseCommand extends BaseCommand {
     @Override
     public void execute() {
         ContiguousDouble heading = pose.getCurrentHeading();
-        DefenseState state = defenseTraversal.measureState(Math.abs(heading.getValue()));
+        defenseTraversal.measureState(Math.abs(heading.getValue()));        
     }
 
 }
