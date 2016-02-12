@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import xbot.common.injection.BaseWPITest;
 
-public class PoseSubsystemTest extends DriveTestBase {
+public class PoseSubsystemTest extends BaseDriveTest {
         
     @Before
     public void setup() {
