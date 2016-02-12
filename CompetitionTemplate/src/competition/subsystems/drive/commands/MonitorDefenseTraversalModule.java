@@ -6,11 +6,16 @@ import com.google.inject.Singleton;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 import xbot.common.properties.StringProperty;
-import competition.subsystems.drive.PoseSubsystem.DefenseState;
 import edu.wpi.first.wpilibj.Timer;
 
 @Singleton
 public class MonitorDefenseTraversalModule {
+    
+    public enum DefenseState {
+        NotOnDefense,
+        OnDefense,
+        RecentlyOnDefense
+    }
 
     double timeOfRecentPitchEvent;
     DoubleProperty defenseTraversalTime;

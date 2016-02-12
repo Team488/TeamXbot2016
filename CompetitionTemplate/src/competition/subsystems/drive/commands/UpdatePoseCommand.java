@@ -3,7 +3,6 @@ package competition.subsystems.drive.commands;
 import com.google.inject.Inject;
 
 import competition.subsystems.drive.PoseSubsystem;
-import competition.subsystems.drive.PoseSubsystem.DefenseState;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.ContiguousDouble;
 

@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import competition.subsystems.drive.PoseSubsystem.DefenseState;
 import competition.subsystems.drive.commands.MonitorDefenseTraversalModule;
+import competition.subsystems.drive.commands.MonitorDefenseTraversalModule.DefenseState;
 import edu.wpi.first.wpilibj.MockTimer;
 
 public class MonitorDefenseTraversalTest extends DriveTestBase {
