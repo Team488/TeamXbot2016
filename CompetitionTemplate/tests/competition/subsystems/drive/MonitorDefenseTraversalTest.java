@@ -33,7 +33,8 @@ public class MonitorDefenseTraversalTest extends DriveTestBase {
     @Test
     public void testTiltFollowedByFlat() {
         assertTrue(module.measureState(-50) == DefenseState.OnDefense);
-        assertTrue(module.measureState(-50) == DefenseState.RecentlyOnDefense);
+        assertTrue(module.measureState(-50) == DefenseState.OnDefense);
+        assertTrue(module.measureState(0) == DefenseState.RecentlyOnDefense);
     }
     
     @Test
