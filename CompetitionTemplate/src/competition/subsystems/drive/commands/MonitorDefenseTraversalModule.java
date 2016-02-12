@@ -36,16 +36,16 @@ public class MonitorDefenseTraversalModule {
         absolutePitch = Math.abs(absolutePitch);        
         DefenseState state = DefenseState.NotOnDefense;
         
-        if (Timer.getFPGATimestamp() - timeOfRecentPitchEvent < defenseTraversalTime.get()) {
-            // we tilted recently!
-            state = DefenseState.RecentlyOnDefense;
-        }
-        else if (absolutePitch > defenseTraversalPitchThreshold.get())
+        if (absolutePitch > defenseTraversalPitchThreshold.get())
         {
             // we're tilting now!
             timeOfRecentPitchEvent = Timer.getFPGATimestamp();
             state = DefenseState.OnDefense;
         }
+        else if (Timer.getFPGATimestamp() - timeOfRecentPitchEvent < defenseTraversalTime.get()) {
+            // we tilted recently!
+            state = DefenseState.RecentlyOnDefense;
+        }        
         else {
             //we're not tilting, and we haven't tilted recently.
             state = DefenseState.NotOnDefense;
