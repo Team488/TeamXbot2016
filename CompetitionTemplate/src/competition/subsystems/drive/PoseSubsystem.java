@@ -21,6 +21,14 @@ import xbot.common.properties.PropertyManager;
 @Singleton
 public class PoseSubsystem extends BaseSubsystem {
     
+    public enum DefenseState {
+        NotOnDefense,
+        OnDefense,
+        RecentlyOnDefense
+    }
+    
+    private DefenseState defenseState;
+    
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
     public DistanceSensor leftDistanceSensor;
@@ -33,6 +41,9 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
+    private DoubleProperty currentPitch;
+    private DoubleProperty currentRoll;
+    
     @Inject
     public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating PoseSubsystem");
@@ -44,6 +55,10 @@ public class PoseSubsystem extends BaseSubsystem {
         // the same as the current value, to avoid any sudden changes later
         lastImuHeading = imu.getYaw();
         currentHeading = new ContiguousHeading(FACING_AWAY_FROM_DRIVERS);
+        defenseState = DefenseState.NotOnDefense;
+        
+        currentPitch = propManager.createEphemeralProperty("CurrentPitch", 0.0);
+        currentRoll = propManager.createEphemeralProperty("CurrentRoll", 0.0);
     }
     
     public static class TemporaryVoltageMap
@@ -70,6 +85,9 @@ public class PoseSubsystem extends BaseSubsystem {
         lastImuHeading = imu.getYaw();
         
         currentHeadingProp.set(currentHeading.getValue());
+        
+        currentPitch.set(imu.getPitch());
+        currentRoll.set(imu.getRoll());
     }
     
     public ContiguousHeading getCurrentHeading() {
@@ -79,6 +97,14 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public void setCurrentHeading(double headingInDegrees){
         currentHeading.setValue(headingInDegrees);
+    }
+    
+    public DefenseState getDefenseTraversalState() {
+        return defenseState;
+    }
+    
+    public void setDefenseTraversalState(DefenseState stateToSet) {
+        defenseState = stateToSet;
     }
     
     public double getFrontRangefinderDistance() {
