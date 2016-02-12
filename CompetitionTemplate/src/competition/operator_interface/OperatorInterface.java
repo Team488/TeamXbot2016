@@ -21,7 +21,7 @@ public class OperatorInterface {
     public JoystickButtonManager rightButtons; 
     
     @Inject
-    public OperatorInterface(WPIFactory factory, RobotAssertionManager assertionManager) {
+    public OperatorInterface(WPIFactory factory, RobotAssertionManager exceptionManager) {
         leftJoystick = factory.getJoystick(1);
         rightJoystick = factory.getJoystick(2);
 
@@ -30,8 +30,8 @@ public class OperatorInterface {
         rightJoystick.setXInversion(true);
         rightJoystick.setYInversion(true);
         
-        leftButtons = new JoystickButtonManager(8, factory, assertionManager, leftJoystick);
-        rightButtons = new JoystickButtonManager(8, factory, assertionManager, rightJoystick);
-    }
+        leftButtons = new JoystickButtonManager(8, factory, exceptionManager, leftJoystick);
+        rightButtons = new JoystickButtonManager(8, factory, exceptionManager, rightJoystick);
+    } 
 }
 
