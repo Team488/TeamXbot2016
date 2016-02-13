@@ -10,6 +10,7 @@ public class ShiftHighCommand extends BaseCommand{
     
     @Inject
     public ShiftHighCommand (ShiftingSubsystem shiftingSubsystem) {
+        this.requires(shiftingSubsystem);
         this.shiftingSubsystem = shiftingSubsystem;
     }
 
