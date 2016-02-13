@@ -5,21 +5,26 @@ import com.google.inject.Inject;
 import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyManager;
 
 public class ArmToTopCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
     ArmTargetSubsystem armTargetSubsystem;
+    DoubleProperty top;
 
     @Inject
-    public ArmToTopCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem) {
+    public ArmToTopCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, PropertyManager propManager) {
         this.armSubsystem = armSubsystem;
+        top = propManager.createPersistentProperty("ArmLargestAngle", 90.0);
         this.armTargetSubsystem = armTargetSubsystem;
+        
         this.requires(this.armSubsystem);
     }
 
     @Override
     public void initialize() {
-        armTargetSubsystem.setTargetAngle(90);
+        armTargetSubsystem.setTargetAngle(top.get());
     }
 
     @Override
@@ -29,7 +34,7 @@ public class ArmToTopCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        return armSubsystem.getArmAngle() >= armTargetSubsystem.getTargetAngle();
+        return armTargetSubsystem.isFinished();
     }
     
     @Override

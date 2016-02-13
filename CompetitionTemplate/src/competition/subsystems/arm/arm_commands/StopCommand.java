@@ -13,12 +13,12 @@ public class StopCommand extends BaseCommand{
 
     @Override
     public void initialize() {
-        
+        armSubsystem.armMotorPower(0);
     }
 
     @Override
     public void execute() {
-        armSubsystem.armMotorPower(0);
+        
     }
 
 }

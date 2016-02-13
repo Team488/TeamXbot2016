@@ -4,22 +4,30 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.PropertyManager;
 
 @Singleton
 public class ArmTargetSubsystem extends BaseSubsystem{
+    public ArmSubsystem armSubsystem;
     double targetAngle;
+    DoubleProperty withinTargetRange;
     
     @Inject
-    public ArmTargetSubsystem (){
-        
+    public ArmTargetSubsystem (ArmSubsystem armSubsystem, PropertyManager propManager){
+        this.armSubsystem = armSubsystem;
+        withinTargetRange = propManager.createPersistentProperty("TargetRange", 0.5);
     }
     
-    public double setTargetAngle(double targetAngle){
+    public void setTargetAngle(double targetAngle){
         this.targetAngle = targetAngle;
-        return targetAngle;
     }
     
     public double getTargetAngle(){
         return targetAngle;
+    }
+    
+    public boolean isFinished(){
+        return Math.abs(armSubsystem.getArmAngle() - getTargetAngle()) <= withinTargetRange.get();
     }
 }
