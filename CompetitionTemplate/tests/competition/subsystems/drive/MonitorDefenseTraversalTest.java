@@ -8,7 +8,7 @@ import competition.subsystems.drive.commands.MonitorDefenseTraversalModule;
 import competition.subsystems.drive.commands.MonitorDefenseTraversalModule.DefenseState;
 import edu.wpi.first.wpilibj.MockTimer;
 
-public class MonitorDefenseTraversalTest extends DriveTestBase {
+public class MonitorDefenseTraversalTest extends BaseDriveTest {
         
     MonitorDefenseTraversalModule module;
     MockTimer timer;
