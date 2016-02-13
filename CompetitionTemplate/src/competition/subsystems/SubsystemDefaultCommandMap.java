@@ -10,6 +10,8 @@ import competition.subsystems.drive.commands.UpdatePoseCommand;
 
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
+import competition.subsystems.vision.VisionSubsystem;
+import competition.subsystems.vision.commands.SpewVisionInformationCommand;
 
 @Singleton
 public class SubsystemDefaultCommandMap {
@@ -29,8 +31,14 @@ public class SubsystemDefaultCommandMap {
     @Inject
     public void setupShiftingSubsystem(
             ShiftingSubsystem shiftingSubsystem,
-            ShiftHighCommand shiftHighCommand){
+            ShiftHighCommand shiftHighCommand) {
         shiftingSubsystem.setDefaultCommand(shiftHighCommand);
     }
     
+    @Inject
+    public void setupVisionSubsystem(
+            VisionSubsystem visionSubsystem,
+            SpewVisionInformationCommand spewer) {
+        visionSubsystem.setDefaultCommand(spewer);
+    }
 }
