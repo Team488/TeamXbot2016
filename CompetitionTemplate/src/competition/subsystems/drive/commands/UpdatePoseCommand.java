@@ -1,4 +1,4 @@
-package competition.subsystems.drive.commands;
+    package competition.subsystems.drive.commands;
 
 import com.google.inject.Inject;
 
@@ -15,6 +15,7 @@ public class UpdatePoseCommand extends BaseCommand {
     @Inject
     public UpdatePoseCommand(PoseSubsystem pose, MonitorDefenseTraversalModule defenseTraversal)
     {
+        this.setRunWhenDisabled(true);
         this.pose = pose;
         this.defenseTraversal = defenseTraversal;
         this.requires(pose);
@@ -27,8 +28,8 @@ public class UpdatePoseCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        ContiguousDouble heading = pose.getCurrentHeading();
-        defenseTraversal.measureState(Math.abs(heading.getValue()));        
+        pose.updateCurrentHeading();
+        defenseTraversal.measureState(Math.abs(pose.getRobotPitch()));
     }
 
 }
