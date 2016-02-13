@@ -63,10 +63,10 @@ public class OperatorCommandMap {
             ArmToTopCommand armToTopCommand,
             ArmToBottomCommand armToBottomCommand)
     {
-        operatorInterface.rightButtons.getifAvailable(1).whileHeld(raiseArmCommand);
-        operatorInterface.leftButtons.getifAvailable(2).whileHeld(lowerArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(1).whileHeld(raiseArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(2).whileHeld(lowerArmCommand);
         
-        operatorInterface.rightButtons.getifAvailable(5).whenPressed(armToTopCommand);
-        operatorInterface.leftButtons.getifAvailable(6).whenPressed(armToBottomCommand);
+        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
+        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
     }
 }
