@@ -17,6 +17,8 @@ public class SpewVisionInformationCommand extends BaseCommand {
     @Inject
     public SpewVisionInformationCommand(VisionSubsystem visionSubsystem) {
         this.visionSubsystem = visionSubsystem;
+        requires(visionSubsystem);
+        setRunWhenDisabled(true);
     }
     
     @Override
@@ -38,5 +40,4 @@ public class SpewVisionInformationCommand extends BaseCommand {
             log.info("Rects:" + str);
         }
     }
-
 }
