@@ -1,11 +1,17 @@
 package competition.subsystems.wrist;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.injection.wpi_factories.WPIFactory;
 
-public class WristSubsystem {
+@Singleton
+public class WristSubsystem extends BaseSubsystem{
     public final XSolenoid solenoid;
     
+    @Inject
     public WristSubsystem (WPIFactory factory){
         solenoid = factory.getSolenoid(2);
     }
