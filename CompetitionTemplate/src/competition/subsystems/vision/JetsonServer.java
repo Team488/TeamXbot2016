@@ -4,9 +4,13 @@ import java.io.*;
 import java.net.*;
 import java.util.function.Consumer;
 
+import org.apache.log4j.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class JetsonServer extends Thread {
+    static Logger log = Logger.getLogger(JetsonServer.class);
+    
     private int connectionPort;
     private boolean isRunning = false;
     private ServerSocket serverSocket;
@@ -24,13 +28,14 @@ public class JetsonServer extends Thread {
 
     @Override
     public void run() {
+        log.debug("Jetson server thread starting");
         this.isRunning = true;
         while (isRunning) {
             try {
-                DriverStation.reportError("Waiting for connection...", false);
+                log.debug("Waiting for connection...");
 
                 Socket socket = serverSocket.accept();
-                DriverStation.reportError("Connected", false);
+                log.info("Connected to client");
                 DataInputStream in = new DataInputStream(socket.getInputStream());
 
                 while (isRunning && socket.isConnected() && !socket.isClosed()) {
@@ -39,13 +44,16 @@ public class JetsonServer extends Thread {
                     int newValue;
                     do {
                         newValue = in.readInt();
+                        log.debug("Reading int " + newValue + "(" + Integer.toUnsignedLong(newValue) + ")");
                     } while (currentPacket.addNewValue(newValue));
-
+                    
+                    log.debug("Read packet. Calling handler.");
                     packetHandler.accept(currentPacket);
                 }
 
             } catch (IOException e) {
-                continue;
+                log.error("Exception thrown in Jetson thread!");
+                log.error(e.toString());
             }
         }
     }

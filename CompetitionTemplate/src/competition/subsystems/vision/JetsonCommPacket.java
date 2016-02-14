@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class JetsonCommPacket {
-    private static final int startOfPacketByte = Integer.MAX_VALUE;
+    private static final int startOfPacketInt = Integer.MAX_VALUE;
 
     private PacketParserState currentParserState = PacketParserState.WAITING_FOR_START;
 
@@ -21,7 +21,7 @@ public class JetsonCommPacket {
         switch (currentParserState) {
             case WAITING_FOR_START:
                 // Skip data until we find the start of a packet
-                if (newValue == startOfPacketByte) {
+                if (newValue == startOfPacketInt) {
                     this.currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_TYPE_FLAG;
                 }
                 break;
@@ -105,7 +105,6 @@ public class JetsonCommPacket {
 
         private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
             {
-                put(0, PacketPayloadType.UNKNOWN);
                 put(1, PacketPayloadType.BALL_RECT_ARRAY);
             }
         };

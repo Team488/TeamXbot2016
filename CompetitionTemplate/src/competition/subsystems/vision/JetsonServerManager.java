@@ -30,6 +30,8 @@ public class JetsonServerManager {
 
     private void handlePacket(JetsonCommPacket newPacket) {
         int[] payload = newPacket.getPayloadData();
+        log.debug("Vision packet recieved with payload byte length " + payload.length);
+        
         if (newPacket.getPayloadType() == PacketPayloadType.BALL_RECT_ARRAY) {
             if (payload.length % 4 != 0) {
                 log.error("Supplied packet data does not include a number of bytes evenly parsable into rects!");

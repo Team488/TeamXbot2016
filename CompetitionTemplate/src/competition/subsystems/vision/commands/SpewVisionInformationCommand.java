@@ -28,8 +28,8 @@ public class SpewVisionInformationCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        if(visionSubsystem.getBoulderRects() == null) {
-            log.info("No rects!");
+        if(visionSubsystem.getBoulderRects() == null || visionSubsystem.getBoulderRects().length <= 0) {
+            log.debug("No rects!");
         }
         else {
             String str = "";
@@ -37,7 +37,7 @@ public class SpewVisionInformationCommand extends BaseCommand {
                 str += " " + r.toString();
             }
             
-            log.info("Rects:" + str);
+            log.debug("Rects:" + str);
         }
     }
 }
