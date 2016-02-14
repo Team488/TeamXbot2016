@@ -23,7 +23,7 @@ public class ShiftingSubsystemTest extends BaseWPITest{
         
         shiftHighCommand.initialize();
         
-        assertTrue(shiftingSubsystem.leftSolenoid.get() && shiftingSubsystem.rightSolenoid.get());
+        assertTrue(shiftingSubsystem.shiftHighSolenoid.get() && !(shiftingSubsystem.shiftLowSolenoid.get()));
     }
     
     @Test
@@ -32,6 +32,6 @@ public class ShiftingSubsystemTest extends BaseWPITest{
         
         shiftLowCommand.initialize();
         
-        assertTrue(!(shiftingSubsystem.leftSolenoid.get() && shiftingSubsystem.rightSolenoid.get()));
+        assertTrue(!(shiftingSubsystem.shiftHighSolenoid.get()) && shiftingSubsystem.shiftLowSolenoid.get());
     }
 }

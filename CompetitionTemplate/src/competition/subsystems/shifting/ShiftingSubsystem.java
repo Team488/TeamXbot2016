@@ -28,6 +28,4 @@ public class ShiftingSubsystem extends BaseSubsystem {
         shiftLowSolenoid.set(true);
     }
     
-    
-    
 }
