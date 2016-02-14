@@ -16,7 +16,8 @@ import xbot.common.properties.PropertyManager;
 public class ArmSubsystem extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(ArmSubsystem.class);
-    public XSpeedController armMotor;
+    public XSpeedController armMotor1;
+    public XSpeedController armMotor2;
     public XDigitalInput upperLimitSwitch;
     public XDigitalInput lowerLimitSwitch;
     public XEncoder encoder;
@@ -24,10 +25,11 @@ public class ArmSubsystem extends BaseSubsystem {
     @Inject
     public ArmSubsystem(WPIFactory factory, PropertyManager propManager) {
         log.info("Creating ArmSubsystem");
-        armMotor = factory.getSpeedController(4);
+        armMotor1 = factory.getSpeedController(4);
+        armMotor2 = factory.getSpeedController(5);
         upperLimitSwitch = factory.getDigitalInput(5);
         lowerLimitSwitch = factory.getDigitalInput(6);
-        encoder = factory.getEncoder(7, 8);
+        encoder = factory.getEncoder(1, 2);
     }
 
     public boolean isArmAtMinimumHeight() {
@@ -51,6 +53,7 @@ public class ArmSubsystem extends BaseSubsystem {
     }
     
     public void armMotorPower(double power) {
-        armMotor.set(power);
+        armMotor1.set(power);
+        armMotor2.set(power);
     }
 }

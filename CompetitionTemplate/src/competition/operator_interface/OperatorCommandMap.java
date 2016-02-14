@@ -73,7 +73,7 @@ public class OperatorCommandMap {
     }
     
     @Inject
-    public void setUpWristCommands(
+    public void setupWristCommands(
             OperatorInterface operatorInterface,
             MoveWristDownCommand moveWristDown,
             MoveWristUpCommand moveWristUp){

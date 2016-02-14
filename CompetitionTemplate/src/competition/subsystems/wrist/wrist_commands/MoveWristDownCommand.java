@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import competition.subsystems.wrist.WristSubsystem;
 import xbot.common.command.BaseCommand;
 
-public class MoveWristDownCommand extends BaseCommand{
+public class MoveWristDownCommand extends BaseCommand {
     WristSubsystem wristSubsystem;
     
     @Inject
@@ -22,6 +22,10 @@ public class MoveWristDownCommand extends BaseCommand{
     @Override
     public void initialize() {
         wristSubsystem.moveWristDown();
+    }
+    
+    public boolean isFinished() {
+        return true;
     }
     
 

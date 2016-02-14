@@ -24,34 +24,34 @@ public class ArmSubsystemTest extends BaseWPITest{
     public void testRaiseArmCommand() {
         RaiseArmCommand raiseArmCommand = this.injector.getInstance(RaiseArmCommand.class);
         
-        assertTrue(armSubsystem.armMotor.get() == 0);
+        assertTrue(armSubsystem.armMotor1.get() == 0 && armSubsystem.armMotor2.get() == 0);
         
         raiseArmCommand.initialize();
         
         raiseArmCommand.execute();
         
-        assertTrue(armSubsystem.armMotor.get() > 0);
+        assertTrue(armSubsystem.armMotor1.get() > 0 && armSubsystem.armMotor2.get() > 0);
         
         raiseArmCommand.end();
         
-        assertTrue(armSubsystem.armMotor.get() == 0);
+        assertTrue(armSubsystem.armMotor1.get() == 0 && armSubsystem.armMotor2.get() == 0);
     }
     
     @Test
     public void testLowerArmCommand(){
         LowerArmCommand lowerArmCommand = this.injector.getInstance(LowerArmCommand.class); //black magic that says to test this class
         
-        assertTrue(armSubsystem.armMotor.get() == 0); //at the beginning, the motor powers should be 0. Say true if the motors are 0
+        assertTrue(armSubsystem.armMotor1.get() == 0 && armSubsystem.armMotor2.get() == 0); //at the beginning, the motor powers should be 0. Say true if the motors are 0
         
         lowerArmCommand.initialize(); //runs initialize in lowerArmCommand
         
         lowerArmCommand.execute(); //runs execute in the lowerArmCommand
         
-        assertTrue(armSubsystem.armMotor.get() < 0); //the motor power should be greater than 0 after initialize and execute runs
+        assertTrue(armSubsystem.armMotor1.get() < 0 && armSubsystem.armMotor2.get() < 0); //the motor power should be greater than 0 after initialize and execute runs
         
         lowerArmCommand.end();
         
-        assertTrue(armSubsystem.armMotor.get() == 0); //the motor power should be 0 after end. if so, report true
+        assertTrue(armSubsystem.armMotor1.get() == 0 && armSubsystem.armMotor2.get() == 0); //the motor power should be 0 after end. if so, report true
     }
     
     @Test
