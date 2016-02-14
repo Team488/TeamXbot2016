@@ -101,11 +101,12 @@ public class JetsonCommPacket {
     }
 
     public enum PacketPayloadType {
-        UNKNOWN, BALL_RECT_ARRAY;
+        UNKNOWN, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
 
         private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
             {
                 put(1, PacketPayloadType.BALL_RECT_ARRAY);
+                put(2, PacketPayloadType.BALL_SPATIAL_INFO);
             }
         };
 

@@ -15,6 +15,7 @@ import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
+import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 
 @Singleton
 public class OperatorCommandMap {
@@ -53,6 +54,14 @@ public class OperatorCommandMap {
     {
         operatorInterface.rightButtons.getifAvailable(3).whenPressed(shiftHighCommand);
         operatorInterface.leftButtons.getifAvailable(4).whenPressed(shiftLowCommand);
+    }
+    
+    @Inject
+    public void setupVisionCommands(
+            OperatorInterface operatorInterface,
+            RotateTowardsBallCommand ballCommand)
+    {
+        operatorInterface.rightButtons.getifAvailable(8).whileHeld(ballCommand);
     }
     
     @Inject

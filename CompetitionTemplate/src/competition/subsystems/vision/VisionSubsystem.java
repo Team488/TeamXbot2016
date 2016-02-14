@@ -23,7 +23,12 @@ public class VisionSubsystem extends BaseSubsystem {
         this.jetsonServer = jetsonServer;
     }
     
+    @Deprecated
     public Rectangle[] getBoulderRects() {
         return jetsonServer.getLastBallArray();
+    }
+    
+    public BallSpatialInfo[] getBoulderInfo() {
+        return jetsonServer.getLastSpatialInfoArray();
     }
 }
