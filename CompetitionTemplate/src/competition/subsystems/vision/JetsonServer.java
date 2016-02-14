@@ -1,12 +1,12 @@
 package competition.subsystems.vision;
 
-import java.io.*;
-import java.net.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
-
-import edu.wpi.first.wpilibj.DriverStation;
 
 public class JetsonServer extends Thread {
     static Logger log = Logger.getLogger(JetsonServer.class);
