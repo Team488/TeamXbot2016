@@ -1,35 +1,40 @@
 package competition.subsystems.arm.arm_commands;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import competition.subsystems.arm.ArmSubsystem;
+import competition.subsystems.arm.ArmTargetSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.PropertyManager;
 
-public class LowerArmCommand extends BaseCommand {
+@Singleton
+public class ArmToBottomCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
-    DoubleProperty lowerArmPower;
+    ArmTargetSubsystem armTargetSubsystem;
+    DoubleProperty bottom;
 
     @Inject
-    public LowerArmCommand(ArmSubsystem armSubsystem, PropertyManager propManager) {
+    public ArmToBottomCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, PropertyManager propManager) {
         this.armSubsystem = armSubsystem;
-        lowerArmPower = propManager.createPersistentProperty("ArmLoweringPower", -1.0);
+        this.armTargetSubsystem = armTargetSubsystem;
+        bottom = propManager.createPersistentProperty("ArmLowestAngle", 0.0);
         this.requires(this.armSubsystem);
     }
 
     @Override
     public void initialize() {
-
+        armTargetSubsystem.setTargetAngle(bottom.get());
     }
 
     @Override
     public void execute() {
-        armSubsystem.armMotorPower(lowerArmPower.get());
+
     }
     
     @Override
     public boolean isFinished() {
-        return armSubsystem.isArmAtMinimumHeight();
+        return armTargetSubsystem.isFinished();
     }
     
     @Override

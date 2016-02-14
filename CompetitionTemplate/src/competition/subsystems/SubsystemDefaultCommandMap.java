@@ -3,6 +3,8 @@ package competition.subsystems;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.subsystems.arm.ArmSubsystem;
+import competition.subsystems.arm.arm_commands.StopCommand;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
@@ -33,6 +35,13 @@ public class SubsystemDefaultCommandMap {
             ShiftingSubsystem shiftingSubsystem,
             ShiftHighCommand shiftHighCommand) {
         shiftingSubsystem.setDefaultCommand(shiftHighCommand);
+    }
+    
+    @Inject
+    public void setupArmSubsystem(
+            ArmSubsystem armSubsystem,
+            StopCommand stopCommand){
+        armSubsystem.setDefaultCommand(stopCommand);
     }
     
     @Inject

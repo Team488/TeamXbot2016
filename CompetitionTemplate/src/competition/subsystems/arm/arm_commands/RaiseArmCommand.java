@@ -15,6 +15,7 @@ public class RaiseArmCommand extends BaseCommand {
     public RaiseArmCommand(ArmSubsystem armSubsystem, PropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         raiseArmPower = propManager.createPersistentProperty("ArmRaisingPower", 1.0);
+        this.requires(this.armSubsystem); 
     }
 
     @Override
