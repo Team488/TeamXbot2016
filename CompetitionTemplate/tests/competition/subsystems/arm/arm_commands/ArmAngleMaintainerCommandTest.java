@@ -31,9 +31,9 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
         
         angleMaintainer.execute();
         
-        assertEquals(1.0, armSubsystem.armMotor1.get(), 0.001);
+        assertEquals(1.0, armSubsystem.leftArmMotor.get(), 0.001);
         
-        assertEquals(1.0, armSubsystem.armMotor2.get(), 0.001);
+        assertEquals(1.0, armSubsystem.rightArmMotor.get(), 0.001);
     }
     
     @Test
@@ -46,9 +46,9 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
         
         angleMaintainer.execute();
 
-        assertEquals(-1.0, armSubsystem.armMotor1.get(), 0.001);
+        assertEquals(-1.0, armSubsystem.leftArmMotor.get(), 0.001);
         
-        assertEquals(-1.0, armSubsystem.armMotor2.get(), 0.001);
+        assertEquals(-1.0, armSubsystem.rightArmMotor.get(), 0.001);
     }
 
 }
