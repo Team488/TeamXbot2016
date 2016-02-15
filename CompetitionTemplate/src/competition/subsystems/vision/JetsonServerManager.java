@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import competition.subsystems.vision.JetsonCommPacket.PacketPayloadType;
@@ -15,21 +16,15 @@ import competition.subsystems.vision.JetsonCommPacket.PacketPayloadType;
 @Singleton
 public class JetsonServerManager {
     static Logger log = Logger.getLogger(JetsonServerManager.class);
-    private final int serverPort = 3000;
-
-    private NetworkedJetsonServer server;
 
     private Rectangle[] lastSentBallArray = null;
     private BallSpatialInfo[] lastSentSpatialInfo = null;
 
-    public JetsonServerManager() {
-        server = new NetworkedJetsonServer(serverPort, packet -> handlePacket(packet));
-        try {
-            server.startServer();
-        } catch (IOException e) {
-            log.error("Jetson server failed to start!");
-            log.error(e.toString());
-        }
+    @Inject
+    public JetsonServerManager(JetsonServer server) {
+        server.setPacketHandler(packet -> handlePacket(packet));
+        
+        server.startServer();
     }
 
     private <T> ArrayList<T> parseObjectsFromPayload(int[] payload, int intsPerObject,

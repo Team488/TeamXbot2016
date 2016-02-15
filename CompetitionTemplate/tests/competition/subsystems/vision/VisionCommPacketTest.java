@@ -5,14 +5,16 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import competition.BaseRobotTest;
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
 import competition.subsystems.vision.JetsonCommPacket.PacketParserState;
 import competition.subsystems.vision.JetsonCommPacket.PacketPayloadType;
+import xbot.common.command.BaseRobot;
 import xbot.common.injection.BaseWPITest;
 
-public class VisionCommPacketTest extends BaseWPITest {
+public class VisionCommPacketTest extends BaseRobotTest {
     
     @Before
     public void setup() {
@@ -55,6 +57,28 @@ public class VisionCommPacketTest extends BaseWPITest {
         assertArrayEquals(new int[] { 'H', 'e', 'l', 'l' }, testPacket.getPayloadData());
 
         assertFalse(testPacket.addNewValue('o'));
+        assertTrue(testPacket.isParseComplete());
+        assertEquals(PacketParserState.PARSE_COMPLETE, testPacket.getCurrentParserState());
+        assertArrayEquals(new int[] { 'H', 'e', 'l', 'l', 'o' }, testPacket.getPayloadData());
+        
+        
+        
+        assertFalse(testPacket.addNewValue('?'));
+        assertEquals(PacketParserState.PARSE_COMPLETE, testPacket.getCurrentParserState());
+        assertArrayEquals(new int[] { 'H', 'e', 'l', 'l', 'o' }, testPacket.getPayloadData());
+    }
+    
+    @Test
+    public void testParseFromArray() {
+        JetsonCommPacket testPacket = new JetsonCommPacket();
+        
+        assertEquals(PacketParserState.WAITING_FOR_START, testPacket.getCurrentParserState());
+        
+        assertTrue(testPacket.addNewValues(new int[] { Integer.MAX_VALUE, 2, 5, 'H', 'e' }));
+        assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_DATA, testPacket.getCurrentParserState());
+        assertArrayEquals(new int[] { 'H', 'e' }, testPacket.getPayloadData());
+        
+        assertFalse(testPacket.addNewValues(new int[] { 'l', 'l', 'o' }));
         assertTrue(testPacket.isParseComplete());
         assertEquals(PacketParserState.PARSE_COMPLETE, testPacket.getCurrentParserState());
         assertArrayEquals(new int[] { 'H', 'e', 'l', 'l', 'o' }, testPacket.getPayloadData());

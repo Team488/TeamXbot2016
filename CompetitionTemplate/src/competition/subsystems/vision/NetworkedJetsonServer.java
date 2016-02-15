@@ -9,27 +9,43 @@ import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
 
-public class NetworkedJetsonServer extends Thread {
+import com.google.inject.Inject;
+
+public class NetworkedJetsonServer extends Thread implements JetsonServer {
     static Logger log = Logger.getLogger(NetworkedJetsonServer.class);
     
-    private int connectionPort;
+    private final int connectionPort = 3000;
     private volatile boolean isRunning = false;
     private volatile ServerSocket serverSocket;
     private Consumer<JetsonCommPacket> packetHandler;
 
-    public NetworkedJetsonServer(int connectionPort, Consumer<JetsonCommPacket> packetHandler) {
-        this.connectionPort = connectionPort;
+    @Inject
+    public NetworkedJetsonServer() {
+        
+    }
+    
+    public void setPacketHandler(Consumer<JetsonCommPacket> packetHandler) {
         this.packetHandler = packetHandler;
     }
 
-    public void startServer() throws IOException {
-        serverSocket = new ServerSocket(this.connectionPort);
-        this.start();
+    public void startServer() {
+        try {
+            serverSocket = new ServerSocket(this.connectionPort);
+            this.start();
+        } catch (IOException e) {
+            log.error("Jetson server failed to start!");
+            log.error(e.toString());
+        }
     }
 
-    public void stopServer() throws IOException {
-        this.isRunning = false;
-        serverSocket.close();
+    public void stopServer() {
+        try {
+            this.isRunning = false;
+            serverSocket.close();
+        } catch (IOException e) {
+            log.error("Jetson server failed to stop!");
+            log.error(e.toString());
+        }
     }
 
     @Override

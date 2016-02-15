@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
+import org.apache.log4j.Logger;
+
 /**
  * Parses and stores data from incoming vision packets.
  *
  */
 public class JetsonCommPacket {
+    static Logger log = Logger.getLogger(JetsonCommPacket.class);
+    
     private static final int startOfPacketInt = Integer.MAX_VALUE;
 
     private PacketParserState currentParserState = PacketParserState.WAITING_FOR_START;
@@ -89,6 +93,22 @@ public class JetsonCommPacket {
         }
 
         return true;
+    }
+    
+    public boolean addNewValues(int[] newValues) {
+        if(newValues == null || newValues.length <= 0) {
+            log.error("No values given to add!");
+            return !isParseComplete();
+        }
+        
+        boolean shouldContinue = true;
+        for(int i = 0;
+                i < newValues.length && (shouldContinue = addNewValue(newValues[i]));
+                i++) {
+            continue;
+        }
+        
+        return shouldContinue;
     }
     
     public boolean isParseComplete() {
