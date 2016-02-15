@@ -39,7 +39,7 @@ public class ArmToTopCommand extends BaseCommand {
     
     @Override
     public void end() {
-        armSubsystem.armMotorPower(0);
+        armSubsystem.setArmMotorPower(0);
     }
         
 }

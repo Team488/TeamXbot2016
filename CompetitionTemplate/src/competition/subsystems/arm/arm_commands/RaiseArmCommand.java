@@ -25,7 +25,7 @@ public class RaiseArmCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        armSubsystem.armMotorPower(raiseArmPower.get());
+        armSubsystem.setArmMotorPower(raiseArmPower.get());
     }
     
     @Override
@@ -35,7 +35,7 @@ public class RaiseArmCommand extends BaseCommand {
     
     @Override
     public void end() {
-        armSubsystem.armMotorPower(0);
+        armSubsystem.setArmMotorPower(0);
     }
         
 }
