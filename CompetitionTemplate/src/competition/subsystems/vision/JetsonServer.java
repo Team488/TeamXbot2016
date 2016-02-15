@@ -1,6 +1,7 @@
 package competition.subsystems.vision;
 
 import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,8 +13,8 @@ public class JetsonServer extends Thread {
     static Logger log = Logger.getLogger(JetsonServer.class);
     
     private int connectionPort;
-    private boolean isRunning = false;
-    private ServerSocket serverSocket;
+    private volatile boolean isRunning = false;
+    private volatile ServerSocket serverSocket;
     private Consumer<JetsonCommPacket> packetHandler;
 
     public JetsonServer(int connectionPort, Consumer<JetsonCommPacket> packetHandler) {
@@ -26,9 +27,15 @@ public class JetsonServer extends Thread {
         this.start();
     }
 
+    public void stopServer() throws IOException {
+        this.isRunning = false;
+        serverSocket.close();
+    }
+
     @Override
     public void run() {
         log.debug("Jetson server thread starting");
+        
         this.isRunning = true;
         while (isRunning) {
             try {
@@ -36,6 +43,7 @@ public class JetsonServer extends Thread {
 
                 Socket socket = serverSocket.accept();
                 log.info("Connected to client");
+                
                 DataInputStream in = new DataInputStream(socket.getInputStream());
 
                 while (isRunning && socket.isConnected() && !socket.isClosed()) {
@@ -51,7 +59,11 @@ public class JetsonServer extends Thread {
                     packetHandler.accept(currentPacket);
                 }
 
-            } catch (IOException e) {
+            } catch (EOFException e) {
+                log.error("Vision client closed connection unexpectedly!"
+                        + " This may mean that it misreported packet length.");
+            }
+            catch (IOException e) {
                 log.error("Exception thrown in Jetson thread!");
                 log.error(e.toString());
             }

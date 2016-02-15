@@ -3,7 +3,12 @@ package competition.subsystems.vision;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
+/**
+ * Parses and stores data from incoming vision packets.
+ *
+ */
 public class JetsonCommPacket {
     private static final int startOfPacketInt = Integer.MAX_VALUE;
 
@@ -17,6 +22,20 @@ public class JetsonCommPacket {
 
     }
 
+    /*
+     * Packets are sets of 32-bit (4-byte) signed integers, formatted as follows.
+     * 
+     * [0] Packet start flag. Equivalent to Integer.MAX_VALUE.
+     * [1] Payload type flag. Integer specifying the type of data, as described in PacketPayloadType.
+     * [2] Packet length. Length of packet, indicating the number of 32-bit integers in the payload.
+     * [3..packet length + 2] Payload data. Type-dependent.
+     */
+
+    /**
+     * Processes a newly-received integer value and updates internal state tracking accordingly.
+     * @param newValue the new value to process.
+     * @return A boolean indicating whether more data are needed to fill this packet.
+     */
     public boolean addNewValue(int newValue) {
         switch (currentParserState) {
             case WAITING_FOR_START:
@@ -28,12 +47,28 @@ public class JetsonCommPacket {
 
             case WAITING_FOR_PAYLOAD_TYPE_FLAG:
                 this.payloadType = PacketPayloadType.parse(newValue);
-                currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_LENGTH;
+                
+                if(this.payloadType == null) {
+                    currentParserState = PacketParserState.MALFORMED_PACKET_ABORT;
+                    // If we get junky data, give up
+                    return false;
+                }
+                else {
+                    currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_LENGTH;
+                }
                 break;
 
             case WAITING_FOR_PAYLOAD_LENGTH:
                 this.expectedPayloadLength = newValue;
-                currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_DATA;
+                
+                if(this.expectedPayloadLength >= 0) {
+                    currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_DATA;
+                }
+                else {
+                    currentParserState = PacketParserState.MALFORMED_PACKET_ABORT;
+                    // If we get junky data, give up
+                    return false;
+                }
                 break;
 
             case WAITING_FOR_PAYLOAD_DATA:
@@ -50,32 +85,31 @@ public class JetsonCommPacket {
             default:
                 // Do nothing
         }
-        // TODO: Decide if we want to consume one more byte to confirm that we hit the end
 
         return true;
+    }
+    
+    public boolean isParseComplete() {
+        return this.currentParserState == PacketParserState.PARSE_COMPLETE
+                || this.currentParserState == PacketParserState.MALFORMED_PACKET_ABORT;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("JetsonCommPacket (");
-        builder.append(this.currentParserState.toString());
-        builder.append(", ");
-        builder.append(this.payloadType);
-        builder.append(") ");
+        String result = "JetsonCommPacket [" + this.currentParserState + ", " + this.payloadType + "]";
 
-        builder.append(" {");
+        result += " { ";
         for (int i : this.packetPayloadData) {
-            builder.append(i);
-            builder.append(", ");
+            result += i + " ";
         }
-        builder.append("}");
+        result += "}";
 
-        return builder.toString();
+        return result;
     }
 
     public PacketPayloadType getPayloadType() {
-        return this.payloadType;
+        return this.currentParserState == PacketParserState.MALFORMED_PACKET_ABORT ? PacketPayloadType.UNKNOWN
+                : this.payloadType;
     }
 
     public PacketParserState getCurrentParserState() {
@@ -83,29 +117,35 @@ public class JetsonCommPacket {
     }
 
     public int[] getPayloadData() {
-        return convertIntegers(this.packetPayloadData);
+        return convertIntegersToValueType(this.packetPayloadData);
     }
 
-    private static int[] convertIntegers(ArrayList<Integer> integers) {
+    private static int[] convertIntegersToValueType(ArrayList<Integer> integers) {
         int[] ret = new int[integers.size()];
         Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; i < ret.length; i++) {
             ret[i] = iterator.next().intValue();
         }
-        
+
         return ret;
     }
 
     public enum PacketParserState {
-        WAITING_FOR_START, WAITING_FOR_PAYLOAD_TYPE_FLAG, WAITING_FOR_PAYLOAD_LENGTH, WAITING_FOR_PAYLOAD_DATA, PARSE_COMPLETE
+        WAITING_FOR_START,
+        WAITING_FOR_PAYLOAD_TYPE_FLAG,
+        WAITING_FOR_PAYLOAD_LENGTH,
+        WAITING_FOR_PAYLOAD_DATA,
+        PARSE_COMPLETE,
+        MALFORMED_PACKET_ABORT
     }
 
     public enum PacketPayloadType {
-        UNKNOWN, BALL_RECT_ARRAY;
+        UNKNOWN, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
 
         private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
             {
                 put(1, PacketPayloadType.BALL_RECT_ARRAY);
+                put(2, PacketPayloadType.BALL_SPATIAL_INFO);
             }
         };
 

@@ -1,7 +1,5 @@
 package competition.subsystems.vision.commands;
 
-import java.awt.Rectangle;
-
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -28,16 +26,8 @@ public class SpewVisionInformationCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        if(visionSubsystem.getBoulderRects() == null || visionSubsystem.getBoulderRects().length <= 0) {
-            log.debug("No rects!");
-        }
-        else {
-            String str = "";
-            for(Rectangle r : visionSubsystem.getBoulderRects()) {
-                str += " " + r.toString();
-            }
-            
-            log.debug("Rects:" + str);
-        }
+        int numRects = visionSubsystem.getBoulderRects() == null ? 0 : visionSubsystem.getBoulderRects().length;
+        int numSpatial = visionSubsystem.getBoulderInfo() == null ? 0 : visionSubsystem.getBoulderInfo().length;
+        log.debug("Rects: " + numRects + ", " + "Spatial coords: " + numSpatial);
     }
 }
