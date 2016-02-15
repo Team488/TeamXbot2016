@@ -15,6 +15,8 @@ import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
+import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
+import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
 
 @Singleton
 public class OperatorCommandMap {
@@ -68,5 +70,13 @@ public class OperatorCommandMap {
     {
         operatorInterface.operatorButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
         operatorInterface.operatorButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
+    }
+    
+    public void setupWristCommands(
+            OperatorInterface operatorInterface,
+            MoveWristDownCommand moveWristDown,
+            MoveWristUpCommand moveWristUp){
+        operatorInterface.operatorButtons.getifAvailable(5).whenPressed(moveWristUp);
+        operatorInterface.operatorButtons.getifAvailable(6).whenPressed(moveWristDown);
     }
 }
