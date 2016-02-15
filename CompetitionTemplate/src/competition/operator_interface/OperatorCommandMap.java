@@ -31,20 +31,10 @@ public class OperatorCommandMap {
             HeadingDriveCommand headingDrive
             )
     {
-        operatorInterface.leftButtons.getifAvailable(1).whenPressed(calibrateHeading);
+        operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         headingDrive.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
-        operatorInterface.leftButtons.getifAvailable(2).whileHeld(headingDrive);
-    }
-    
-    @Inject
-    public void setupCollectorCommands(
-            OperatorInterface operatorInterface,
-            CollectorIntakeCommand collectorIntakeCommand,
-            CollectorEjectCommand collectorEjectCommand)
-    {
-        operatorInterface.rightButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
-        operatorInterface.leftButtons.getifAvailable(3).whileHeld(collectorEjectCommand);
+        operatorInterface.rightButtons.getifAvailable(2).whileHeld(headingDrive);
     }
     
     @Inject
@@ -53,8 +43,8 @@ public class OperatorCommandMap {
             ShiftHighCommand shiftHighCommand,
             ShiftLowCommand shiftLowCommand)
     {
-        operatorInterface.rightButtons.getifAvailable(3).whenPressed(shiftHighCommand);
-        operatorInterface.leftButtons.getifAvailable(4).whenPressed(shiftLowCommand);
+        operatorInterface.rightButtons.getifAvailable(1).whenPressed(shiftLowCommand);
+        operatorInterface.leftButtons.getifAvailable(1).whenPressed(shiftHighCommand);
     }
     
     @Inject
@@ -65,19 +55,28 @@ public class OperatorCommandMap {
             ArmToTopCommand armToTopCommand,
             ArmToBottomCommand armToBottomCommand)
     {
-        operatorInterface.operatorButtons.getifAvailable(1).whileHeld(raiseArmCommand);
-        operatorInterface.operatorButtons.getifAvailable(2).whileHeld(lowerArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
         
-        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
-        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
+//        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
+//        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
     }
     
     @Inject
+    public void setupCollectorCommands(
+            OperatorInterface operatorInterface,
+            CollectorIntakeCommand collectorIntakeCommand,
+            CollectorEjectCommand collectorEjectCommand)
+    {
+        operatorInterface.operatorButtons.getifAvailable(1).whileHeld(collectorIntakeCommand);
+        operatorInterface.operatorButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
+    }
+    
     public void setupWristCommands(
             OperatorInterface operatorInterface,
             MoveWristDownCommand moveWristDown,
             MoveWristUpCommand moveWristUp){
         operatorInterface.operatorButtons.getifAvailable(5).whenPressed(moveWristUp);
-        operatorInterface.operatorButtons.getifAvailable(6).whenPressed(moveWristDown);
+        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
     }
 }
