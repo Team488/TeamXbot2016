@@ -17,13 +17,13 @@ public class JetsonServerManager {
     static Logger log = Logger.getLogger(JetsonServerManager.class);
     private final int serverPort = 3000;
 
-    private JetsonServer server;
+    private NetworkedJetsonServer server;
 
     private Rectangle[] lastSentBallArray = null;
     private BallSpatialInfo[] lastSentSpatialInfo = null;
 
     public JetsonServerManager() {
-        server = new JetsonServer(serverPort, packet -> handlePacket(packet));
+        server = new NetworkedJetsonServer(serverPort, packet -> handlePacket(packet));
         try {
             server.startServer();
         } catch (IOException e) {

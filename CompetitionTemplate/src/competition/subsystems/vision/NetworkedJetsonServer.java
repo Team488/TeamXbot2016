@@ -9,15 +9,15 @@ import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
 
-public class JetsonServer extends Thread {
-    static Logger log = Logger.getLogger(JetsonServer.class);
+public class NetworkedJetsonServer extends Thread {
+    static Logger log = Logger.getLogger(NetworkedJetsonServer.class);
     
     private int connectionPort;
     private volatile boolean isRunning = false;
     private volatile ServerSocket serverSocket;
     private Consumer<JetsonCommPacket> packetHandler;
 
-    public JetsonServer(int connectionPort, Consumer<JetsonCommPacket> packetHandler) {
+    public NetworkedJetsonServer(int connectionPort, Consumer<JetsonCommPacket> packetHandler) {
         this.connectionPort = connectionPort;
         this.packetHandler = packetHandler;
     }

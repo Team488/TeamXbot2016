@@ -82,6 +82,8 @@ public class JetsonCommPacket {
             case PARSE_COMPLETE:
                 // We shouldn't get here; consumer should stop after all data is received
                 return false;
+            case MALFORMED_PACKET_ABORT:
+                return false;
             default:
                 // Do nothing
         }
