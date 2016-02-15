@@ -55,11 +55,11 @@ public class OperatorCommandMap {
             ArmToTopCommand armToTopCommand,
             ArmToBottomCommand armToBottomCommand)
     {
-        operatorInterface.operatorButtons.getifAvailable(1).whileHeld(raiseArmCommand);
-        operatorInterface.operatorButtons.getifAvailable(2).whileHeld(lowerArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
+        operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
         
-        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
-        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
+//        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
+//        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
     }
     
     @Inject
@@ -77,6 +77,6 @@ public class OperatorCommandMap {
             MoveWristDownCommand moveWristDown,
             MoveWristUpCommand moveWristUp){
         operatorInterface.operatorButtons.getifAvailable(5).whenPressed(moveWristUp);
-        operatorInterface.operatorButtons.getifAvailable(6).whenPressed(moveWristDown);
+        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
     }
 }
