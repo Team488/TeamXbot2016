@@ -31,6 +31,6 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
         double targetArmAngle = armTargetSubsystem.getTargetAngle();
         
         armPower = (targetArmAngle - currentArmAngle) / 90;
-        armSubsystem.armMotorPower(armPower);
+        armSubsystem.setArmMotorPower(armPower);
     }
 }
