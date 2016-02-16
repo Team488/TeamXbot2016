@@ -23,24 +23,26 @@ public class PoseSubsystem extends BaseSubsystem {
         
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
-    //public DistanceSensor leftDistanceSensor;
+    public DistanceSensor frontDistanceSensor;
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
     private ContiguousHeading lastImuHeading;
     
     private DoubleProperty leftSensorMountingDistanceInches;
+    private DoubleProperty frontDistance;
     
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
     private DoubleProperty currentPitch;
     private DoubleProperty currentRoll;
+    private DoubleProperty leftDistanceToWall;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        //leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        frontDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
         currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
@@ -50,13 +52,15 @@ public class PoseSubsystem extends BaseSubsystem {
         
         currentPitch = propManager.createEphemeralProperty("CurrentPitch", 0.0);
         currentRoll = propManager.createEphemeralProperty("CurrentRoll", 0.0);
+        frontDistance = propManager.createEphemeralProperty("FrontDistance", 0.0);
+        leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
     }
     
     public static class TemporaryVoltageMap
     {
         public static final double placeholder(double voltage)
         {
-            return 10*voltage;
+            return 1*voltage;
         }
     }
     
@@ -90,10 +94,15 @@ public class PoseSubsystem extends BaseSubsystem {
         currentHeading.setValue(headingInDegrees);
     }
     
-    public double getFrontRangefinderDistance() {
-        return 0;
+    public void updateRangefinders() {
+        frontDistance.set(frontDistanceSensor.getDistance());
+        getDistanceFromLeftRangerfinderToLeftWall();
     }
-    /*
+    
+    public double getFrontRangefinderDistance() {
+        return frontDistanceSensor.getDistance();
+    }
+    
     public PoseResult getDistanceFromLeftRangerfinderToLeftWall() {
         // We want to return the distance between the center of rotation of the robot, and whatever the rangefinder
         // is hitting. This involves some trig.
@@ -102,15 +111,17 @@ public class PoseSubsystem extends BaseSubsystem {
         // These results are only valid if the robot's left side is already kind of pointed at the wall. Otherwise there's
         // too much speculation.
         
-        double compensatedRange =(leftSensorMountingDistanceInches.get() + leftDistanceSensor.getDistance()) 
-                                * Math.abs(Math.sin(getCurrentHeading().getValue()));
+        double compensatedRange =(leftSensorMountingDistanceInches.get() + frontDistanceSensor.getDistance()) 
+                                * Math.abs(Math.sin(getCurrentHeading().getValue() * Math.PI / 180));
         boolean sane = true;
         if (Math.abs(getCurrentHeading().getValue()) < 60) {
             sane = false;
         }
         
+        leftDistanceToWall.set(compensatedRange);
+        
         return new PoseResult(sane, compensatedRange);        
-    }*/
+    }
     
     public double getRobotPitch() {
         return imu.getPitch();

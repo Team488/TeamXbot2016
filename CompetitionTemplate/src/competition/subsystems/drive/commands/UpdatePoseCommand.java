@@ -30,6 +30,7 @@ public class UpdatePoseCommand extends BaseCommand {
     public void execute() {
         pose.updateCurrentHeading();
         defenseTraversal.measureState(Math.abs(pose.getRobotPitch()));
+        pose.updateRangefinders();
     }
 
 }
