@@ -10,7 +10,7 @@ import xbot.common.controls.actuators.XSpeedController;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class DriveSubsystem extends BaseSubsystem {
@@ -31,7 +31,7 @@ public class DriveSubsystem extends BaseSubsystem {
     private DoubleProperty rightPowerProp;
         
     @Inject
-    public DriveSubsystem(WPIFactory factory, PropertyManager propManager, PoseSubsystem pose)
+    public DriveSubsystem(WPIFactory factory, XPropertyManager propManager, PoseSubsystem pose)
     {
         log.info("Creating DriveSubsystem");
 

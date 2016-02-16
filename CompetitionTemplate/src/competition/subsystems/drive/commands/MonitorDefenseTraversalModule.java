@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 import xbot.common.properties.StringProperty;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -23,7 +23,7 @@ public class MonitorDefenseTraversalModule {
     StringProperty defenseTraversalState;
     
     @Inject
-    public MonitorDefenseTraversalModule(PropertyManager propMan) {
+    public MonitorDefenseTraversalModule(XPropertyManager propMan) {
         timeOfRecentPitchEvent = -99999999;
         defenseTraversalTime = propMan.createPersistentProperty("DefenseTraversalTime", 1.0);
         defenseTraversalPitchThreshold = propMan.createPersistentProperty("DefensePitchLimit", 8.0);

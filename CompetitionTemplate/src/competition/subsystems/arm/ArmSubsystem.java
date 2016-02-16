@@ -10,7 +10,7 @@ import xbot.common.controls.actuators.XSpeedController;
 import xbot.common.controls.sensors.XDigitalInput;
 import xbot.common.controls.sensors.XEncoder;
 import xbot.common.injection.wpi_factories.WPIFactory;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class ArmSubsystem extends BaseSubsystem {
@@ -23,7 +23,7 @@ public class ArmSubsystem extends BaseSubsystem {
     public XEncoder encoder;
 
     @Inject
-    public ArmSubsystem(WPIFactory factory, PropertyManager propManager) {
+    public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating ArmSubsystem");
         leftArmMotor = factory.getSpeedController(4);
         rightArmMotor = factory.getSpeedController(5);
