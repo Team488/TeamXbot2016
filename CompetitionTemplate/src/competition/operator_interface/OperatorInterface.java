@@ -37,7 +37,7 @@ public class OperatorInterface {
         
         leftButtons = new JoystickButtonManager(8, factory, assertionManager, leftJoystick);
         rightButtons = new JoystickButtonManager(8, factory, assertionManager, rightJoystick);
-        operatorButtons = new JoystickButtonManager(8, factory, assertionManager, operatorJoystick);
+        operatorButtons = new JoystickButtonManager(12, factory, assertionManager, operatorJoystick);
     }
 }
 

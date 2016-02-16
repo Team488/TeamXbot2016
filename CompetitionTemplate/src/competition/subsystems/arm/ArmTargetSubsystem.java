@@ -5,7 +5,7 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class ArmTargetSubsystem extends BaseSubsystem{
@@ -14,7 +14,7 @@ public class ArmTargetSubsystem extends BaseSubsystem{
     DoubleProperty withinTargetRange;
     
     @Inject
-    public ArmTargetSubsystem (ArmSubsystem armSubsystem, PropertyManager propManager){
+    public ArmTargetSubsystem (ArmSubsystem armSubsystem, XPropertyManager propManager){
         this.armSubsystem = armSubsystem;
         withinTargetRange = propManager.createPersistentProperty("TargetRange", 0.5);
     }

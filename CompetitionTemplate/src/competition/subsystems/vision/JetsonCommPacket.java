@@ -67,8 +67,13 @@ public class JetsonCommPacket {
             case WAITING_FOR_PAYLOAD_LENGTH:
                 this.expectedPayloadLength = newValue;
                 
-                if(this.expectedPayloadLength >= 0) {
+                if(this.expectedPayloadLength > 0) {
                     currentParserState = PacketParserState.WAITING_FOR_PAYLOAD_DATA;
+                }
+                else if (this.expectedPayloadLength == 0) {
+                    currentParserState = PacketParserState.PARSE_COMPLETE;
+                    
+                    return false;
                 }
                 else {
                     currentParserState = PacketParserState.MALFORMED_PACKET_ABORT;
@@ -79,7 +84,7 @@ public class JetsonCommPacket {
 
             case WAITING_FOR_PAYLOAD_DATA:
                 this.packetPayloadData.add((Integer) newValue);
-
+                
                 if (packetPayloadData.size() >= expectedPayloadLength) {
                     currentParserState = PacketParserState.PARSE_COMPLETE;
                     return false;

@@ -16,7 +16,7 @@ public class StopCommand extends BaseCommand{
 
     @Override
     public void initialize() {
-        armSubsystem.armMotorPower(0);
+        armSubsystem.setArmMotorPower(0);
     }
 
     @Override

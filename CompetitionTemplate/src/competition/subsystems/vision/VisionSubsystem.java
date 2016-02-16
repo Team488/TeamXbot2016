@@ -9,7 +9,7 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.injection.wpi_factories.WPIFactory;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class VisionSubsystem extends BaseSubsystem {
@@ -18,7 +18,7 @@ public class VisionSubsystem extends BaseSubsystem {
     private JetsonServerManager jetsonServer;
     
     @Inject
-    public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, PropertyManager propManager) {
+    public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating VisionSubsystem");
         this.jetsonServer = jetsonServer;
     }
