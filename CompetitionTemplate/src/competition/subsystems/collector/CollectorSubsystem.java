@@ -12,7 +12,7 @@ public class CollectorSubsystem {
     
     @Inject
     public CollectorSubsystem(WPIFactory factory){
-        this.collectorMotor = factory.getSpeedController(5);
+        this.collectorMotor = factory.getSpeedController(7);
     }
     
     public void setIntakePower(double power) {
