@@ -22,6 +22,8 @@ public class JetsonCommPacket {
     private int expectedPayloadLength = -1;
     private PacketPayloadType payloadType = PacketPayloadType.UNKNOWN;
 
+    private double reciptTimestamp = Double.NEGATIVE_INFINITY;
+    
     public JetsonCommPacket() {
 
     }
@@ -139,17 +141,15 @@ public class JetsonCommPacket {
     }
 
     public int[] getPayloadData() {
-        return convertIntegersToValueType(this.packetPayloadData);
+        return this.packetPayloadData.stream().mapToInt(i->i).toArray();
     }
-
-    private static int[] convertIntegersToValueType(ArrayList<Integer> integers) {
-        int[] ret = new int[integers.size()];
-        Iterator<Integer> iterator = integers.iterator();
-        for (int i = 0; i < ret.length; i++) {
-            ret[i] = iterator.next().intValue();
-        }
-
-        return ret;
+    
+    public double getReciptTimestamp() {
+        return this.reciptTimestamp;
+    }
+    
+    public void setReciptTimestamp(double value) {
+        this.reciptTimestamp = value;
     }
 
     public enum PacketParserState {

@@ -11,13 +11,19 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 
+import edu.wpi.first.wpilibj.Timer;
+
 public class NetworkedJetsonServer extends Thread implements JetsonServer {
     static Logger log = Logger.getLogger(NetworkedJetsonServer.class);
     
     private final int connectionPort = 3000;
+    private final double healthyTimeThreshold = 0.5; // Seconds
+    
     private volatile boolean isRunning = false;
     private volatile ServerSocket serverSocket;
     private Consumer<JetsonCommPacket> packetHandler;
+    
+    private JetsonCommPacket lastPacket = null;
 
     @Inject
     public NetworkedJetsonServer() {
@@ -55,7 +61,7 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
         this.isRunning = true;
         while (isRunning) {
             try {
-                log.debug("Waiting for connection...");
+                log.info("Waiting for connection...");
 
                 Socket socket = serverSocket.accept();
                 log.info("Connected to client");
@@ -71,6 +77,9 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
                         log.debug("Reading int " + newValue + "(" + Integer.toUnsignedLong(newValue) + ")");
                     } while (currentPacket.addNewValue(newValue));
                     
+                    currentPacket.setReciptTimestamp(Timer.getFPGATimestamp());
+                    lastPacket = currentPacket;
+                    
                     log.debug("Read packet. Calling handler.");
                     packetHandler.accept(currentPacket);
                 }
@@ -84,5 +93,10 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
                 log.error(e.toString());
             }
         }
+    }
+
+    @Override
+    public boolean isConnectionHealthy() {
+        return lastPacket.getReciptTimestamp() - Timer.getFPGATimestamp() <= healthyTimeThreshold;
     }
 }

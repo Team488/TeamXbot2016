@@ -7,4 +7,6 @@ public interface JetsonServer {
     public void stopServer();
     
     public void setPacketHandler(Consumer<JetsonCommPacket> packetHandler);
+    
+    public boolean isConnectionHealthy();
 }
