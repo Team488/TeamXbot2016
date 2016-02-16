@@ -5,14 +5,14 @@ import com.google.inject.Inject;
 import competition.subsystems.collector.CollectorSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 public class CollectorEjectCommand extends BaseCommand{
     CollectorSubsystem collectorSubsystem;
     DoubleProperty intakePower;
 
     @Inject
-    public CollectorEjectCommand(CollectorSubsystem collectorSubsystem, PropertyManager propManager) {
+    public CollectorEjectCommand(CollectorSubsystem collectorSubsystem, XPropertyManager propManager) {
         this.collectorSubsystem = collectorSubsystem;
         intakePower = propManager.createPersistentProperty("CollectorEjectPower", -1.0);
     }
