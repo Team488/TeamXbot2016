@@ -6,7 +6,7 @@ import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class ArmToBottomCommand extends BaseCommand {
@@ -15,7 +15,7 @@ public class ArmToBottomCommand extends BaseCommand {
     DoubleProperty bottom;
 
     @Inject
-    public ArmToBottomCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, PropertyManager propManager) {
+    public ArmToBottomCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
         bottom = propManager.createPersistentProperty("ArmLowestAngle", 0.0);

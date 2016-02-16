@@ -10,7 +10,7 @@ import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 
 public class HeadingDriveCommand extends BaseCommand {
@@ -27,7 +27,7 @@ public class HeadingDriveCommand extends BaseCommand {
     @Inject
     public HeadingDriveCommand(DriveSubsystem driveSubsystem, 
                                PoseSubsystem pose,
-                               PropertyManager propMan,
+                               XPropertyManager propMan,
                                HeadingModule headingModule)
     {
         this.driveSubsystem = driveSubsystem;

@@ -5,7 +5,7 @@ import competition.operator_interface.OperatorInterface;
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 public class ArmManualControlCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
@@ -13,7 +13,7 @@ public class ArmManualControlCommand extends BaseCommand {
     OperatorInterface oi;
 
     @Inject
-    public ArmManualControlCommand(ArmSubsystem armSubsystem, OperatorInterface oi, PropertyManager propManager) {
+    public ArmManualControlCommand(ArmSubsystem armSubsystem, OperatorInterface oi, XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.oi = oi;
         this.requires(armSubsystem);

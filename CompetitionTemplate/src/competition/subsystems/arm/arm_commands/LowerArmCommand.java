@@ -4,14 +4,14 @@ import com.google.inject.Inject;
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 public class LowerArmCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
     DoubleProperty lowerArmPower;
 
     @Inject
-    public LowerArmCommand(ArmSubsystem armSubsystem, PropertyManager propManager) {
+    public LowerArmCommand(ArmSubsystem armSubsystem, XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         lowerArmPower = propManager.createPersistentProperty("ArmLoweringPower", -1.0);
         this.requires(this.armSubsystem);

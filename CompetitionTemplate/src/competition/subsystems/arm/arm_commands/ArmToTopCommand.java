@@ -6,7 +6,7 @@ import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 public class ArmToTopCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
@@ -14,7 +14,7 @@ public class ArmToTopCommand extends BaseCommand {
     DoubleProperty top;
 
     @Inject
-    public ArmToTopCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, PropertyManager propManager) {
+    public ArmToTopCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem, XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         top = propManager.createPersistentProperty("ArmLargestAngle", 90.0);
         this.armTargetSubsystem = armTargetSubsystem;

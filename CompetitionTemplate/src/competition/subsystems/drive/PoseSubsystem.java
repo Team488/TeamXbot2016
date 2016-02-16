@@ -16,7 +16,7 @@ import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class PoseSubsystem extends BaseSubsystem {
@@ -37,7 +37,7 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty currentRoll;
     
     @Inject
-    public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
+    public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
         //leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
