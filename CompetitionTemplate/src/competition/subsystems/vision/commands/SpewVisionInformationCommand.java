@@ -21,7 +21,7 @@ public class SpewVisionInformationCommand extends BaseCommand {
     
     @Override
     public void initialize() {
-
+        log.info("Initializing...");
     }
 
     @Override
