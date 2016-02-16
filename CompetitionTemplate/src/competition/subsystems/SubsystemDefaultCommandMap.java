@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import competition.subsystems.arm.ArmSubsystem;
+import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.StopCommand;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
-
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.vision.VisionSubsystem;
@@ -40,8 +40,8 @@ public class SubsystemDefaultCommandMap {
     @Inject
     public void setupArmSubsystem(
             ArmSubsystem armSubsystem,
-            StopCommand stopCommand){
-        armSubsystem.setDefaultCommand(stopCommand);
+            ArmManualControlCommand armManualCommand){
+        armSubsystem.setDefaultCommand(armManualCommand);
     }
     
     @Inject

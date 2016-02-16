@@ -16,14 +16,14 @@ import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.properties.DoubleProperty;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class PoseSubsystem extends BaseSubsystem {
         
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
-    public DistanceSensor leftDistanceSensor;
+    //public DistanceSensor leftDistanceSensor;
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
@@ -37,10 +37,10 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty currentRoll;
     
     @Inject
-    public PoseSubsystem(WPIFactory factory, PropertyManager propManager) {
+    public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        //leftDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
         currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
@@ -93,7 +93,7 @@ public class PoseSubsystem extends BaseSubsystem {
     public double getFrontRangefinderDistance() {
         return 0;
     }
-    
+    /*
     public PoseResult getDistanceFromLeftRangerfinderToLeftWall() {
         // We want to return the distance between the center of rotation of the robot, and whatever the rangefinder
         // is hitting. This involves some trig.
@@ -110,7 +110,7 @@ public class PoseSubsystem extends BaseSubsystem {
         }
         
         return new PoseResult(sane, compensatedRange);        
-    }
+    }*/
     
     public double getRobotPitch() {
         return imu.getPitch();

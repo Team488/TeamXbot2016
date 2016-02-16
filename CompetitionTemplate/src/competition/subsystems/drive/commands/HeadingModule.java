@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
-import xbot.common.properties.PropertyManager;
+import xbot.common.properties.XPropertyManager;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 
@@ -17,7 +17,7 @@ public class HeadingModule {
     private ContiguousHeading targetHeading;
     
     @Inject
-    public HeadingModule(PoseSubsystem pose, PropertyManager propMan)
+    public HeadingModule(PoseSubsystem pose, XPropertyManager propMan)
     {
         this.pose = pose;
         

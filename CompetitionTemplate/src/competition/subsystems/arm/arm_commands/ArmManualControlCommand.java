@@ -1,20 +1,22 @@
 package competition.subsystems.arm.arm_commands;
 import com.google.inject.Inject;
 
+import competition.operator_interface.OperatorInterface;
 import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-public class LowerArmCommand extends BaseCommand {
+public class ArmManualControlCommand extends BaseCommand {
     ArmSubsystem armSubsystem;
     DoubleProperty lowerArmPower;
+    OperatorInterface oi;
 
     @Inject
-    public LowerArmCommand(ArmSubsystem armSubsystem, XPropertyManager propManager) {
+    public ArmManualControlCommand(ArmSubsystem armSubsystem, OperatorInterface oi, XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
-        lowerArmPower = propManager.createPersistentProperty("ArmLoweringPower", -1.0);
-        this.requires(this.armSubsystem);
+        this.oi = oi;
+        this.requires(armSubsystem);
     }
 
     @Override
@@ -24,12 +26,7 @@ public class LowerArmCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        armSubsystem.setArmMotorPower(lowerArmPower.get());
-    }
-    
-    @Override
-    public boolean isFinished() {
-        return armSubsystem.isArmAtMinimumHeight();
+        armSubsystem.setArmMotorPower(oi.operatorJoystick.getVector().y);
     }
     
     @Override
