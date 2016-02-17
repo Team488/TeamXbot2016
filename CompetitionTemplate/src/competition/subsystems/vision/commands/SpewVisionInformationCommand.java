@@ -36,9 +36,9 @@ public class SpewVisionInformationCommand extends BaseCommand {
     }
     
     public void updateSpewInfo() {
-        int numRects = visionSubsystem.getBoulderRects() == null ? 0 : visionSubsystem.getBoulderRects().length;
         int numSpatial = visionSubsystem.getBoulderInfo() == null ? 0 : visionSubsystem.getBoulderInfo().length;
-        log.debug("Rects: " + numRects + ", " + "Spatial coords: " + numSpatial);
+        log.debug("Currently has " + numSpatial + " spatial coords"
+                + " (connection is " + (visionSubsystem.isConnectionHealthy() ? "healthy" : "unhealthy") + ")");
         
         this.lastSpewTimestamp = Timer.getFPGATimestamp();
     }

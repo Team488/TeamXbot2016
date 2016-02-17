@@ -27,6 +27,12 @@ public class JetsonCommPacket {
     public JetsonCommPacket() {
 
     }
+    
+    public JetsonCommPacket(int[] data) {
+        if(addNewValues(data)) {
+            log.warn("Packet object initialized with partial packet data!");
+        }
+    }
 
     /*
      * Packets are sets of 32-bit (4-byte) signed integers, formatted as follows.
@@ -167,10 +173,11 @@ public class JetsonCommPacket {
     }
 
     public enum PacketPayloadType {
-        UNKNOWN, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
+        UNKNOWN, RAW_TEST_DATA, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
 
         private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
             {
+                put(-1, PacketPayloadType.RAW_TEST_DATA);
                 put(1, PacketPayloadType.BALL_RECT_ARRAY);
                 put(2, PacketPayloadType.BALL_SPATIAL_INFO);
             }

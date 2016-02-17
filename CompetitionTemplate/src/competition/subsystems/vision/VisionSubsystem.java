@@ -25,10 +25,14 @@ public class VisionSubsystem extends BaseSubsystem {
     
     @Deprecated
     public Rectangle[] getBoulderRects() {
-        return jetsonServer.getLastBallArray();
+        return jetsonServer.getLastRectArray();
     }
     
     public BallSpatialInfo[] getBoulderInfo() {
         return jetsonServer.getLastSpatialInfoArray();
+    }
+    
+    public boolean isConnectionHealthy() {
+        return jetsonServer.isConnectionHealthy();
     }
 }

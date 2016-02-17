@@ -17,11 +17,14 @@ import competition.subsystems.vision.JetsonCommPacket.PacketPayloadType;
 public class JetsonServerManager {
     static Logger log = Logger.getLogger(JetsonServerManager.class);
 
-    private Rectangle[] lastSentBallArray = null;
+    private Rectangle[] lastSentRectArray = null;
     private BallSpatialInfo[] lastSentSpatialInfo = null;
+    
+    private JetsonServer server;
 
     @Inject
     public JetsonServerManager(JetsonServer server) {
+        this.server = server;
         server.setPacketHandler(packet -> handlePacket(packet));
         
         server.startServer();
@@ -50,10 +53,10 @@ public class JetsonServerManager {
         
         if (newPacket.getPayloadType() == PacketPayloadType.BALL_RECT_ARRAY) {
             
-            this.lastSentBallArray = new Rectangle[0];
-            this.lastSentBallArray = parseObjectsFromPayload(payload, 4, data -> {
+            this.lastSentRectArray = new Rectangle[0];
+            this.lastSentRectArray = parseObjectsFromPayload(payload, 4, data -> {
                 return new Rectangle(data[0], data[1], data[2], data[3]);
-            }).toArray(lastSentBallArray);
+            }).toArray(lastSentRectArray);
             
         } else if (newPacket.getPayloadType() == PacketPayloadType.BALL_SPATIAL_INFO) {
             
@@ -67,11 +70,15 @@ public class JetsonServerManager {
     }
 
     @Deprecated
-    public Rectangle[] getLastBallArray() {
-        return lastSentBallArray;
+    public Rectangle[] getLastRectArray() {
+        return lastSentRectArray;
     }
 
     public BallSpatialInfo[] getLastSpatialInfoArray() {
         return lastSentSpatialInfo;
+    }
+    
+    public boolean isConnectionHealthy() {
+        return this.server.isConnectionHealthy();
     }
 }

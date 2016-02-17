@@ -18,13 +18,11 @@ public class VisionCommPacketTest extends BaseRobotTest {
     
     @Before
     public void setup() {
-        // malformed length
-        // malformed type
-        // 
+        
     }
     
     @Test
-    public void testParseSpatialInfo() {
+    public void testParseStandardPacket() {
         JetsonCommPacket testPacket = new JetsonCommPacket();
         
         assertEquals(PacketParserState.WAITING_FOR_START, testPacket.getCurrentParserState());
@@ -32,9 +30,9 @@ public class VisionCommPacketTest extends BaseRobotTest {
         assertTrue(testPacket.addNewValue(Integer.MAX_VALUE));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_TYPE_FLAG, testPacket.getCurrentParserState());
 
-        assertTrue(testPacket.addNewValue(2));
+        assertTrue(testPacket.addNewValue(-1));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_LENGTH, testPacket.getCurrentParserState());
-        assertEquals(PacketPayloadType.BALL_SPATIAL_INFO, testPacket.getPayloadType());
+        assertEquals(PacketPayloadType.RAW_TEST_DATA, testPacket.getPayloadType());
         
         assertTrue(testPacket.addNewValue(5));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_DATA, testPacket.getCurrentParserState());
@@ -74,7 +72,7 @@ public class VisionCommPacketTest extends BaseRobotTest {
         
         assertEquals(PacketParserState.WAITING_FOR_START, testPacket.getCurrentParserState());
         
-        assertTrue(testPacket.addNewValues(new int[] { Integer.MAX_VALUE, 2, 5, 'H', 'e' }));
+        assertTrue(testPacket.addNewValues(new int[] { Integer.MAX_VALUE, -1, 5, 'H', 'e' }));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_DATA, testPacket.getCurrentParserState());
         assertArrayEquals(new int[] { 'H', 'e' }, testPacket.getPayloadData());
         
@@ -118,9 +116,9 @@ public class VisionCommPacketTest extends BaseRobotTest {
         assertTrue(testPacket.addNewValue(Integer.MAX_VALUE));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_TYPE_FLAG, testPacket.getCurrentParserState());
 
-        assertTrue(testPacket.addNewValue(2));
+        assertTrue(testPacket.addNewValue(-1));
         assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_LENGTH, testPacket.getCurrentParserState());
-        assertEquals(PacketPayloadType.BALL_SPATIAL_INFO, testPacket.getPayloadType());
+        assertEquals(PacketPayloadType.RAW_TEST_DATA, testPacket.getPayloadType());
         
         assertFalse(testPacket.addNewValue(-10));
         assertTrue(testPacket.isParseComplete());
@@ -130,6 +128,27 @@ public class VisionCommPacketTest extends BaseRobotTest {
         
         assertFalse(testPacket.addNewValue('?'));
         assertEquals(PacketParserState.MALFORMED_PACKET_ABORT, testPacket.getCurrentParserState());
+        assertArrayEquals(new int[] { }, testPacket.getPayloadData());
+    }
+    
+    @Test
+    public void testParseEmptyPacket() {
+        JetsonCommPacket testPacket = new JetsonCommPacket();
+        
+        assertEquals(PacketParserState.WAITING_FOR_START, testPacket.getCurrentParserState());
+        
+        assertTrue(testPacket.addNewValue(Integer.MAX_VALUE));
+        assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_TYPE_FLAG, testPacket.getCurrentParserState());
+
+        assertTrue(testPacket.addNewValue(-1));
+        assertEquals(PacketParserState.WAITING_FOR_PAYLOAD_LENGTH, testPacket.getCurrentParserState());
+        assertEquals(PacketPayloadType.RAW_TEST_DATA, testPacket.getPayloadType());
+        
+        assertFalse(testPacket.addNewValue(0));
+        assertTrue(testPacket.isParseComplete());
+        assertEquals(PacketParserState.PARSE_COMPLETE, testPacket.getCurrentParserState());
+        
+        
         assertArrayEquals(new int[] { }, testPacket.getPayloadData());
     }
 }
