@@ -22,7 +22,7 @@ public class JetsonCommPacket {
     private int expectedPayloadLength = -1;
     private PacketPayloadType payloadType = PacketPayloadType.UNKNOWN;
 
-    private double reciptTimestamp = Double.NEGATIVE_INFINITY;
+    private double recieptTimestamp = Double.NEGATIVE_INFINITY;
     
     public JetsonCommPacket() {
 
@@ -31,6 +31,31 @@ public class JetsonCommPacket {
     public JetsonCommPacket(int[] data) {
         if(addNewValues(data)) {
             log.warn("Packet object initialized with partial packet data!");
+        }
+    }
+
+    public enum PacketParserState {
+        WAITING_FOR_START,
+        WAITING_FOR_PAYLOAD_TYPE_FLAG,
+        WAITING_FOR_PAYLOAD_LENGTH,
+        WAITING_FOR_PAYLOAD_DATA,
+        PARSE_COMPLETE,
+        MALFORMED_PACKET_ABORT
+    }
+
+    public enum PacketPayloadType {
+        UNKNOWN, RAW_TEST_DATA, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
+
+        private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
+            {
+                put(-1, PacketPayloadType.RAW_TEST_DATA);
+                put(1, PacketPayloadType.BALL_RECT_ARRAY);
+                put(2, PacketPayloadType.BALL_SPATIAL_INFO);
+            }
+        };
+
+        public static PacketPayloadType parse(int value) {
+            return payloadLookup.get(value);
         }
     }
 
@@ -115,10 +140,8 @@ public class JetsonCommPacket {
         }
         
         boolean shouldContinue = true;
-        for(int i = 0;
-                i < newValues.length && (shouldContinue = addNewValue(newValues[i]));
-                i++) {
-            continue;
+        for(int i = 0; i < newValues.length; i++) {
+            shouldContinue = addNewValue(newValues[i]);
         }
         
         return shouldContinue;
@@ -155,36 +178,11 @@ public class JetsonCommPacket {
         return this.packetPayloadData.stream().mapToInt(i->i).toArray();
     }
     
-    public double getReciptTimestamp() {
-        return this.reciptTimestamp;
+    public double getRecieptTimestamp() {
+        return this.recieptTimestamp;
     }
     
     public void setReciptTimestamp(double value) {
-        this.reciptTimestamp = value;
-    }
-
-    public enum PacketParserState {
-        WAITING_FOR_START,
-        WAITING_FOR_PAYLOAD_TYPE_FLAG,
-        WAITING_FOR_PAYLOAD_LENGTH,
-        WAITING_FOR_PAYLOAD_DATA,
-        PARSE_COMPLETE,
-        MALFORMED_PACKET_ABORT
-    }
-
-    public enum PacketPayloadType {
-        UNKNOWN, RAW_TEST_DATA, BALL_RECT_ARRAY, BALL_SPATIAL_INFO;
-
-        private static HashMap<Integer, PacketPayloadType> payloadLookup = new HashMap<Integer, PacketPayloadType>() {
-            {
-                put(-1, PacketPayloadType.RAW_TEST_DATA);
-                put(1, PacketPayloadType.BALL_RECT_ARRAY);
-                put(2, PacketPayloadType.BALL_SPATIAL_INFO);
-            }
-        };
-
-        public static PacketPayloadType parse(int value) {
-            return payloadLookup.get(value);
-        }
+        this.recieptTimestamp = value;
     }
 }

@@ -26,11 +26,11 @@ public class JetsonServerManagerTest extends BaseRobotTest {
        assertEquals(2, serverManager.getLastSpatialInfoArray().length);
 
        BallSpatialInfo parsedInfoA = serverManager.getLastSpatialInfoArray()[0];
-       assertEquals(10, parsedInfoA.headingDeflection, 0.001);
+       assertEquals(10, parsedInfoA.relativeHeading, 0.001);
        assertEquals(5, parsedInfoA.distanceInches, 0.001);
 
        BallSpatialInfo parsedInfoB = serverManager.getLastSpatialInfoArray()[1];
-       assertEquals(2, parsedInfoB.headingDeflection, 0.001);
+       assertEquals(2, parsedInfoB.relativeHeading, 0.001);
        assertEquals(1, parsedInfoB.distanceInches, 0.001);
     }
     
