@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import competition.BaseRobotTest;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
 import xbot.common.injection.BaseWPITest;
 
-public class CollectorSubsystemTest extends BaseWPITest{
+public class CollectorSubsystemTest extends BaseRobotTest {
     CollectorSubsystem collectorSubsystem;
     
     @Before

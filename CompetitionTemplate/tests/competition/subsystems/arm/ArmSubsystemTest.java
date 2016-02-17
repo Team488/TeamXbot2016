@@ -5,12 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import competition.BaseRobotTest;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import edu.wpi.first.wpilibj.MockDigitalInput;
 import xbot.common.injection.BaseWPITest;
 
-public class ArmSubsystemTest extends BaseWPITest{
+public class ArmSubsystemTest extends BaseRobotTest {
     
     ArmSubsystem armSubsystem;
     
