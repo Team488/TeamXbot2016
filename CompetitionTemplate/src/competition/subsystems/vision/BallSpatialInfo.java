@@ -1,11 +1,11 @@
 package competition.subsystems.vision;
 
 public class BallSpatialInfo {
-    public float headingDeflection;
+    public float relativeHeading;
     public float distanceInches;
     
-    public BallSpatialInfo(float headingDeflection, float distanceInches) {
-        this.headingDeflection = headingDeflection;
+    public BallSpatialInfo(float heading, float distanceInches) {
+        this.relativeHeading = heading;
         this.distanceInches = distanceInches;
     }
 }
