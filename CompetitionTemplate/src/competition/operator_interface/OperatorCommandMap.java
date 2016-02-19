@@ -13,6 +13,8 @@ import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
@@ -78,5 +80,16 @@ public class OperatorCommandMap {
             MoveWristUpCommand moveWristUp){
         operatorInterface.operatorButtons.getifAvailable(5).whenPressed(moveWristUp);
         operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
+    }
+    
+    public void setupPortcullisCommands(
+            OperatorInterface oi,
+            SpinPortcullisWheelsCommand up,
+            SpinPortcullisWheelsCommand down) {
+        up.setDirection(PortcullisDirection.Up);
+        down.setDirection(PortcullisDirection.Down);
+        
+        oi.operatorButtons.getifAvailable(4).whileHeld(up);
+        oi.operatorButtons.getifAvailable(6).whileHeld(down);
     }
 }
