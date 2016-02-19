@@ -8,6 +8,7 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
@@ -63,8 +64,9 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
                 DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
                 serverSocket.receive(receivePacket);
     
-                ByteBuffer bufferBuffer = ByteBuffer.wrap(receiveBuffer);
-                JetsonCommPacket currentPacket = new JetsonCommPacket(bufferBuffer.asIntBuffer().array());
+                int[] intReceiveBuffer = convertBytesToInts(receiveBuffer);
+                
+                JetsonCommPacket currentPacket = new JetsonCommPacket(intReceiveBuffer);
                 currentPacket.setReciptTimestamp(Timer.getFPGATimestamp());
                 
                 log.debug("Read packet. Calling handler.");
@@ -81,6 +83,16 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
                 log.error(e.toString());
             }
         }
+    }
+
+    private int[] convertBytesToInts(byte[] inputBytes) {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(inputBytes);
+        IntBuffer intBuffer = byteBuffer.asIntBuffer();
+        
+        int[] receiveIntBuffer = new int[intBuffer.remaining()];
+        intBuffer.get(receiveIntBuffer);
+        
+        return receiveIntBuffer;
     }
 
     @Override
