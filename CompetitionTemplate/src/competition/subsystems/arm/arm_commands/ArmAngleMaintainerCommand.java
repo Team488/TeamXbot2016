@@ -6,6 +6,8 @@ import com.google.inject.Singleton;
 import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.math.PIDManager;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class ArmAngleMaintainerCommand extends BaseCommand{
@@ -13,10 +15,14 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     public ArmTargetSubsystem armTargetSubsystem;
     double armPower;
     
-    @Inject    
-    public ArmAngleMaintainerCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem){
+    PIDManager pidManager;
+    
+    @Inject
+    public ArmAngleMaintainerCommand(ArmSubsystem armSubsystem, ArmTargetSubsystem armTargetSubsystem,
+            XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
+        this.pidManager = new PIDManager("ArmPID", propManager, 0.1, 0, 0);
         this.requires(this.armSubsystem);
     }
 
@@ -29,8 +35,9 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     public void execute() {
         double currentArmAngle = armSubsystem.getArmAngle();
         double targetArmAngle = armTargetSubsystem.getTargetAngle();
-        
-        armPower = (targetArmAngle - currentArmAngle) / 90;
+
+        double armPower = pidManager.calculate(targetArmAngle, currentArmAngle);
+
         armSubsystem.setArmMotorPower(armPower);
     }
 }
