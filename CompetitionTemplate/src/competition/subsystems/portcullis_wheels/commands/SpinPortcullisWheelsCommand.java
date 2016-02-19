@@ -1,4 +1,4 @@
-package competition.subsystems.portcullisWheels.commands;
+package competition.subsystems.portcullis_wheels.commands;
 
 
 import xbot.common.command.BaseCommand;
@@ -7,7 +7,7 @@ import xbot.common.properties.XPropertyManager;
 
 import com.google.inject.Inject;
 
-import competition.subsystems.portcullisWheels.PortcullisWheelsSubsystem;
+import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
 
 public class SpinPortcullisWheelsCommand extends BaseCommand {
 

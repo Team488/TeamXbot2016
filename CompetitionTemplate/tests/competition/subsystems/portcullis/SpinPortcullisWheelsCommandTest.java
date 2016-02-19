@@ -4,9 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import competition.BaseRobotTest;
-import competition.subsystems.portcullisWheels.PortcullisWheelsSubsystem;
-import competition.subsystems.portcullisWheels.commands.SpinPortcullisWheelsCommand;
-import competition.subsystems.portcullisWheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
+import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import static org.junit.Assert.*;
 
 public class SpinPortcullisWheelsCommandTest extends BaseRobotTest {

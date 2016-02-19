@@ -4,8 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import competition.BaseRobotTest;
-import competition.subsystems.portcullisWheels.PortcullisWheelsSubsystem;
-
+import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
 import static org.junit.Assert.*;
 
 public class PortcullisSubsystemTests extends BaseRobotTest {
