@@ -10,6 +10,9 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
+import competition.subsystems.portcullisWheels.PortcullisWheelsSubsystem;
+import competition.subsystems.portcullisWheels.commands.SpinPortcullisWheelsCommand;
+import competition.subsystems.portcullisWheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.vision.VisionSubsystem;
@@ -42,6 +45,14 @@ public class SubsystemDefaultCommandMap {
             ArmSubsystem armSubsystem,
             ArmManualControlCommand armManualCommand){
         armSubsystem.setDefaultCommand(armManualCommand);
+    }
+    
+    @Inject
+    public void setUpPortcullisSystem(
+            PortcullisWheelsSubsystem portSystem,
+            SpinPortcullisWheelsCommand stop) {
+        stop.setDirection(PortcullisDirection.Stop);
+        portSystem.setDefaultCommand(stop);
     }
     
     @Inject
