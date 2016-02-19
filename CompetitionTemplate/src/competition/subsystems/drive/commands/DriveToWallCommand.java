@@ -13,7 +13,7 @@ public class DriveToWallCommand extends BaseCommand
     PoseSubsystem pose;
     DriveSubsystem drive;
     PIDManager wallManager;
-    double desiredDistance;
+    double targetDistanceFromWall;
     
     @Inject
     public DriveToWallCommand(PoseSubsystem pose, XPropertyManager propMan, DriveSubsystem drive)
@@ -31,7 +31,7 @@ public class DriveToWallCommand extends BaseCommand
     }
     
     public void setDesiredDistance(double distance) {
-        desiredDistance = distance;
+        targetDistanceFromWall = distance;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class DriveToWallCommand extends BaseCommand
         // approach our desired distance
         // negate the power, since if we are at 100 distance and goal is 40, we will get back a negative result,
         // but we need a positive power to move forward.
-        double power = -wallManager.calculate(desiredDistance, pose.getFrontRangefinderDistance());
+        double power = -wallManager.calculate(targetDistanceFromWall, pose.getFrontRangefinderDistance());
         
         drive.tankDriveSafely(power, power);
     }

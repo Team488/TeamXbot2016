@@ -23,14 +23,23 @@ public class PoseSubsystem extends BaseSubsystem {
         
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
     public XGyro imu;
+    
     public DistanceSensor frontDistanceSensor;
+    public DistanceSensor rearDistanceSensor;
+    public DistanceSensor leftDistanceSensor;
+    public DistanceSensor rightDistanceSensor;
+    
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
     private ContiguousHeading lastImuHeading;
     
     private DoubleProperty leftSensorMountingDistanceInches;
+    
     private DoubleProperty frontDistance;
+    private DoubleProperty rearDistance;
+    private DoubleProperty leftDistance;
+    private DoubleProperty rightDistance;
     
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     
@@ -52,7 +61,12 @@ public class PoseSubsystem extends BaseSubsystem {
         
         currentPitch = propManager.createEphemeralProperty("CurrentPitch", 0.0);
         currentRoll = propManager.createEphemeralProperty("CurrentRoll", 0.0);
+        
         frontDistance = propManager.createEphemeralProperty("FrontDistance", 0.0);
+        rearDistance = propManager.createEphemeralProperty("RearDistance", 0.0);
+        leftDistance = propManager.createEphemeralProperty("LeftDistance", 0.0);
+        rightDistance = propManager.createEphemeralProperty("RightDistance", 0.0);
+        
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
     }
     
@@ -69,7 +83,7 @@ public class PoseSubsystem extends BaseSubsystem {
      * continue to update the property when the robot doesn't explicitly need it - such as when the robot 
      * is disabled, but the drivers/programmers want to see the robot heading
      */
-    public void updateCurrentHeading() {
+    private void updateCurrentHeading() {
         // Old heading - current heading gets the delta heading        
         double imuDeltaYaw = lastImuHeading.difference(imu.getYaw());
 
@@ -94,13 +108,34 @@ public class PoseSubsystem extends BaseSubsystem {
         currentHeading.setValue(headingInDegrees);
     }
     
-    public void updateRangefinders() {
-        frontDistance.set(frontDistanceSensor.getDistance());
+    private void updateRangefinders() {
+        frontDistance.set(getFrontRangefinderDistance());
+        rearDistance.set(getRearRangefinderDistance());
+        leftDistance.set(getLeftRangefinderDistance());
+        rightDistance.set(getRightRangefinderDistance());
+                
         getDistanceFromLeftRangerfinderToLeftWall();
+    }
+    
+    public void updateAllSensors() {
+        updateRangefinders();
+        updateCurrentHeading();
     }
     
     public double getFrontRangefinderDistance() {
         return frontDistanceSensor.getDistance();
+    }
+    
+    public double getLeftRangefinderDistance() {
+        return leftDistanceSensor.getDistance();
+    }
+    
+    public double getRightRangefinderDistance() {
+        return rightDistanceSensor.getDistance();
+    }
+    
+    public double getRearRangefinderDistance() {
+        return rearDistanceSensor.getDistance();
     }
     
     public PoseResult getDistanceFromLeftRangerfinderToLeftWall() {
