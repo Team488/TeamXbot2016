@@ -28,7 +28,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
 
     @Override
     public void initialize() {
-        
+        pidManager.reset();
     }
 
     @Override
