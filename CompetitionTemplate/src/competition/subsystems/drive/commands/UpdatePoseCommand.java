@@ -28,7 +28,7 @@ public class UpdatePoseCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        pose.updateCurrentHeading();
+        pose.updateAllSensors();
         defenseTraversal.measureState(Math.abs(pose.getRobotPitch()));
     }
 
