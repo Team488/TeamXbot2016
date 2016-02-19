@@ -22,7 +22,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
-        this.pidManager = new PIDManager("ArmPID", propManager, 0.1, 0, 0);
+        this.pidManager = new PIDManager("ArmPID", propManager, 0.01, 0, 0);
         this.requires(this.armSubsystem);
     }
 
