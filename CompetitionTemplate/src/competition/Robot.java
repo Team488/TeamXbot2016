@@ -3,6 +3,7 @@ package competition;
 
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
+import competition.subsystems.arm.arm_commands.UpdateArmSensorsCommand;
 import competition.subsystems.vision.InertJetsonServer;
 import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
@@ -28,5 +29,8 @@ public class Robot extends BaseRobot {
         super.initializeSystems();
         this.injector.getInstance(SubsystemDefaultCommandMap.class);
         this.injector.getInstance(OperatorCommandMap.class);
+        
+        // Always running sensor updating commands
+        this.injector.getInstance(UpdateArmSensorsCommand.class).start();
     }
 }
