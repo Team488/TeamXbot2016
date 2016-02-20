@@ -28,6 +28,10 @@ public class ArmSubsystem extends BaseSubsystem {
     DoubleProperty armAngleDegrees;
     BooleanProperty lowerLimitSwitchProperty;
     BooleanProperty upperLimitSwitchProperty;
+    
+    DoubleProperty armEncoderCalibrationHeight;
+    BooleanProperty armEncoderCalibrated;
+    DoubleProperty armCalibrationPower;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -41,7 +45,10 @@ public class ArmSubsystem extends BaseSubsystem {
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
         armEncoderDistancePerPulse = propManager.createPersistentProperty("armEncoderDistancePerPulse", 1.0);
-        encoder.setDistancePerPulse(armEncoderDistancePerPulse.get());
+               
+        armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
+        armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
+        armCalibrationPower = propManager.createPersistentProperty("armCalibrationPower", -0.2);
     }
 
     public boolean isArmAtMinimumHeight() {
@@ -53,7 +60,11 @@ public class ArmSubsystem extends BaseSubsystem {
     }
     
     public double getArmAngle() {
-        return encoder.getDistance();
+        return encoder.getDistance() * armEncoderDistancePerPulse.get() - armEncoderCalibrationHeight.get();
+    }
+    
+    public void calibrateArm() {
+        setArmMotorPower(armCalibrationPower.get());
     }
     
     public void setArmMotorPower(double power) {
@@ -61,10 +72,22 @@ public class ArmSubsystem extends BaseSubsystem {
         rightArmMotor.set(power);
     }
     
+    public void forceCalibrateLow() {
+        armEncoderCalibrationHeight.set(getArmAngle());
+        armEncoderCalibrated.set(true);
+    }
+    
+    public boolean isCalibrated() {
+        return armEncoderCalibrated.get();
+    }
+    
     public void updateSensors() {
         armAngleDegrees.set(getArmAngle());
         lowerLimitSwitchProperty.set(lowerLimitSwitch.get());
         upperLimitSwitchProperty.set(upperLimitSwitch.get());
         
+        if (lowerLimitSwitch.get()) {
+            forceCalibrateLow();
+        }
     }
 }

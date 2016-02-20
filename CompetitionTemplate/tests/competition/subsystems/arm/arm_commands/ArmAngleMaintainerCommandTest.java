@@ -24,7 +24,7 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     @Test
     public void testArmAngle0to90() {
         ArmSubsystem armSubsystem = this.injector.getInstance(ArmSubsystem.class);
-        
+        armSubsystem.forceCalibrateLow();
         ((MockEncoder)armSubsystem.encoder).setDistance(0);
         
         armTargetSubsystem.setTargetAngle(90);
@@ -39,7 +39,7 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     @Test
     public void testArmAngle90to0() {
         ArmSubsystem armSubsystem = this.injector.getInstance(ArmSubsystem.class);
-        
+        armSubsystem.forceCalibrateLow();
         ((MockEncoder)armSubsystem.encoder).setDistance(90);
         
         armTargetSubsystem.setTargetAngle(0);
