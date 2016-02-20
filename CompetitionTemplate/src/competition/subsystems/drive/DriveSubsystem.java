@@ -103,4 +103,12 @@ public class DriveSubsystem extends BaseSubsystem {
         // Drive with the potentially-modified power values.
         tankDrive(leftPower, rightPower);
     }
+    
+    public void tankRotate(double rotationalPower) {
+        tankDrive(rotationalPower, -rotationalPower);
+    }
+    
+    public void stopDrive() {
+        tankDrive(0, 0);
+    }
 }
