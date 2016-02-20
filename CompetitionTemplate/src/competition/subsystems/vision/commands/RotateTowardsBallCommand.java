@@ -50,7 +50,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
             }
 
             double newRotationalPower = rotationalPidManager.calculate(0, targetBall.relativeHeading);
-            driveSubsystem.tankRotate(newRotationalPower);
+            driveSubsystem.tankRotateSafely(newRotationalPower);
         }
         
         visionSubsystem.updateMonitorLogging();
