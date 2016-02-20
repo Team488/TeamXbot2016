@@ -73,24 +73,28 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             }
             else {
                 switch (calibration) {
-                case NotCalibrated:
-                    beginCalibrationTime = Timer.getFPGATimestamp();
-                    calibration = AttemptCalibrationState.WaitForArmToLower;
-                    armSubsystem.calibrateArm();
-                    break;
-                case WaitForArmToLower:
-                    if (Timer.getFPGATimestamp() - beginCalibrationTime > 5.0) {
-                        // calibration is taking too long - abort and only drive manually
-                        calibration = AttemptCalibrationState.AbortCalibration;
+                    case NotCalibrated:
+                        beginCalibrationTime = Timer.getFPGATimestamp();
+                        calibration = AttemptCalibrationState.WaitForArmToLower;
+                        armSubsystem.calibrateArm();
+                        break;
+                    case WaitForArmToLower:
+                        if (Timer.getFPGATimestamp() - beginCalibrationTime > 5.0) {
+                            // calibration is taking too long - abort and only drive manually
+                            calibration = AttemptCalibrationState.AbortCalibration;
+                            armSubsystem.setArmMotorPower(0);
+                            break;
+                        }
+                        armSubsystem.calibrateArm();
+                        break;
+                    case AbortCalibration:
+                        // we could not calibrate - don't drive automatically.
                         armSubsystem.setArmMotorPower(0);
                         break;
-                    }
-                    armSubsystem.calibrateArm();
-                    break;
-                case AbortCalibration:
-                    // we could not calibrate - don't drive automatically.
-                    armSubsystem.setArmMotorPower(0);
-                    break;
+                    default: 
+                        // no idea how you got here
+                        armSubsystem.setArmMotorPower(0);
+                        break;
                 }
             }
         }
