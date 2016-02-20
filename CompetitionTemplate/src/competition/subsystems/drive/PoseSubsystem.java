@@ -167,8 +167,19 @@ public class PoseSubsystem extends BaseSubsystem {
         return currentHeading;
     }
     
-    public XYPair getTotalDistanceTraveled() {
+    public XYPair getFieldOrientedTotalDistanceTraveled() {
+        return getTravelVector();
+    }
+    
+    private XYPair getTravelVector() {
         return new XYPair(totalDistanceX.get(), totalDistanceY.get());
+    }
+    
+    public XYPair getRobotOrientedTotalDistanceTraveled() {
+        // if we are facing 90 degrees, no change.
+        // if we are facing 0 degrees (right), this rotates left by 90. Makes sense - if you rotate right, you want
+        // your perception of distance traveled to be that you have gone "leftward."
+        return getTravelVector().rotate(-(currentHeading.getValue() - 90));
     }
     
     public void resetDistanceTraveled() {
