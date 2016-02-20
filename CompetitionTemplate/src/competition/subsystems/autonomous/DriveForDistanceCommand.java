@@ -43,13 +43,13 @@ public class DriveForDistanceCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        currentDistance = poseSubsystem.getTotalDistanceTraveled().y;
+        currentDistance = poseSubsystem.getRobotOrientedTotalDistanceTraveled().y;
         double power = distanceDrivePid.calculate(targetDistance, currentDistance);
         driveSubsystem.tankDrive(power, power);
     }
     
     public boolean isFinished(){
-        currentDistance = poseSubsystem.getTotalDistanceTraveled().y;
+        currentDistance = poseSubsystem.getRobotOrientedTotalDistanceTraveled().y;
         return Math.abs(targetDistance - currentDistance) < targetRange.get(); 
     }
     

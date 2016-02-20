@@ -20,7 +20,12 @@ public class LowBarScoreCommandGroup extends CommandGroup{
     DoubleProperty ballEjectTime;
     
     @Inject
-    public LowBarScoreCommandGroup (DriveSubsystem drive, HeadingModule headingModule, PoseSubsystem pose, CollectorSubsystem collector, XPropertyManager propManager){
+    public LowBarScoreCommandGroup (
+            DriveSubsystem drive, 
+            HeadingModule headingModule, 
+            PoseSubsystem pose, 
+            CollectorSubsystem collector, 
+            XPropertyManager propManager){
         distanceToTurningPoint = propManager.createPersistentProperty("distance to turning point", -147.7);
         DriveForDistanceCommand driveToTurningPoint = new DriveForDistanceCommand(pose, drive, propManager);
         driveToTurningPoint.setTargetDistance(distanceToTurningPoint.get());
@@ -39,8 +44,10 @@ public class LowBarScoreCommandGroup extends CommandGroup{
         
         this.addSequential(driveToLowGoal);
         
+        ballEjectTime = propManager.createPersistentProperty("timeout for ejecting ball", 2.0);
         CollectorEjectCommand collectorEjectCommand = new CollectorEjectCommand(collector, propManager);
-        this.addSequential(collectorEjectCommand);
+        
+        this.addSequential(collectorEjectCommand, ballEjectTime.get());
         
     }
 
