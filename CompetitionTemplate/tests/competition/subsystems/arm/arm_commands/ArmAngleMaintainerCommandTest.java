@@ -65,8 +65,8 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     @Test
     public void testAutoCalibration() {
         angleMaintainer.setAutoCalibration(true);
-        armTargetSubsystem.setTargetAngle(90);
         angleMaintainer.initialize();
+        armTargetSubsystem.setTargetAngle(90);
         angleMaintainer.execute();
         
         // arm trying to go down and calibrate
