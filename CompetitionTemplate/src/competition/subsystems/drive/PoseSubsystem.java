@@ -1,7 +1,5 @@
 package competition.subsystems.drive;
 
-import java.util.function.DoubleFunction;
-
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -12,9 +10,7 @@ import xbot.common.controls.sensors.DistanceSensor;
 import xbot.common.controls.sensors.XEncoder;
 import xbot.common.controls.sensors.NavImu.ImuType;
 import xbot.common.controls.sensors.XGyro;
-import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
-import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.math.XYPair;
 import xbot.common.properties.DoubleProperty;
@@ -33,6 +29,9 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public XEncoder leftDriveEncoder;
     public XEncoder rightDriveEncoder;
+    
+    private DoubleProperty leftDriveDistancePerPulse;
+    private DoubleProperty rightDriveDistancePerPulse;
     
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
@@ -59,6 +58,9 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty currentPitch;
     private DoubleProperty currentRoll;
     private DoubleProperty leftDistanceToWall;
+    
+    private double previousLeftDistance;
+    private double previousRightDistance;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -94,6 +96,9 @@ public class PoseSubsystem extends BaseSubsystem {
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
         rightDriveDistance = propManager.createEphemeralProperty("RightDriveDistance", 0.0);
         
+        leftDriveDistancePerPulse = propManager.createPersistentProperty("LeftDriveDPP", 1.0);
+        rightDriveDistancePerPulse = propManager.createPersistentProperty("RightDriveDPP", 1.0);
+        
         totalDistanceX = propManager.createEphemeralProperty("TotalDistanceX", 0.0);
         totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
     }
@@ -127,13 +132,59 @@ public class PoseSubsystem extends BaseSubsystem {
         currentRoll.set(imu.getRoll());
     }
     
+    private double getLeftDriveDistance() {
+        return leftDriveEncoder.getDistance() * leftDriveDistancePerPulse.get();
+    }
+    
+    private double getRightDriveDistance() {
+        return rightDriveEncoder.getDistance() * rightDriveDistancePerPulse.get();
+    }
+    
+
+    private void updateDistanceTraveled() {
+        double currentLeftDistance = getLeftDriveDistance();
+        double currentRightDistance = getRightDriveDistance();
+        
+        double deltaLeft = currentLeftDistance - previousLeftDistance;
+        double deltaRight = currentRightDistance - previousRightDistance;
+        
+        double totalDistance = (deltaLeft + deltaRight) / 2;
+        
+        // get X and Y
+        double deltaY = Math.sin(currentHeading.getValue() * Math.PI / 180) * totalDistance;
+        double deltaX = Math.cos(currentHeading.getValue() * Math.PI / 180) * totalDistance;
+        
+        totalDistanceX.set(totalDistanceX.get() + deltaX);
+        totalDistanceY.set(totalDistanceY.get() + deltaY);
+        
+        // save values for next round
+        previousLeftDistance = currentLeftDistance;
+        previousRightDistance = currentRightDistance;
+    }
+    
     public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
         return currentHeading;
     }
     
-    public XYPair getTotalDistanceTraveled() {
-        return new XYPair(0,0);
+    public XYPair getFieldOrientedTotalDistanceTraveled() {
+        return getTravelVector();
+    }
+    
+    private XYPair getTravelVector() {
+        return new XYPair(totalDistanceX.get(), totalDistanceY.get());
+    }
+    
+    public XYPair getRobotOrientedTotalDistanceTraveled() {
+        // if we are facing 90 degrees, no change.
+        // if we are facing 0 degrees (right), this rotates left by 90. Makes sense - if you rotate right, you want
+        // your perception of distance traveled to be that you have gone "leftward."
+        return getTravelVector().rotate(-(currentHeading.getValue() - 90));
+    }
+    
+    public void resetDistanceTraveled() {
+        totalDistanceX.set(0);
+        totalDistanceY.set(0);
     }
     
     public void setCurrentHeading(double headingInDegrees){
@@ -158,6 +209,7 @@ public class PoseSubsystem extends BaseSubsystem {
         updateRangefinders();
         updateCurrentHeading();
         updateEncoders();
+        updateDistanceTraveled();
     }
     
     public double getFrontRangefinderDistance() {
