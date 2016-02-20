@@ -10,6 +10,7 @@ import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
@@ -27,16 +28,20 @@ public class OperatorCommandMap {
     // Example for setting up a command to fire when a button is pressed:
     
     @Inject
-    public void setupMyCommands(
+    public void setupDriveCommands(
             OperatorInterface operatorInterface,
             CalibrateHeadingCommand calibrateHeading,
-            HeadingDriveCommand headingDrive
+            HeadingDriveCommand headingDrive,
+            DriveToWallCommand driveToWall
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         headingDrive.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         operatorInterface.rightButtons.getifAvailable(2).whileHeld(headingDrive);
+        
+        driveToWall.setDesiredDistance(50);
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
     }
     
     @Inject

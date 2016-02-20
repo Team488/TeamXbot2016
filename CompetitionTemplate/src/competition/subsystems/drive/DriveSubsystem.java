@@ -35,11 +35,11 @@ public class DriveSubsystem extends BaseSubsystem {
     {
         log.info("Creating DriveSubsystem");
 
-        this.leftFrontDrive = factory.getSpeedController(0);
-        this.leftRearDrive = factory.getSpeedController(1);
+        this.leftFrontDrive = factory.getSpeedController(2);
+        this.leftRearDrive = factory.getSpeedController(4);
         
-        this.rightFrontDrive = factory.getSpeedController(2);
-        this.rightRearDrive = factory.getSpeedController(3);
+        this.rightFrontDrive = factory.getSpeedController(3);
+        this.rightRearDrive = factory.getSpeedController(5);
         
         this.leftFrontDrive.setInverted(true);
         this.leftRearDrive.setInverted(true);

@@ -32,8 +32,11 @@ public class ArmSubsystem extends BaseSubsystem {
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating ArmSubsystem");
-        leftArmMotor = factory.getSpeedController(4);
-        rightArmMotor = factory.getSpeedController(5);
+        
+        leftArmMotor = factory.getSpeedController(6);
+        leftArmMotor.setInverted(true);
+        
+        rightArmMotor = factory.getSpeedController(7);
         
         upperLimitSwitch = factory.getDigitalInput(1);
         lowerLimitSwitch = factory.getDigitalInput(2);
