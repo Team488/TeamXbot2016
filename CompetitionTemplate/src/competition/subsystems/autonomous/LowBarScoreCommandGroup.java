@@ -18,13 +18,13 @@ public class LowBarScoreCommandGroup extends CommandGroup{
     
     @Inject
     public LowBarScoreCommandGroup (DriveSubsystem driveSubsystem, HeadingModule headingModule, PoseSubsystem poseSubsystem, XPropertyManager propManager){
-        distanceToTurningPoint = propManager.createPersistentProperty("distance to turning point", 99.7);
+        distanceToTurningPoint = propManager.createPersistentProperty("distance to turning point", 147.7);
         DriveForDistanceCommand driveToTurningPoint = new DriveForDistanceCommand(poseSubsystem, driveSubsystem, propManager);
         driveToTurningPoint.setTargetDistance(distanceToTurningPoint.get());
         
         this.addSequential(driveToTurningPoint);
         
-        targetHeading = propManager.createPersistentProperty("Target heading to turn to lowGoal", 60.0);
+        targetHeading = propManager.createPersistentProperty("Target heading to turn to lowGoal", 240.0);
         TurnToHeadingCommand turnToLowGoal = new TurnToHeadingCommand(driveSubsystem, headingModule, poseSubsystem, propManager);
         turnToLowGoal.setTargetHeading(targetHeading.get());
         

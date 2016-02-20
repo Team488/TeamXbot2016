@@ -12,10 +12,11 @@ import xbot.common.properties.XPropertyManager;
 
 public class TurnToHeadingCommand extends BaseCommand{
     DriveSubsystem driveSubsystem;
-    XPropertyManager propManager;
+    PoseSubsystem poseSubsystem;
     HeadingModule headingModule;
-    PoseSubsystem pose;
+    
     DoubleProperty headingTargetRange;
+    
     public XGyro gyro;
     double power;
     double targetHeading;
@@ -24,7 +25,7 @@ public class TurnToHeadingCommand extends BaseCommand{
     public TurnToHeadingCommand(DriveSubsystem driveSubsystem, HeadingModule headingModule, PoseSubsystem poseSubsystem, XPropertyManager propManager){
         this.driveSubsystem = driveSubsystem;
         this.headingModule = headingModule;
-        this.pose = poseSubsystem;
+        this.poseSubsystem = poseSubsystem;
 
         headingTargetRange = propManager.createPersistentProperty("headingTargetRange", 3.0);
     }
@@ -34,18 +35,18 @@ public class TurnToHeadingCommand extends BaseCommand{
     }
 
     @Override
-    public void initialize() {
+    public void initialize(){
         headingModule.reset();
     }
 
     @Override
-    public void execute() {
+    public void execute(){
         power = Math.abs(headingModule.calculateHeadingPower(targetHeading));
         driveSubsystem.tankDrive(power, power * -1);
     }
     
     public boolean isFinished(){
-        double errorInDegrees = pose.getCurrentHeading().difference(targetHeading);
+        double errorInDegrees = poseSubsystem.getCurrentHeading().difference(targetHeading);
         return Math.abs(errorInDegrees) < headingTargetRange.get();
     }
     

@@ -29,9 +29,9 @@ public class LowBarLowScoreCommandGroupTest extends DriveTestBase{
         
         driveForDistanceCommand.setTargetDistance(lowScoreCommands.distanceToTurningPoint.get());
         
-        ((MockEncoder)poseSubsystem.leftEncoder).setDistance(0);
+        ((MockEncoder)poseSubsystem.leftDriveEncoder).setDistance(0);
         
-        ((MockEncoder)poseSubsystem.rightEncoder).setDistance(0);
+        ((MockEncoder)poseSubsystem.rightDriveEncoder).setDistance(0);
         
         driveForDistanceCommand.initialize();
         
@@ -39,9 +39,9 @@ public class LowBarLowScoreCommandGroupTest extends DriveTestBase{
        
         checkChassisPower(-1, -1);
         
-        ((MockEncoder)poseSubsystem.leftEncoder).setDistance(lowScoreCommands.distanceToTurningPoint.get());
+        ((MockEncoder)poseSubsystem.leftDriveEncoder).setDistance(lowScoreCommands.distanceToTurningPoint.get());
         
-        ((MockEncoder)poseSubsystem.rightEncoder).setDistance(lowScoreCommands.distanceToTurningPoint.get());
+        ((MockEncoder)poseSubsystem.rightDriveEncoder).setDistance(lowScoreCommands.distanceToTurningPoint.get());
         
         driveForDistanceCommand.execute();
         
@@ -84,7 +84,7 @@ public class LowBarLowScoreCommandGroupTest extends DriveTestBase{
         
         driveForDistanceCommand.setTargetDistance(lowScoreCommands.distanceToLowGoal.get());
         
-        ((MockEncoder)poseSubsystem.leftEncoder).setDistance(0);
+        ((MockEncoder)poseSubsystem.leftDriveEncoder).setDistance(0);
         
         driveForDistanceCommand.initialize();
         
@@ -92,9 +92,9 @@ public class LowBarLowScoreCommandGroupTest extends DriveTestBase{
        
         checkChassisPower(1, 1);
         
-        ((MockEncoder)poseSubsystem.leftEncoder).setDistance(lowScoreCommands.distanceToLowGoal.get());
+        ((MockEncoder)poseSubsystem.leftDriveEncoder).setDistance(lowScoreCommands.distanceToLowGoal.get());
         
-        ((MockEncoder)poseSubsystem.rightEncoder).setDistance(lowScoreCommands.distanceToLowGoal.get());
+        ((MockEncoder)poseSubsystem.rightDriveEncoder).setDistance(lowScoreCommands.distanceToLowGoal.get());
         
         driveForDistanceCommand.execute();
         

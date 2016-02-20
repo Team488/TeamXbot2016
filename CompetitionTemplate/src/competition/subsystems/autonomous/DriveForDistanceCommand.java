@@ -12,13 +12,15 @@ import xbot.common.properties.XPropertyManager;
 public class DriveForDistanceCommand extends BaseCommand{
     DriveSubsystem driveSubsystem; 
     PoseSubsystem poseSubsystem;
+    
     DoubleProperty distancePerTick;
     DoubleProperty targetRange;
+    
+    PIDManager distanceDrivePid;
+    
     public double targetDistance;
     double targetEncoderDistance;
-    public double currentDistance;
-    PIDManager distanceDrivePid;
-    double power;
+    double currentDistance;
     
     @Inject
     public DriveForDistanceCommand(PoseSubsystem poseSubsystem, DriveSubsystem driveSubsystem, XPropertyManager propManager){
@@ -41,13 +43,13 @@ public class DriveForDistanceCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        currentDistance = getAverageDistance();
-        power = distanceDrivePid.calculate(targetDistance, currentDistance);
+        currentDistance = poseSubsystem.getTotalDistanceTraveled().y;
+        double power = distanceDrivePid.calculate(targetDistance, currentDistance);
         driveSubsystem.tankDrive(power, power);
     }
     
     public boolean isFinished(){
-        currentDistance = getAverageDistance();
+        currentDistance = poseSubsystem.getTotalDistanceTraveled().y;
         return Math.abs(targetDistance - currentDistance) < targetRange.get(); 
     }
     
