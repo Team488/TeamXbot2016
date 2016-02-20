@@ -16,11 +16,14 @@ public class VisionSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(VisionSubsystem.class);
     
     private JetsonServerManager jetsonServer;
+    private VisionStateMonitor monitor;
     
     @Inject
     public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating VisionSubsystem");
         this.jetsonServer = jetsonServer;
+        
+        this.monitor = new VisionStateMonitor(this);
     }
     
     @Deprecated
@@ -34,5 +37,9 @@ public class VisionSubsystem extends BaseSubsystem {
     
     public boolean isConnectionHealthy() {
         return jetsonServer.isConnectionHealthy();
+    }
+    
+    public void updateMonitorLogging() {
+        this.monitor.update();
     }
 }

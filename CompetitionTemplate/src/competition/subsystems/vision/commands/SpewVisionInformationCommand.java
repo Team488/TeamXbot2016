@@ -33,6 +33,8 @@ public class SpewVisionInformationCommand extends BaseCommand {
         if(isPastInterval()) {
             updateSpewInfo();
         }
+        
+        visionSubsystem.updateMonitorLogging();
     }
     
     public void updateSpewInfo() {

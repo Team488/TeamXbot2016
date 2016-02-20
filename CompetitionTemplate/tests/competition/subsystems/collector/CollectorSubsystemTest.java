@@ -17,17 +17,21 @@ public class CollectorSubsystemTest extends BaseRobotTest {
         this.collectorSubsystem = this.injector.getInstance(CollectorSubsystem.class);
     }
     
+    private double getCollectorPower() {
+        return collectorSubsystem.collectorMotorLeft.get();
+    }
+    
     @Test
     public void testCollectorEjectCommand() {
          CollectorEjectCommand collectorEjectCommand = this.injector.getInstance(CollectorEjectCommand.class);
          
          collectorEjectCommand.initialize();
          
-         assertTrue(collectorSubsystem.collectorMotor.get() < 0);
+         assertTrue(getCollectorPower() < 0);
          
          collectorEjectCommand.end();
          
-         assertTrue(collectorSubsystem.collectorMotor.get() == 0);
+         assertTrue(getCollectorPower() == 0);
     }
     
     @Test
@@ -36,11 +40,11 @@ public class CollectorSubsystemTest extends BaseRobotTest {
          
          collectorIntakeCommand.initialize();
          
-         assertTrue(collectorSubsystem.collectorMotor.get() > 0);
+         assertTrue(getCollectorPower() > 0);
          
          collectorIntakeCommand.end();
          
-         assertTrue(collectorSubsystem.collectorMotor.get() == 0);
+         assertTrue(getCollectorPower() == 0);
     }
     
 }

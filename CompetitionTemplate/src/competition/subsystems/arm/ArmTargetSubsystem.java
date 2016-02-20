@@ -27,7 +27,7 @@ public class ArmTargetSubsystem extends BaseSubsystem{
         return targetAngle;
     }
     
-    public boolean isFinished(){
+    public boolean isWithinRange(){
         return Math.abs(armSubsystem.getArmAngle() - getTargetAngle()) <= withinTargetRange.get();
     }
 }

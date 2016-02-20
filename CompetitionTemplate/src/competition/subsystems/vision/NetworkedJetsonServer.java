@@ -97,6 +97,9 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
 
     @Override
     public boolean isConnectionHealthy() {
+        if (lastPacket == null) {
+            return false;
+        }
         return Timer.getFPGATimestamp() - lastPacket.getRecieptTimestamp() <= healthyTimeThreshold;
     }
 }

@@ -35,11 +35,11 @@ public class DriveSubsystem extends BaseSubsystem {
     {
         log.info("Creating DriveSubsystem");
 
-        this.leftFrontDrive = factory.getSpeedController(0);
-        this.leftRearDrive = factory.getSpeedController(1);
+        this.leftFrontDrive = factory.getSpeedController(2);
+        this.leftRearDrive = factory.getSpeedController(4);
         
-        this.rightFrontDrive = factory.getSpeedController(2);
-        this.rightRearDrive = factory.getSpeedController(3);
+        this.rightFrontDrive = factory.getSpeedController(3);
+        this.rightRearDrive = factory.getSpeedController(5);
         
         this.leftFrontDrive.setInverted(true);
         this.leftRearDrive.setInverted(true);
@@ -102,5 +102,13 @@ public class DriveSubsystem extends BaseSubsystem {
         
         // Drive with the potentially-modified power values.
         tankDrive(leftPower, rightPower);
+    }
+    
+    public void tankRotate(double rotationalPower) {
+        tankDrive(rotationalPower, -rotationalPower);
+    }
+    
+    public void stopDrive() {
+        tankDrive(0, 0);
     }
 }
