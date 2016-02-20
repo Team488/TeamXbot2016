@@ -19,6 +19,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     double armPower;
     AttemptCalibrationState calibration;
     BooleanProperty autoCalibrationEnabled;
+    double beginCalibrationTime = 0;
     
     PIDManager pidManager;
     
@@ -26,6 +27,10 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
         NotCalibrated,
         WaitForArmToLower,
         AbortCalibration
+    }
+    
+    public void setAutoCalibration(boolean value) {
+        autoCalibrationEnabled.set(value);
     }
     
     @Inject
@@ -43,11 +48,13 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     public void initialize() {
         pidManager.reset();
     }
-    
-    private double beginCalibrationTime = 0;
 
     @Override
     public void execute() {
+        
+        // just in case the system underneath is not running
+        armSubsystem.updateSensors();
+        
         if (armSubsystem.isCalibrated()) {
         
             double currentArmAngle = armSubsystem.getArmAngle();
@@ -58,7 +65,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             armSubsystem.setArmMotorPower(armPower);
         }
         else {
-            // System uncalibrated!
+            // System not calibrated! Let's try to fix that.
             
             if (!autoCalibrationEnabled.get()) {
                 // TODO: once we have limit switches, enable automatic calibration
@@ -69,11 +76,14 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
                 case NotCalibrated:
                     beginCalibrationTime = Timer.getFPGATimestamp();
                     calibration = AttemptCalibrationState.WaitForArmToLower;
+                    armSubsystem.calibrateArm();
                     break;
                 case WaitForArmToLower:
                     if (Timer.getFPGATimestamp() - beginCalibrationTime > 5.0) {
                         // calibration is taking too long - abort and only drive manually
                         calibration = AttemptCalibrationState.AbortCalibration;
+                        armSubsystem.setArmMotorPower(0);
+                        break;
                     }
                     armSubsystem.calibrateArm();
                     break;

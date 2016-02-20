@@ -9,6 +9,8 @@ import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
 import edu.wpi.first.wpilibj.MockDigitalInput;
 import edu.wpi.first.wpilibj.MockEncoder;
+import edu.wpi.first.wpilibj.MockTimer;
+import edu.wpi.first.wpilibj.Timer;
 import xbot.common.injection.BaseWPITest;
 
 public class ArmAngleMaintainerCommandTest extends BaseWPITest {
@@ -61,20 +63,39 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     }
     
     @Test
-    public void testCalibration() {
-        setMockEncoder(0);
-        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+    public void testAutoCalibration() {
+        angleMaintainer.setAutoCalibration(true);
+        armTargetSubsystem.setTargetAngle(90);
+        angleMaintainer.initialize();
+        angleMaintainer.execute();
         
-        setMockEncoder(-100);
-        assertEquals(-100, armSubsystem.getArmAngle(), 0.001);
+        // arm trying to go down and calibrate
+        assertTrue(armSubsystem.leftArmMotor.get() < 0);
         
+        // set up calibration conditions
         setLimitSwitches(false, true);
-        armSubsystem.updateSensors();
         
-        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+        angleMaintainer.execute();
+        // should be going up as normal now
+        assertTrue(armSubsystem.leftArmMotor.get() > 0);
+    }
+    
+    @Test
+    public void testAutoCalibrationTimeout() {
+        angleMaintainer.setAutoCalibration(true);
+        armTargetSubsystem.setTargetAngle(90);
+        angleMaintainer.initialize();
+        angleMaintainer.execute();
         
-        setMockEncoder(0);
-        assertEquals(100, armSubsystem.getArmAngle(), 0.001);
+        // arm trying to go down and calibrate
+        assertTrue(armSubsystem.leftArmMotor.get() < 0);
+        
+        MockTimer timer = injector.getInstance(MockTimer.class);
+        timer.setTimeInSeconds(10);
+        
+        angleMaintainer.execute();
+        // should be going up as normal now
+        assertEquals(0, armSubsystem.leftArmMotor.get(), 0.001);
     }
 
 }
