@@ -1,13 +1,15 @@
 package competition.subsystems.arm.arm_commands;
 
-import competition.subsystems.arm.ArmSubsystem;
+import com.google.inject.Inject;
 
+import competition.subsystems.arm.ArmSubsystem;
 import xbot.common.command.BaseCommand;
 
 public class UpdateArmSensorsCommand extends BaseCommand {
 
     ArmSubsystem armSubsystem;
     
+    @Inject
     public UpdateArmSensorsCommand(ArmSubsystem armSubsystem) {
         this.armSubsystem = armSubsystem;
         this.setRunWhenDisabled(true);

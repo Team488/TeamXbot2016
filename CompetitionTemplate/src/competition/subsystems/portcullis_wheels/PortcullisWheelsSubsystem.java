@@ -19,7 +19,7 @@ public class PortcullisWheelsSubsystem extends BaseSubsystem {
     
     @Inject
     public PortcullisWheelsSubsystem(WPIFactory factory, XPropertyManager propMan) {       
-        portcullisWheel = factory.getSpeedController(5);
+        portcullisWheel = factory.getSpeedController(6);
     }
     
     public void setWheelSpeed(double power) {
