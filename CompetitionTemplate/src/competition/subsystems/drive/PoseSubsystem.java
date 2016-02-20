@@ -9,6 +9,7 @@ import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
+import xbot.common.controls.sensors.XEncoder;
 import xbot.common.controls.sensors.NavImu.ImuType;
 import xbot.common.controls.sensors.XGyro;
 import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
@@ -28,6 +29,12 @@ public class PoseSubsystem extends BaseSubsystem {
     public DistanceSensor rearDistanceSensor;
     public DistanceSensor leftDistanceSensor;
     public DistanceSensor rightDistanceSensor;
+    
+    public XEncoder leftDriveEncoder;
+    public XEncoder rightDriveEncoder;
+    
+    private DoubleProperty leftDriveDistance;
+    private DoubleProperty rightDriveDistance;
     
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
@@ -52,6 +59,11 @@ public class PoseSubsystem extends BaseSubsystem {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
         frontDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rearDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        leftDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rightDistanceSensor = factory.getAnalogDistanceSensor(4, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        
+        
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
         currentHeadingProp = propManager.createEphemeralProperty("CurrentHeading", 0.0);
         // Right when the system is initialized, we need to have the old value be
@@ -68,6 +80,13 @@ public class PoseSubsystem extends BaseSubsystem {
         rightDistance = propManager.createEphemeralProperty("RightDistance", 0.0);
         
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
+        
+        leftDriveEncoder = factory.getEncoder(8, 9);
+        rightDriveEncoder = factory.getEncoder(6, 7);
+        rightDriveEncoder.setDistancePerPulse(-1);
+        
+        leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
+        rightDriveDistance = propManager.createEphemeralProperty("RightDriveDistance", 0.0);
     }
     
     public static class TemporaryVoltageMap
@@ -117,9 +136,15 @@ public class PoseSubsystem extends BaseSubsystem {
         getDistanceFromLeftRangerfinderToLeftWall();
     }
     
+    private void updateEncoders() {
+        leftDriveDistance.set(leftDriveEncoder.getDistance());
+        rightDriveDistance.set(rightDriveEncoder.getDistance());
+    }
+    
     public void updateAllSensors() {
         updateRangefinders();
         updateCurrentHeading();
+        updateEncoders();
     }
     
     public double getFrontRangefinderDistance() {

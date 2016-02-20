@@ -18,7 +18,6 @@ public class CollectorSubsystemTest extends BaseRobotTest {
     }
     
     private double getCollectorPower() {
-        assertTrue(collectorSubsystem.collectorMotorLeft.get() == collectorSubsystem.collectorMotorRight.get());
         return collectorSubsystem.collectorMotorLeft.get();
     }
     

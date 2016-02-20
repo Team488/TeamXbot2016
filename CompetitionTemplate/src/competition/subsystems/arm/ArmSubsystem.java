@@ -42,9 +42,9 @@ public class ArmSubsystem extends BaseSubsystem {
         
         rightArmMotor = factory.getSpeedController(7);
         
-        upperLimitSwitch = factory.getDigitalInput(5);
-        lowerLimitSwitch = factory.getDigitalInput(6);
-        encoder = factory.getEncoder(1, 2);
+        upperLimitSwitch = factory.getDigitalInput(1);
+        lowerLimitSwitch = factory.getDigitalInput(2);
+        encoder = factory.getEncoder(4, 5);
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
