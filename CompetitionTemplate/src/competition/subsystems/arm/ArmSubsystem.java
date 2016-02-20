@@ -63,7 +63,7 @@ public class ArmSubsystem extends BaseSubsystem {
         return encoder.getDistance() * armEncoderDistancePerPulse.get() - armEncoderCalibrationHeight.get();
     }
     
-    public void calibrateArm() {
+    public void setArmMotorToCalibratePower() {
         setArmMotorPower(armCalibrationPower.get());
     }
     
@@ -72,12 +72,13 @@ public class ArmSubsystem extends BaseSubsystem {
         rightArmMotor.set(power);
     }
     
-    public void forceCalibrateLow() {
+    public void calibrateCurrentPositionAsLow() {
         armEncoderCalibrationHeight.set(getArmAngle());
         armEncoderCalibrated.set(true);
     }
     
     public boolean isCalibrated() {
+        updateSensors();
         return armEncoderCalibrated.get();
     }
     
@@ -87,7 +88,7 @@ public class ArmSubsystem extends BaseSubsystem {
         upperLimitSwitchProperty.set(upperLimitSwitch.get());
         
         if (lowerLimitSwitch.get()) {
-            forceCalibrateLow();
+            calibrateCurrentPositionAsLow();
         }
     }
 }

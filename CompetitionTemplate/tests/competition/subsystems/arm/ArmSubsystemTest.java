@@ -12,22 +12,11 @@ import edu.wpi.first.wpilibj.MockDigitalInput;
 import edu.wpi.first.wpilibj.MockEncoder;
 import xbot.common.injection.BaseWPITest;
 
-public class ArmSubsystemTest extends BaseRobotTest {
-    
-    ArmSubsystem armSubsystem;
-    
+public class ArmSubsystemTest extends ArmTestBase {
+        
     @Before
     public void setup() {
-        this.armSubsystem = this.injector.getInstance(ArmSubsystem.class);
-    }
-    
-    private void setMockEncoder(double value) {
-        ((MockEncoder)armSubsystem.encoder).setDistance(value);
-    }
-    
-    private void setLimitSwitches(boolean up, boolean down) {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(up);
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(down);
+        super.setup();
     }
     
     @Test
