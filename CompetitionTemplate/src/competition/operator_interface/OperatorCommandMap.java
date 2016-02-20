@@ -70,8 +70,9 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
         operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
         
-        AnalogHIDDescription yUp = new AnalogHIDDescription(1, 0.15, 1);
-        AnalogHIDDescription yDown = new AnalogHIDDescription(1, -1, -.15);
+        double minValue = 0.15;
+        AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
+        AnalogHIDDescription yDown = new AnalogHIDDescription(1, -1, -minValue);
         operatorInterface.operatorButtons.addAnalogButton(yUp);
         operatorInterface.operatorButtons.addAnalogButton(yDown);
         
