@@ -59,8 +59,8 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty currentRoll;
     private DoubleProperty leftDistanceToWall;
     
-    private double oldLeftDistance;
-    private double oldRightDistance;
+    private double previousLeftDistance;
+    private double previousRightDistance;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -145,8 +145,8 @@ public class PoseSubsystem extends BaseSubsystem {
         double currentLeftDistance = getLeftDriveDistance();
         double currentRightDistance = getRightDriveDistance();
         
-        double deltaLeft = currentLeftDistance - oldLeftDistance;
-        double deltaRight = currentRightDistance - oldRightDistance;
+        double deltaLeft = currentLeftDistance - previousLeftDistance;
+        double deltaRight = currentRightDistance - previousRightDistance;
         
         double totalDistance = (deltaLeft + deltaRight) / 2;
         
@@ -158,8 +158,8 @@ public class PoseSubsystem extends BaseSubsystem {
         totalDistanceY.set(totalDistanceY.get() + deltaY);
         
         // save values for next round
-        oldLeftDistance = currentLeftDistance;
-        oldRightDistance = currentRightDistance;
+        previousLeftDistance = currentLeftDistance;
+        previousRightDistance = currentRightDistance;
     }
     
     public ContiguousHeading getCurrentHeading() {
