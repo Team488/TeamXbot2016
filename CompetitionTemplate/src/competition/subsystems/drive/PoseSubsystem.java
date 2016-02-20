@@ -16,6 +16,7 @@ import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
+import xbot.common.math.XYPair;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -36,6 +37,9 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
     
+    private DoubleProperty totalDistanceX;
+    private DoubleProperty totalDistanceY;
+    
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
@@ -48,7 +52,9 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty leftDistance;
     private DoubleProperty rightDistance;
     
+    // These are two common robot starting positions - kept here as convenient shorthand.
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
+    public static final double FACING_TOWARDS_DRIVERS = -90;
     
     private DoubleProperty currentPitch;
     private DoubleProperty currentRoll;
@@ -87,6 +93,9 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
         rightDriveDistance = propManager.createEphemeralProperty("RightDriveDistance", 0.0);
+        
+        totalDistanceX = propManager.createEphemeralProperty("TotalDistanceX", 0.0);
+        totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
     }
     
     public static class TemporaryVoltageMap
@@ -121,6 +130,10 @@ public class PoseSubsystem extends BaseSubsystem {
     public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
         return currentHeading;
+    }
+    
+    public XYPair getTotalDistanceTraveled() {
+        return new XYPair(0,0);
     }
     
     public void setCurrentHeading(double headingInDegrees){
