@@ -1,9 +1,12 @@
 package competition.subsystems.vision;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.log4j.Logger;
 
@@ -18,7 +21,7 @@ public class JetsonCommPacket {
 
     private PacketParserState currentParserState = PacketParserState.WAITING_FOR_START;
 
-    private ArrayList<Integer> packetPayloadData = new ArrayList<>();
+    private List<Integer> packetPayloadData = new ArrayList<>();
     private int expectedPayloadLength = -1;
     private PacketPayloadType payloadType = PacketPayloadType.UNKNOWN;
 
@@ -32,6 +35,12 @@ public class JetsonCommPacket {
         if(addNewValues(data)) {
             log.warn("Packet object initialized with partial packet data!");
         }
+    }
+    
+    public JetsonCommPacket(PacketPayloadType type, int[] payloadData) {
+        this.currentParserState = PacketParserState.PARSE_COMPLETE;
+        this.payloadType = type;
+        this.packetPayloadData = IntStream.of(payloadData).boxed().collect(Collectors.toList());;
     }
 
     public enum PacketParserState {
