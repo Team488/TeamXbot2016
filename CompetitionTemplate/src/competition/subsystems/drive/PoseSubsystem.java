@@ -52,6 +52,7 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty leftDistance;
     private DoubleProperty rightDistance;
     
+    // These are two common robot starting positions - kept here as convenient shorthand.
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     public static final double FACING_TOWARDS_DRIVERS = -90;
     
@@ -92,6 +93,9 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
         rightDriveDistance = propManager.createEphemeralProperty("RightDriveDistance", 0.0);
+        
+        totalDistanceX = propManager.createEphemeralProperty("TotalDistanceX", 0.0);
+        totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
     }
     
     public static class TemporaryVoltageMap
