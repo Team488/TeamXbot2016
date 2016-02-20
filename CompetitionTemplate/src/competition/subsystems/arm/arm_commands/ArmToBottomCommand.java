@@ -34,7 +34,7 @@ public class ArmToBottomCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        return armTargetSubsystem.isFinished();
+        return armTargetSubsystem.isWithinRange();
     }
     
     @Override

@@ -10,8 +10,13 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
+import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
+import competition.subsystems.vision.VisionSubsystem;
+import competition.subsystems.vision.commands.SpewVisionInformationCommand;
 
 @Singleton
 public class SubsystemDefaultCommandMap {
@@ -31,7 +36,7 @@ public class SubsystemDefaultCommandMap {
     @Inject
     public void setupShiftingSubsystem(
             ShiftingSubsystem shiftingSubsystem,
-            ShiftHighCommand shiftHighCommand){
+            ShiftHighCommand shiftHighCommand) {
         shiftingSubsystem.setDefaultCommand(shiftHighCommand);
     }
     
@@ -40,5 +45,20 @@ public class SubsystemDefaultCommandMap {
             ArmSubsystem armSubsystem,
             ArmManualControlCommand armManualCommand){
         armSubsystem.setDefaultCommand(armManualCommand);
+    }
+    
+    @Inject
+    public void setUpPortcullisSystem(
+            PortcullisWheelsSubsystem portSystem,
+            SpinPortcullisWheelsCommand stop) {
+        stop.setDirection(PortcullisDirection.Stop);
+        portSystem.setDefaultCommand(stop);
+    }
+    
+    @Inject
+    public void setupVisionSubsystem(
+            VisionSubsystem visionSubsystem,
+            SpewVisionInformationCommand spewer) {
+        visionSubsystem.setDefaultCommand(spewer);
     }
 }

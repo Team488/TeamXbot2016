@@ -5,19 +5,18 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import competition.BaseRobotTest;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import edu.wpi.first.wpilibj.MockDigitalInput;
+import edu.wpi.first.wpilibj.MockEncoder;
 import xbot.common.injection.BaseWPITest;
 
-public class ArmSubsystemTest extends BaseWPITest{
-    
-    ArmSubsystem armSubsystem;
-    
+public class ArmSubsystemTest extends ArmTestBase {
+        
     @Before
     public void setup() {
-        this.armSubsystem = this.injector.getInstance(ArmSubsystem.class);
-
+        super.setup();
     }
     
     @Test
@@ -41,13 +40,15 @@ public class ArmSubsystemTest extends BaseWPITest{
     public void testLowerArmCommand(){
         LowerArmCommand lowerArmCommand = this.injector.getInstance(LowerArmCommand.class); //black magic that says to test this class
         
-        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0); //at the beginning, the motor powers should be 0. Say true if the motors are 0
+       //at the beginning, the motor powers should be 0. Say true if the motors are 0
+        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0); 
         
         lowerArmCommand.initialize(); //runs initialize in lowerArmCommand
         
         lowerArmCommand.execute(); //runs execute in the lowerArmCommand
         
-        assertTrue(armSubsystem.leftArmMotor.get() < 0 && armSubsystem.rightArmMotor.get() < 0); //the motor power should be greater than 0 after initialize and execute runs
+        //the motor power should be greater than 0 after initialize and execute runs
+        assertTrue(armSubsystem.leftArmMotor.get() < 0 && armSubsystem.rightArmMotor.get() < 0); 
         
         lowerArmCommand.end();
         
@@ -63,5 +64,22 @@ public class ArmSubsystemTest extends BaseWPITest{
         ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(true); //mocks the lower limit switch being pressed
         
         assertTrue(armSubsystem.isArmAtMinimumHeight()); //say true is the arm is at minimum height
+    }
+    
+    @Test
+    public void testCalibration() {
+        setMockEncoder(0);
+        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+        
+        setMockEncoder(-100);
+        assertEquals(-100, armSubsystem.getArmAngle(), 0.001);
+        
+        setLimitSwitches(false, true);
+        armSubsystem.updateSensors();
+        
+        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+        
+        setMockEncoder(0);
+        assertEquals(100, armSubsystem.getArmAngle(), 0.001);
     }
 }

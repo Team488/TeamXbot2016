@@ -10,9 +10,12 @@ import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
+import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
@@ -25,16 +28,20 @@ public class OperatorCommandMap {
     // Example for setting up a command to fire when a button is pressed:
     
     @Inject
-    public void setupMyCommands(
+    public void setupDriveCommands(
             OperatorInterface operatorInterface,
             CalibrateHeadingCommand calibrateHeading,
-            HeadingDriveCommand headingDrive
+            HeadingDriveCommand headingDrive,
+            DriveToWallCommand driveToWall
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         headingDrive.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         operatorInterface.rightButtons.getifAvailable(2).whileHeld(headingDrive);
+        
+        driveToWall.setDesiredDistance(50);
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
     }
     
     @Inject
@@ -78,5 +85,16 @@ public class OperatorCommandMap {
             MoveWristUpCommand moveWristUp){
         operatorInterface.operatorButtons.getifAvailable(5).whenPressed(moveWristUp);
         operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
+    }
+    
+    public void setupPortcullisCommands(
+            OperatorInterface oi,
+            SpinPortcullisWheelsCommand up,
+            SpinPortcullisWheelsCommand down) {
+        up.setDirection(PortcullisDirection.Up);
+        down.setDirection(PortcullisDirection.Down);
+        
+        oi.operatorButtons.getifAvailable(4).whileHeld(up);
+        oi.operatorButtons.getifAvailable(6).whileHeld(down);
     }
 }
