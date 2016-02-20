@@ -1,7 +1,6 @@
 package competition.subsystems.autonomous;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import competition.subsystems.collector.CollectorSubsystem;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-@Singleton
 public class LowBarScoreCommandGroup extends CommandGroup{
     public DoubleProperty distanceToTurningPoint;
     public DoubleProperty distanceToLowGoal;
@@ -26,19 +24,19 @@ public class LowBarScoreCommandGroup extends CommandGroup{
             PoseSubsystem pose, 
             CollectorSubsystem collector, 
             XPropertyManager propManager){
-        distanceToTurningPoint = propManager.createPersistentProperty("distance to turning point", -147.7);
+        distanceToTurningPoint = propManager.createPersistentProperty("distance to turning point from far end of low goal", -147.7);
         DriveForDistanceCommand driveToTurningPoint = new DriveForDistanceCommand(pose, drive, propManager);
         driveToTurningPoint.setTargetDistance(distanceToTurningPoint.get());
         
         this.addSequential(driveToTurningPoint);
         
-        targetHeading = propManager.createPersistentProperty("Target heading to turn to lowGoal", 240.0);
+        targetHeading = propManager.createPersistentProperty("Target heading to turn to low Goal", 240.0);
         TurnToHeadingCommand turnToLowGoal = new TurnToHeadingCommand(drive, headingModule, pose, propManager);
         turnToLowGoal.setTargetHeading(targetHeading.get());
         
         this.addSequential(turnToLowGoal);
         
-        distanceToLowGoal = propManager.createPersistentProperty("distance to low goal", 139.03);
+        distanceToLowGoal = propManager.createPersistentProperty("distance to low goal from turning point", 139.03);
         DriveForDistanceCommand driveToLowGoal = new DriveForDistanceCommand(pose, drive, propManager);
         driveToLowGoal.setTargetDistance(distanceToLowGoal.get());
         
