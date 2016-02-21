@@ -1,5 +1,7 @@
 package competition.subsystems.wrist;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -9,19 +11,26 @@ import xbot.common.injection.wpi_factories.WPIFactory;
 
 @Singleton
 public class WristSubsystem extends BaseSubsystem {
-    public final XSolenoid solenoid;
+    public final XSolenoid solenoidA;
+    public final XSolenoid solenoidB;
+    
+    private static Logger log = Logger.getLogger(WristSubsystem.class);
     
     @Inject
     public WristSubsystem (WPIFactory factory) {
-        solenoid = factory.getSolenoid(2);
+        log.info("Creating WristSubsystem");
+        solenoidA = factory.getSolenoid(2);
+        solenoidB = factory.getSolenoid(3);
     }
     
     public void moveWristUp() {
-        solenoid.set(true);
+        solenoidA.set(true);
+        solenoidB.set(false);
     }
     
     public void moveWristDown() {
-        solenoid.set(false);
+        solenoidA.set(false);
+        solenoidB.set(true);
     }
 
 }

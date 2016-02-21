@@ -95,6 +95,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
     }
     
+    @Inject
     public void setupWristCommands(
             OperatorInterface operatorInterface,
             MoveWristDownCommand moveWristDown,
@@ -103,6 +104,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
     }
     
+    @Inject
     public void setupPortcullisCommands(
             OperatorInterface oi,
             SpinPortcullisWheelsCommand up,
