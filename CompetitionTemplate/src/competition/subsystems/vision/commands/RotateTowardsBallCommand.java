@@ -35,25 +35,16 @@ public class RotateTowardsBallCommand extends BaseCommand {
     }
 
     @Override
-    public void execute() {
-        BallSpatialInfo[] ballInfo = visionSubsystem.getBoulderInfo();
-        
-        if(!visionSubsystem.isConnectionHealthy() || ballInfo == null || ballInfo.length <= 0) {
+    public void execute() {        
+        if(!visionSubsystem.isConnectionHealthy() || !visionSubsystem.trackingAnyBalls()) {
            driveSubsystem.stopDrive();
         }
         else {
-            BallSpatialInfo targetBall = null;
-            for(BallSpatialInfo ball : ballInfo) {
-                if(targetBall == null || ball.distanceInches > targetBall.distanceInches) {
-                    targetBall = ball;
-                }
-            }
+            BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
 
             double newRotationalPower = rotationalPidManager.calculate(0, targetBall.relativeHeading);
             driveSubsystem.tankRotate(newRotationalPower);
         }
-        
-        visionSubsystem.updateMonitorLogging();
     }
     
     @Override

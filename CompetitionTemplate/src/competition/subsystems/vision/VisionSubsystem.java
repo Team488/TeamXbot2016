@@ -16,14 +16,11 @@ public class VisionSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(VisionSubsystem.class);
     
     private JetsonServerManager jetsonServer;
-    private VisionStateMonitor monitor;
     
     @Inject
     public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating VisionSubsystem");
         this.jetsonServer = jetsonServer;
-        
-        this.monitor = new VisionStateMonitor(this);
     }
     
     @Deprecated
@@ -35,11 +32,25 @@ public class VisionSubsystem extends BaseSubsystem {
         return jetsonServer.getLastSpatialInfoArray();
     }
     
+    public BallSpatialInfo findTargetBall() {
+        BallSpatialInfo[] ballInfo = this.getBoulderInfo();
+        
+        BallSpatialInfo targetBall = null;
+        for(BallSpatialInfo ball : ballInfo) {
+            if(targetBall == null || ball.distanceInches > targetBall.distanceInches) {
+                targetBall = ball;
+            }
+        }
+        
+        return targetBall;
+    }
+    
     public boolean isConnectionHealthy() {
         return jetsonServer.isConnectionHealthy();
     }
-    
-    public void updateMonitorLogging() {
-        this.monitor.update();
+
+    public boolean trackingAnyBalls() {
+        BallSpatialInfo[] ballInfo = this.getBoulderInfo();
+        return ballInfo == null || ballInfo.length <= 0;
     }
 }

@@ -17,7 +17,7 @@ import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCom
 import competition.subsystems.shifting.ShiftingSubsystem;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.vision.VisionSubsystem;
-import competition.subsystems.vision.commands.SpewVisionInformationCommand;
+import competition.subsystems.vision.commands.VisionTelemetryReporterCommand;
 
 @Singleton
 public class SubsystemDefaultCommandMap {
@@ -58,8 +58,6 @@ public class SubsystemDefaultCommandMap {
     
     @Inject
     public void setupVisionSubsystem(
-            VisionSubsystem visionSubsystem,
-            SpewVisionInformationCommand spewer) {
-        visionSubsystem.setDefaultCommand(spewer);
+            VisionSubsystem visionSubsystem) {
     }
 }
