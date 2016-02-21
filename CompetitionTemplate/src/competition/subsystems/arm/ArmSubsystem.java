@@ -32,6 +32,9 @@ public class ArmSubsystem extends BaseSubsystem {
     DoubleProperty armEncoderCalibrationHeight;
     BooleanProperty armEncoderCalibrated;
     DoubleProperty armCalibrationPower;
+    
+    DoubleProperty armExtensionAngleDangerZoneBegin;
+    DoubleProperty armExtensionAngleIllegalZoneBegin;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -42,8 +45,8 @@ public class ArmSubsystem extends BaseSubsystem {
         
         rightArmMotor = factory.getSpeedController(7);
         
-        upperLimitSwitch = factory.getDigitalInput(1);
-        lowerLimitSwitch = factory.getDigitalInput(2);
+        upperLimitSwitch = factory.getDigitalInput(2);
+        lowerLimitSwitch = factory.getDigitalInput(0);
         encoder = factory.getEncoder(4, 5);
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
@@ -53,6 +56,13 @@ public class ArmSubsystem extends BaseSubsystem {
         armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
         armCalibrationPower = propManager.createPersistentProperty("armCalibrationPower", -0.2);
+        
+        armExtensionAngleDangerZoneBegin = propManager.createPersistentProperty("ArmExtensionDangerZoneBegin", 25.0);
+        armExtensionAngleIllegalZoneBegin = propManager.createPersistentProperty("ArmExtensionIllegalZoneBegin", 20.0);
+        
+        if (armExtensionAngleDangerZoneBegin.get() < armExtensionAngleIllegalZoneBegin.get()) {
+            log.warn("The Illegal zone for the arm is greater than the warning zone! This may cause illegal robot behavior!!");
+        }
     }
 
     public boolean isArmAtMinimumHeight() {
@@ -65,6 +75,20 @@ public class ArmSubsystem extends BaseSubsystem {
     
     public double getArmAngle() {
         return encoder.getDistance() * armEncoderDistancePerPulse.get() - armEncoderCalibrationHeight.get();
+    }
+    
+
+    // When the arm is low enough, extending the wrist will cause us to extend beyond the 15" legal limit.
+    // This zone is where extending the wrist is still legal, but only barely. If you are in this zone,
+    // this would be a good time to lower the wrist.
+    public boolean isArmInDangerZone() {
+        return getArmAngle() < armExtensionAngleDangerZoneBegin.get();
+    }
+    
+    // When the arm is low enough, extending the wrist will cause us to extend beyond the 15" legal limit.
+    // Commands can use this information to decide how to manipulate the wrist.
+    public boolean isArmInIllegalZone() {
+        return getArmAngle() < armExtensionAngleIllegalZoneBegin.get();
     }
     
     public void setArmMotorToCalibratePower() {
