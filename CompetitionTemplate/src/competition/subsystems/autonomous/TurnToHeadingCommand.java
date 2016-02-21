@@ -6,7 +6,6 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.HeadingModule;
 import xbot.common.command.BaseCommand;
-import xbot.common.controls.sensors.XGyro;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
