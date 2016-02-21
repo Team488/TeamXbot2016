@@ -23,7 +23,7 @@ public class WristSubsystemTest extends BaseWPITest{
         
         moveWristUpCommand.initialize();
         
-        assertTrue(wristSubsystem.solenoid.get());
+        assertTrue(wristSubsystem.solenoidA.get());
         
         assertTrue(moveWristUpCommand.isFinished());
     }
@@ -34,7 +34,7 @@ public class WristSubsystemTest extends BaseWPITest{
         
         moveWristDownCommand.initialize();
         
-        assertTrue(!(wristSubsystem.solenoid.get()));
+        assertTrue(!(wristSubsystem.solenoidA.get()));
         
         assertTrue(moveWristDownCommand.isFinished());
     }

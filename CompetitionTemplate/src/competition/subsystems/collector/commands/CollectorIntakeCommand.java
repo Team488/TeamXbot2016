@@ -18,8 +18,7 @@ public class CollectorIntakeCommand extends BaseCommand{
     }
     
     @Override
-    public void initialize() {
-        collectorSubsystem.setIntakePower(intakePower.get()); 
+    public void initialize() { 
     }
 
     public void end() {
@@ -28,7 +27,9 @@ public class CollectorIntakeCommand extends BaseCommand{
 
     @Override
     public void execute() {
-      
+        if (!collectorSubsystem.isBallInCollector()) {
+            collectorSubsystem.setIntakePower(intakePower.get());
+        }
     }
 
 

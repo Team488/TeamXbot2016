@@ -38,7 +38,7 @@ public class CollectorSubsystemTest extends BaseRobotTest {
     public void testCollectorIntakeCommand() {
          CollectorIntakeCommand collectorIntakeCommand = this.injector.getInstance(CollectorIntakeCommand.class);
          
-         collectorIntakeCommand.initialize();
+         collectorIntakeCommand.execute();
          
          assertTrue(getCollectorPower() > 0);
          
