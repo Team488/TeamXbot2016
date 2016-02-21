@@ -14,7 +14,7 @@ import xbot.common.properties.XPropertyManager;
 public class LowBarScoreCommandGroup extends CommandGroup{
     public DoubleProperty distanceToTurningPoint;
     public DoubleProperty distanceToLowGoal;
-    DoubleProperty targetHeading;
+    public DoubleProperty targetHeading;
     DoubleProperty ballEjectTime;
     
     @Inject
