@@ -32,6 +32,9 @@ public class ArmSubsystem extends BaseSubsystem {
     DoubleProperty armEncoderCalibrationHeight;
     BooleanProperty armEncoderCalibrated;
     DoubleProperty armCalibrationPower;
+    
+    DoubleProperty armExtensionDangerZoneBegin;
+    DoubleProperty armExtensionIllegalZoneBegin;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -53,6 +56,9 @@ public class ArmSubsystem extends BaseSubsystem {
         armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
         armCalibrationPower = propManager.createPersistentProperty("armCalibrationPower", -0.2);
+        
+        armExtensionDangerZoneBegin = propManager.createPersistentProperty("ArmExtensionDangerZoneBegin", 25.0);
+        armExtensionIllegalZoneBegin = propManager.createPersistentProperty("ArmExtensionIllegalZoneBegin", 20.0);
     }
 
     public boolean isArmAtMinimumHeight() {
@@ -65,6 +71,14 @@ public class ArmSubsystem extends BaseSubsystem {
     
     public double getArmAngle() {
         return encoder.getDistance() * armEncoderDistancePerPulse.get() - armEncoderCalibrationHeight.get();
+    }
+    
+    public boolean isArmInDangerZone() {
+        return getArmAngle() < armExtensionDangerZoneBegin.get();
+    }
+    
+    public boolean isArmInIllegalZone() {
+        return getArmAngle() < armExtensionIllegalZoneBegin.get();
     }
     
     public void setArmMotorToCalibratePower() {
