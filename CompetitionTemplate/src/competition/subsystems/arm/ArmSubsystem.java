@@ -24,7 +24,6 @@ public class ArmSubsystem extends BaseSubsystem {
     public XDigitalInput lowerLimitSwitch;
     public XEncoder encoder;
     
-    DoubleProperty armEncoderDistancePerPulse;
     DoubleProperty armAngleDegrees;
     BooleanProperty lowerLimitSwitchProperty;
     BooleanProperty upperLimitSwitchProperty;
@@ -47,11 +46,10 @@ public class ArmSubsystem extends BaseSubsystem {
         
         upperLimitSwitch = factory.getDigitalInput(2);
         lowerLimitSwitch = factory.getDigitalInput(0);
-        encoder = factory.getEncoder(4, 5);
+        encoder = factory.getEncoder("ArmEncoder", 4, 5, 1.0);
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
-        armEncoderDistancePerPulse = propManager.createPersistentProperty("armEncoderDistancePerPulse", 1.0);
                
         armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
@@ -74,7 +72,7 @@ public class ArmSubsystem extends BaseSubsystem {
     }
     
     public double getArmAngle() {
-        return encoder.getDistance() * armEncoderDistancePerPulse.get() - armEncoderCalibrationHeight.get();
+        return encoder.getDistance() - armEncoderCalibrationHeight.get();
     }
     
 
