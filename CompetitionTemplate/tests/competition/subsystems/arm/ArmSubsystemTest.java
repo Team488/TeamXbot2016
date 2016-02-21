@@ -3,6 +3,7 @@ package competition.subsystems.arm;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.BaseRobotTest;
@@ -67,6 +68,7 @@ public class ArmSubsystemTest extends ArmTestBase {
     }
     
     @Test
+    @Ignore("Calibration currently disabled")
     public void testCalibration() {
         setMockEncoder(0);
         assertEquals(0, armSubsystem.getArmAngle(), 0.001);
