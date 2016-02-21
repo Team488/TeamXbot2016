@@ -57,6 +57,8 @@ public class CollectorSubsystemTest extends BaseRobotTest {
         assertTrue(getCollectorPower() > 0);
         
         setIsBallInCollector(true);
+        
+        collectorIntakeCommand.enableCollectorAutoStop.set(true);
         collectorIntakeCommand.execute();
         
         assertTrue(getCollectorPower() == 0);

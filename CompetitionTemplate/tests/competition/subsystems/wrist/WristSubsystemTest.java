@@ -35,6 +35,19 @@ public class WristSubsystemTest extends BaseWPITest{
     }
     
     @Test
+    public void tryMoveWristUpInDangerZone() {
+MoveWristUpCommand moveWristUpCommand = this.injector.getInstance(MoveWristUpCommand.class);
+        
+        // move the arm out of the danger zone
+        moveWristUpCommand.enableWristLegalityProtection.set(true);
+        moveWristUpCommand.execute();
+        
+        assertTrue(!wristSubsystem.solenoidA.get());
+        
+        assertTrue(moveWristUpCommand.isFinished());
+    }
+    
+    @Test
     public void moveWristDownCommand() {
         MoveWristDownCommand moveWristDownCommand = this.injector.getInstance(MoveWristDownCommand.class);
         
