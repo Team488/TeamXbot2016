@@ -17,8 +17,6 @@ public class TurnToHeadingCommand extends BaseCommand{
     
     DoubleProperty headingTargetRange;
     
-    public XGyro gyro;
-    double power;
     double targetHeading;
     
     @Inject
@@ -41,7 +39,7 @@ public class TurnToHeadingCommand extends BaseCommand{
 
     @Override
     public void execute(){
-        power = Math.abs(headingModule.calculateHeadingPower(targetHeading));
+        double power = Math.abs(headingModule.calculateHeadingPower(targetHeading));
         driveSubsystem.tankDrive(power, power * -1);
     }
     

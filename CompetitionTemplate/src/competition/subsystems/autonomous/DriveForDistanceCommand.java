@@ -13,7 +13,6 @@ public class DriveForDistanceCommand extends BaseCommand{
     DriveSubsystem driveSubsystem; 
     PoseSubsystem poseSubsystem;
     
-    DoubleProperty distancePerTick;
     DoubleProperty targetRange;
     
     PIDManager distanceDrivePid;
@@ -27,7 +26,6 @@ public class DriveForDistanceCommand extends BaseCommand{
         this.driveSubsystem = driveSubsystem;
         this.poseSubsystem = poseSubsystem;
         
-        distancePerTick = propManager.createPersistentProperty("the distance per tick on encoder", 10.0);
         distanceDrivePid = new PIDManager("DistanceDrivePID", propManager, 1, 0, 0);
         targetRange = propManager.createPersistentProperty("DistanceTargetRange", 3.0);
     }
@@ -38,7 +36,7 @@ public class DriveForDistanceCommand extends BaseCommand{
 
     @Override
     public void initialize() {
-        targetEncoderDistance = targetDistance /  distancePerTick.get();
+        
     }
 
     @Override
