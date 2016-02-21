@@ -7,6 +7,7 @@ import org.junit.Test;
 import competition.BaseRobotTest;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
+import edu.wpi.first.wpilibj.MockDigitalInput;
 import xbot.common.injection.BaseWPITest;
 
 public class CollectorSubsystemTest extends BaseRobotTest {
@@ -37,7 +38,7 @@ public class CollectorSubsystemTest extends BaseRobotTest {
     @Test
     public void testCollectorIntakeCommand() {
          CollectorIntakeCommand collectorIntakeCommand = this.injector.getInstance(CollectorIntakeCommand.class);
-         
+         ((MockDigitalInput)collectorSubsystem.ballExistsSensor).set_value(true);
          collectorIntakeCommand.execute();
          
          assertTrue(getCollectorPower() > 0);
@@ -45,6 +46,24 @@ public class CollectorSubsystemTest extends BaseRobotTest {
          collectorIntakeCommand.end();
          
          assertTrue(getCollectorPower() == 0);
+    }
+    
+    @Test
+    public void testCollectorStopsIntaking() {
+        CollectorIntakeCommand collectorIntakeCommand = this.injector.getInstance(CollectorIntakeCommand.class);
+        ((MockDigitalInput)collectorSubsystem.ballExistsSensor).set_value(true);
+        collectorIntakeCommand.execute();
+        
+        assertTrue(getCollectorPower() > 0);
+        
+        setIsBallInCollector(true);
+        collectorIntakeCommand.execute();
+        
+        assertTrue(getCollectorPower() == 0);
+    }
+    
+    private void setIsBallInCollector(boolean value) {
+        ((MockDigitalInput)collectorSubsystem.ballExistsSensor).set_value(!value);
     }
     
 }

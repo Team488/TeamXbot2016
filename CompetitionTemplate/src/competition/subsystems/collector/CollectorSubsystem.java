@@ -24,7 +24,7 @@ public class CollectorSubsystem {
     }
     
     public boolean isBallInCollector() {
-        return ballExistsSensor.get();
+        return !ballExistsSensor.get();
     }
 
 }

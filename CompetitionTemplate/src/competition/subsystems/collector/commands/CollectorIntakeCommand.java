@@ -30,6 +30,9 @@ public class CollectorIntakeCommand extends BaseCommand{
         if (!collectorSubsystem.isBallInCollector()) {
             collectorSubsystem.setIntakePower(intakePower.get());
         }
+        else {
+            collectorSubsystem.setIntakePower(0);
+        }
     }
 
 
