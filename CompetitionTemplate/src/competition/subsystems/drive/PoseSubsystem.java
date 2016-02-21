@@ -201,8 +201,8 @@ public class PoseSubsystem extends BaseSubsystem {
     }
     
     private void updateEncoders() {
-        leftDriveDistance.set(leftDriveEncoder.getDistance());
-        rightDriveDistance.set(rightDriveEncoder.getDistance());
+        leftDriveDistance.set(getLeftDriveDistance());
+        rightDriveDistance.set(getRightDriveDistance());
     }
     
     public void updateAllSensors() {
