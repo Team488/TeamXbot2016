@@ -104,9 +104,9 @@ public class ArmSubsystem extends BaseSubsystem {
         armAngleDegrees.set(getArmAngle());
         lowerLimitSwitchProperty.set(lowerLimitSwitch.get());
         upperLimitSwitchProperty.set(upperLimitSwitch.get());
-        
+        /*
         if (lowerLimitSwitch.get()) {
             calibrateCurrentPositionAsLow();
-        }
+        }*/
     }
 }
