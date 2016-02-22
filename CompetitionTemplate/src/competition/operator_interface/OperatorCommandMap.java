@@ -9,8 +9,6 @@ import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
-import competition.subsystems.arm.arm_commands.LowerArmCommand;
-import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
@@ -60,16 +58,11 @@ public class OperatorCommandMap {
     @Inject
     public void setupArmCommands (
             OperatorInterface operatorInterface,
-            RaiseArmCommand raiseArmCommand,
-            LowerArmCommand lowerArmCommand,
             ArmToTopCommand armToTopCommand,
             ArmToBottomCommand armToBottomCommand,
             ArmManualControlCommand armManual,
             CalibrateArmLowCommand calibrateArmLow)
-    {
-        operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
-        operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
-        
+    { 
         double minValue = 0.15;
         AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
         AnalogHIDDescription yDown = new AnalogHIDDescription(1, -1, -minValue);
