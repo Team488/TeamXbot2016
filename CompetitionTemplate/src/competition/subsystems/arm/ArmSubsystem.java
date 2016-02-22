@@ -75,7 +75,8 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMaximumHeight() {
-        return upperLimitSwitch.get();
+        return false;
+        //return upperLimitSwitch.get();
     }
     
     public double getArmAngle() {
@@ -112,11 +113,18 @@ public class ArmSubsystem extends BaseSubsystem {
             if (isArmAtMaximumHeight()) {
                 power = Math.min(power, 0);
             }
+            
+            setArmRawPower(power);
         }
         else {
-            leftArmMotor.set(power);
-            rightArmMotor.set(power);
+            setArmRawPower(power);
         }
+    }
+    
+    private void setArmRawPower(double power) {
+        armPower.set(power);
+        leftArmMotor.set(power);
+        rightArmMotor.set(power);
     }
     
     public void calibrateCurrentPositionAsLow() {
