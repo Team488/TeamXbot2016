@@ -29,7 +29,7 @@ public class WristSubsystemTest extends BaseWPITest{
         ((MockEncoder)arm.encoder).setDistance(1000);
         moveWristUpCommand.execute();
         
-        assertTrue(wristSubsystem.solenoidA.get());
+        assertTrue(!wristSubsystem.solenoidA.get());
         
         assertTrue(moveWristUpCommand.isFinished());
     }
@@ -42,7 +42,7 @@ public class WristSubsystemTest extends BaseWPITest{
         moveWristUpCommand.enableWristLegalityProtection.set(true);
         moveWristUpCommand.execute();
         
-        assertTrue(!wristSubsystem.solenoidA.get());
+        assertTrue(wristSubsystem.solenoidA.get());
         
         assertTrue(moveWristUpCommand.isFinished());
     }
@@ -53,7 +53,7 @@ public class WristSubsystemTest extends BaseWPITest{
         
         moveWristDownCommand.initialize();
         
-        assertTrue(!(wristSubsystem.solenoidA.get()));
+        assertTrue((wristSubsystem.solenoidA.get()));
         
         assertTrue(moveWristDownCommand.isFinished());
     }

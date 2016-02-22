@@ -8,31 +8,24 @@ import org.junit.Test;
 
 import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
+import competition.subsystems.arm.ArmTestBase;
 import edu.wpi.first.wpilibj.MockDigitalInput;
 import edu.wpi.first.wpilibj.MockEncoder;
 import edu.wpi.first.wpilibj.MockTimer;
 import edu.wpi.first.wpilibj.Timer;
 import xbot.common.injection.BaseWPITest;
 
-public class ArmAngleMaintainerCommandTest extends BaseWPITest {
+public class ArmAngleMaintainerCommandTest extends ArmTestBase {
     ArmAngleMaintainerCommand angleMaintainer;
     ArmTargetSubsystem armTargetSubsystem;
     ArmSubsystem armSubsystem;
 
     @Before
     public void setup() {
+        super.setup();
         angleMaintainer = this.injector.getInstance(ArmAngleMaintainerCommand.class);
         armSubsystem = this.injector.getInstance(ArmSubsystem.class);
         armTargetSubsystem = this.injector.getInstance(ArmTargetSubsystem.class);
-    }
-    
-    private void setMockEncoder(double value) {
-        ((MockEncoder)armSubsystem.encoder).setDistance(value);
-    }
-    
-    private void setLimitSwitches(boolean up, boolean down) {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(up);
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(down);
     }
 
     @Test
@@ -53,6 +46,7 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     public void testArmAngle90to0() {
         armSubsystem.calibrateCurrentPositionAsLow();
         setMockEncoder(90);
+        setLimitSwitches(false, false);
         
         armTargetSubsystem.setTargetAngle(0);
         
@@ -64,7 +58,6 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     }
     
     @Test
-    @Ignore("Calibration currently disabled")
     public void testAutoCalibration() {
         angleMaintainer.setAutoCalibration(true);
         angleMaintainer.initialize();
@@ -86,6 +79,7 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     public void testAutoCalibrationTimeout() {
         angleMaintainer.setAutoCalibration(true);
         armTargetSubsystem.setTargetAngle(90);
+        
         angleMaintainer.initialize();
         angleMaintainer.execute();
         
