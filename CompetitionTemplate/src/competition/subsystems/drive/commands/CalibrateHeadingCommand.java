@@ -11,16 +11,22 @@ import xbot.common.command.BaseCommand;
 public class CalibrateHeadingCommand extends BaseCommand {
 
     PoseSubsystem pose;
+    double heading;
     
     @Inject
     public CalibrateHeadingCommand(PoseSubsystem pose)
     {
         this.pose = pose;
+        heading = pose.FACING_AWAY_FROM_DRIVERS;
+    }
+    
+    public void setHeading(double heading) {
+        this.heading = heading;
     }
     
     @Override
     public void initialize() {
-        pose.setCurrentHeading(pose.FACING_AWAY_FROM_DRIVERS);
+        pose.setCurrentHeading(heading);
     }
 
     @Override

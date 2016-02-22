@@ -3,6 +3,7 @@ package competition.subsystems.arm.arm_commands;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.subsystems.arm.ArmSubsystem;
@@ -63,10 +64,11 @@ public class ArmAngleMaintainerCommandTest extends BaseWPITest {
     }
     
     @Test
+    @Ignore("Calibration currently disabled")
     public void testAutoCalibration() {
         angleMaintainer.setAutoCalibration(true);
-        armTargetSubsystem.setTargetAngle(90);
         angleMaintainer.initialize();
+        armTargetSubsystem.setTargetAngle(90);
         angleMaintainer.execute();
         
         // arm trying to go down and calibrate

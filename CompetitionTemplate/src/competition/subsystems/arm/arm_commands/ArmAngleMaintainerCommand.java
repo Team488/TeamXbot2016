@@ -2,7 +2,6 @@ package competition.subsystems.arm.arm_commands;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.sun.org.apache.xerces.internal.impl.PropertyManager;
 
 import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.ArmTargetSubsystem;
@@ -50,6 +49,10 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     @Override
     public void initialize() {
         pidManager.reset();
+        
+        // When this is initialized, make sure to set target angle to current
+        // angle to avoid mechanical thrashing.
+        armTargetSubsystem.setTargetAngle(armSubsystem.getArmAngle());
     }
 
     @Override

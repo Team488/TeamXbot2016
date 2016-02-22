@@ -1,7 +1,5 @@
 package competition.subsystems.drive;
 
-import java.util.function.DoubleFunction;
-
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -12,10 +10,9 @@ import xbot.common.controls.sensors.DistanceSensor;
 import xbot.common.controls.sensors.XEncoder;
 import xbot.common.controls.sensors.NavImu.ImuType;
 import xbot.common.controls.sensors.XGyro;
-import xbot.common.controls.sensors.AnalogDistanceSensor.VoltageMaps;
 import xbot.common.injection.wpi_factories.WPIFactory;
-import xbot.common.math.ContiguousDouble;
 import xbot.common.math.ContiguousHeading;
+import xbot.common.math.XYPair;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -36,6 +33,9 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
     
+    private DoubleProperty totalDistanceX;
+    private DoubleProperty totalDistanceY;
+    
     private ContiguousHeading currentHeading;
     private DoubleProperty currentHeadingProp;
     
@@ -48,11 +48,16 @@ public class PoseSubsystem extends BaseSubsystem {
     private DoubleProperty leftDistance;
     private DoubleProperty rightDistance;
     
+    // These are two common robot starting positions - kept here as convenient shorthand.
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
+    public static final double FACING_TOWARDS_DRIVERS = -90;
     
     private DoubleProperty currentPitch;
     private DoubleProperty currentRoll;
     private DoubleProperty leftDistanceToWall;
+    
+    private double previousLeftDistance;
+    private double previousRightDistance;
     
     @Inject
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -81,12 +86,15 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
         
-        leftDriveEncoder = factory.getEncoder(8, 9);
-        rightDriveEncoder = factory.getEncoder(6, 7);
-        rightDriveEncoder.setDistancePerPulse(-1);
+        leftDriveEncoder = factory.getEncoder("LeftDrive", 8, 9, 1.0);
+        rightDriveEncoder = factory.getEncoder("RightDrive", 6, 7, 1.0);
+        rightDriveEncoder.setInverted(true);
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
         rightDriveDistance = propManager.createEphemeralProperty("RightDriveDistance", 0.0);
+        
+        totalDistanceX = propManager.createEphemeralProperty("TotalDistanceX", 0.0);
+        totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
     }
     
     public static class TemporaryVoltageMap
@@ -118,9 +126,59 @@ public class PoseSubsystem extends BaseSubsystem {
         currentRoll.set(imu.getRoll());
     }
     
+    private double getLeftDriveDistance() {
+        return leftDriveEncoder.getDistance();
+    }
+    
+    private double getRightDriveDistance() {
+        return rightDriveEncoder.getDistance();
+    }
+    
+
+    private void updateDistanceTraveled() {
+        double currentLeftDistance = getLeftDriveDistance();
+        double currentRightDistance = getRightDriveDistance();
+        
+        double deltaLeft = currentLeftDistance - previousLeftDistance;
+        double deltaRight = currentRightDistance - previousRightDistance;
+        
+        double totalDistance = (deltaLeft + deltaRight) / 2;
+        
+        // get X and Y
+        double deltaY = Math.sin(currentHeading.getValue() * Math.PI / 180) * totalDistance;
+        double deltaX = Math.cos(currentHeading.getValue() * Math.PI / 180) * totalDistance;
+        
+        totalDistanceX.set(totalDistanceX.get() + deltaX);
+        totalDistanceY.set(totalDistanceY.get() + deltaY);
+        
+        // save values for next round
+        previousLeftDistance = currentLeftDistance;
+        previousRightDistance = currentRightDistance;
+    }
+    
     public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
         return currentHeading;
+    }
+    
+    public XYPair getFieldOrientedTotalDistanceTraveled() {
+        return getTravelVector();
+    }
+    
+    private XYPair getTravelVector() {
+        return new XYPair(totalDistanceX.get(), totalDistanceY.get());
+    }
+    
+    public XYPair getRobotOrientedTotalDistanceTraveled() {
+        // if we are facing 90 degrees, no change.
+        // if we are facing 0 degrees (right), this rotates left by 90. Makes sense - if you rotate right, you want
+        // your perception of distance traveled to be that you have gone "leftward."
+        return getTravelVector().rotate(-(currentHeading.getValue() - 90));
+    }
+    
+    public void resetDistanceTraveled() {
+        totalDistanceX.set(0);
+        totalDistanceY.set(0);
     }
     
     public void setCurrentHeading(double headingInDegrees){
@@ -137,14 +195,15 @@ public class PoseSubsystem extends BaseSubsystem {
     }
     
     private void updateEncoders() {
-        leftDriveDistance.set(leftDriveEncoder.getDistance());
-        rightDriveDistance.set(rightDriveEncoder.getDistance());
+        leftDriveDistance.set(getLeftDriveDistance());
+        rightDriveDistance.set(getRightDriveDistance());
     }
     
     public void updateAllSensors() {
         updateRangefinders();
         updateCurrentHeading();
         updateEncoders();
+        updateDistanceTraveled();
     }
     
     public double getFrontRangefinderDistance() {
