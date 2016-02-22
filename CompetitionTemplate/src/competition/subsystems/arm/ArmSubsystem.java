@@ -34,15 +34,18 @@ public class ArmSubsystem extends BaseSubsystem {
     
     DoubleProperty armExtensionAngleDangerZoneBegin;
     DoubleProperty armExtensionAngleIllegalZoneBegin;
+    
+    DoubleProperty armPower;
+    
+    BooleanProperty enableSafeArmOperation;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating ArmSubsystem");
         
-        leftArmMotor = factory.getSpeedController(6);
-        leftArmMotor.setInverted(true);
-        
+        leftArmMotor = factory.getSpeedController(6);        
         rightArmMotor = factory.getSpeedController(7);
+        rightArmMotor.setInverted(true);
         
         upperLimitSwitch = factory.getDigitalInput(2);
         lowerLimitSwitch = factory.getDigitalInput(0);
@@ -58,13 +61,17 @@ public class ArmSubsystem extends BaseSubsystem {
         armExtensionAngleDangerZoneBegin = propManager.createPersistentProperty("ArmExtensionDangerZoneBegin", 25.0);
         armExtensionAngleIllegalZoneBegin = propManager.createPersistentProperty("ArmExtensionIllegalZoneBegin", 20.0);
         
+        enableSafeArmOperation = propManager.createPersistentProperty("EnableSafeArmOperation", true);
+        
+        armPower = propManager.createEphemeralProperty("ArmPower", 0.0);
+        
         if (armExtensionAngleDangerZoneBegin.get() < armExtensionAngleIllegalZoneBegin.get()) {
             log.warn("The Illegal zone for the arm is greater than the warning zone! This may cause illegal robot behavior!!");
         }
     }
 
     public boolean isArmAtMinimumHeight() {
-        return lowerLimitSwitch.get();
+        return !lowerLimitSwitch.get();
     }
 
     public boolean isArmAtMaximumHeight() {
@@ -73,6 +80,10 @@ public class ArmSubsystem extends BaseSubsystem {
     
     public double getArmAngle() {
         return encoder.getDistance() - armEncoderCalibrationHeight.get();
+    }
+    
+    private double getRawArmAngle() {
+        return encoder.getDistance();
     }
     
 
@@ -94,12 +105,22 @@ public class ArmSubsystem extends BaseSubsystem {
     }
     
     public void setArmMotorPower(double power) {
-        leftArmMotor.set(power);
-        rightArmMotor.set(power);
+        if (enableSafeArmOperation.get()) {
+            if (isArmAtMinimumHeight()) {
+                power = Math.max(0, power);
+            }
+            if (isArmAtMaximumHeight()) {
+                power = Math.min(power, 0);
+            }
+        }
+        else {
+            leftArmMotor.set(power);
+            rightArmMotor.set(power);
+        }
     }
     
     public void calibrateCurrentPositionAsLow() {
-        armEncoderCalibrationHeight.set(getArmAngle());
+        armEncoderCalibrationHeight.set(getRawArmAngle());
         armEncoderCalibrated.set(true);
     }
     
@@ -110,11 +131,11 @@ public class ArmSubsystem extends BaseSubsystem {
     
     public void updateSensors() {
         armAngleDegrees.set(getArmAngle());
-        lowerLimitSwitchProperty.set(lowerLimitSwitch.get());
-        upperLimitSwitchProperty.set(upperLimitSwitch.get());
-        /*
-        if (lowerLimitSwitch.get()) {
+        lowerLimitSwitchProperty.set(isArmAtMinimumHeight());
+        upperLimitSwitchProperty.set(isArmAtMaximumHeight());
+        
+        if (isArmAtMinimumHeight()) {
             calibrateCurrentPositionAsLow();
-        }*/
+        }
     }
 }
