@@ -12,15 +12,18 @@ public class ArmTargetSubsystem extends BaseSubsystem{
     public ArmSubsystem armSubsystem;
     double targetAngle;
     DoubleProperty withinTargetRange;
+    DoubleProperty armTargetAngle;
     
     @Inject
     public ArmTargetSubsystem (ArmSubsystem armSubsystem, XPropertyManager propManager){
         this.armSubsystem = armSubsystem;
         withinTargetRange = propManager.createPersistentProperty("TargetRange", 0.5);
+        armTargetAngle = propManager.createEphemeralProperty("ArmTargetAngle", 0.0);
     }
     
     public void setTargetAngle(double targetAngle){
         this.targetAngle = targetAngle;
+        armTargetAngle.set(targetAngle);
     }
     
     public double getTargetAngle(){
