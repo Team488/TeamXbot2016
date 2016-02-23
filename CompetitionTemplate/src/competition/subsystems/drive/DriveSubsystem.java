@@ -104,8 +104,8 @@ public class DriveSubsystem extends BaseSubsystem {
         tankDrive(leftPower, rightPower);
     }
     
-    public void tankRotate(double rotationalPower) {
-        tankDrive(rotationalPower, -rotationalPower);
+    public void tankRotateSafely(double rotationalPower) {
+        tankDriveSafely(rotationalPower, -rotationalPower);
     }
     
     public void stopDrive() {
