@@ -14,6 +14,8 @@ public class TraverseDefenseCommand extends HeadingDriveCommand {
     
     final Timer timer;
     
+    double startTime;
+    
     boolean wasEverOnDefense = false;
     
     @Inject
@@ -31,8 +33,7 @@ public class TraverseDefenseCommand extends HeadingDriveCommand {
     @Override 
     public void initialize() {
         super.initialize();
-        this.timer.reset();
-        this.timer.start();
+        startTime = this.timer.getFPGATimestamp();
         wasEverOnDefense = false;
     }
     
@@ -41,10 +42,12 @@ public class TraverseDefenseCommand extends HeadingDriveCommand {
         boolean onDefense = this.pose.getDefenseState() == MonitorDefenseTraversalModule.DefenseState.OnDefense;
         wasEverOnDefense = wasEverOnDefense || onDefense;
         
-        if(!this.timer.hasPeriodPassed(minTraversalTimeSec)) {
+        double timeElapsed = this.timer.getFPGATimestamp() - startTime;
+        
+        if(timeElapsed < minTraversalTimeSec) {
             // We want to keep trying at least for min time
             return false;
-        } else if(!this.timer.hasPeriodPassed(maxTraversalTimeSec)) {
+        } else if(timeElapsed < maxTraversalTimeSec) {
             // Between min and max, keep trying until we're off the defenses
             boolean offDefense = this.pose.getDefenseState() == MonitorDefenseTraversalModule.DefenseState.NotOnDefense;
             return wasEverOnDefense && offDefense;
