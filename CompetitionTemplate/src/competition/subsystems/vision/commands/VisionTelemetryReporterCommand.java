@@ -35,9 +35,9 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         monitor = new VisionStateMonitor(visionSubsystem);
         
-        ballAngleProp = propMan.createEphemeralProperty("Target ball angle", 0);
-        ballDistanceProp = propMan.createEphemeralProperty("Target ball distance", -1);
-        numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0);
+        ballAngleProp = propMan.createEphemeralProperty("Target ball angle", 0d);
+        ballDistanceProp = propMan.createEphemeralProperty("Target ball distance", -1d);
+        numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0d);
         visionHealthProp = propMan.createEphemeralProperty("Is vision connection healthy?", false);
     }
     
