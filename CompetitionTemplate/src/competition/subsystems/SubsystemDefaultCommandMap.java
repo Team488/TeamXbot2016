@@ -11,6 +11,10 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
+import competition.subsystems.hanger.HookSubsystem;
+import competition.subsystems.hanger.WinchSubsystem;
+import competition.subsystems.hanger.hook_commands.copy.HookStopCommand;
+import competition.subsystems.hanger.winch_commands.WinchStopCommand;
 import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
@@ -61,5 +65,15 @@ public class SubsystemDefaultCommandMap {
             VisionSubsystem visionSubsystem,
             SpewVisionInformationCommand spewer) {
         visionSubsystem.setDefaultCommand(spewer);
+    }
+    
+    @Inject
+    public void setupHangerSubsystem(
+            WinchSubsystem winchSubsystem,
+            HookSubsystem hookSubsystem,
+            WinchStopCommand winchStop,
+            HookStopCommand hookStop){
+        winchSubsystem.setDefaultCommand(winchStop);
+        hookSubsystem.setDefaultCommand(hookStop);
     }
 }

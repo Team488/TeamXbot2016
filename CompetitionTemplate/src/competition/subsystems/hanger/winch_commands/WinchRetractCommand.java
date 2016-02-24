@@ -15,6 +15,7 @@ public class WinchRetractCommand extends BaseCommand{
     public WinchRetractCommand (WinchSubsystem winchSubsystem, XPropertyManager propManager){
         this.winchSubsystem = winchSubsystem;
         winchRetractionPower = propManager.createPersistentProperty("winch retraction power", 1.0);
+        this.requires(winchSubsystem);
     }
 
     @Override

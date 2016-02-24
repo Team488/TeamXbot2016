@@ -8,8 +8,7 @@ import xbot.common.command.BaseCommand;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.XPropertyManager;
 
-public class DriveToWallCommand extends BaseCommand 
-{
+public class DriveToWallCommand extends BaseCommand{
     PoseSubsystem pose;
     DriveSubsystem drive;
     PIDManager wallManager;
@@ -44,8 +43,13 @@ public class DriveToWallCommand extends BaseCommand
         drive.tankDriveSafely(power, power);
     }
     
+    public boolean isFinished(){
+        return Math.abs(targetDistanceFromWall - pose.getFrontRangefinderDistance()) < 1; 
+    }
+    
     @Override
     public void end() {
         drive.tankDriveSafely(0,0);
+        
     }
 }

@@ -11,7 +11,6 @@ public class HookStopCommand extends BaseCommand{
     @Inject
     public HookStopCommand(HookSubsystem hookSubsystem){
         this.hookSubsystem =  hookSubsystem;
-        this.requires(this.hookSubsystem);
     }
 
     @Override

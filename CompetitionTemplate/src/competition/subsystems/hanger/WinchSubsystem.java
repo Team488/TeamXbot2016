@@ -9,11 +9,11 @@ import xbot.common.injection.wpi_factories.WPIFactory;
 
 @Singleton
 public class WinchSubsystem extends BaseSubsystem{
-public XSpeedController winchMotor;
+    public XSpeedController winchMotor;
     
     @Inject
     public WinchSubsystem(WPIFactory factory) {
-        winchMotor = factory.getSpeedController(2);
+        winchMotor = factory.getSpeedController(3);
     }
     
     public void setWinchMotorPower(double power) {

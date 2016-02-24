@@ -15,6 +15,7 @@ public class HookRetractCommand extends BaseCommand{
     public HookRetractCommand(HookSubsystem hookSubsystem, XPropertyManager propManager){
         this.hookSubsystem = hookSubsystem;
         hookRetractionPower = propManager.createPersistentProperty("hook retraction power", 1.0);
+        this.requires(hookSubsystem);
     }
 
     @Override

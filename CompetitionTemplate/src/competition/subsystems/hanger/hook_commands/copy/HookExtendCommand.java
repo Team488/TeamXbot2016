@@ -15,6 +15,7 @@ public class HookExtendCommand extends BaseCommand{
     public HookExtendCommand(HookSubsystem hookSubsystem, XPropertyManager propManager){
         this.hookSubsystem = hookSubsystem;
         hookExtentionPower = propManager.createPersistentProperty("hook extention power", -1.0);
+        this.requires(hookSubsystem);
     }
 
     @Override
