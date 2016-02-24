@@ -1,5 +1,7 @@
 package competition.subsystems.hanger.winch_commands;
 
+import com.google.inject.Inject;
+
 import competition.subsystems.hanger.WinchSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
@@ -9,6 +11,7 @@ public class WinchRetractCommand extends BaseCommand{
     WinchSubsystem winchSubsystem;
     DoubleProperty winchRetractionPower;
     
+    @Inject
     public WinchRetractCommand (WinchSubsystem winchSubsystem, XPropertyManager propManager){
         this.winchSubsystem = winchSubsystem;
         winchRetractionPower = propManager.createPersistentProperty("winch retraction power", 1.0);

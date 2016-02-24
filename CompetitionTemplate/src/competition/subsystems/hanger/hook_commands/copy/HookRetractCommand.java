@@ -1,5 +1,7 @@
 package competition.subsystems.hanger.hook_commands.copy;
 
+import com.google.inject.Inject;
+
 import competition.subsystems.hanger.HookSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
@@ -9,6 +11,7 @@ public class HookRetractCommand extends BaseCommand{
     public HookSubsystem hookSubsystem;
     DoubleProperty hookRetractionPower;
     
+    @Inject
     public HookRetractCommand(HookSubsystem hookSubsystem, XPropertyManager propManager){
         this.hookSubsystem = hookSubsystem;
         hookRetractionPower = propManager.createPersistentProperty("hook retraction power", 1.0);
