@@ -79,6 +79,8 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
     
     public void tankDriveSafely(double leftPower, double rightPower) {
         
+        
+        
         if (enableSafeTankDrive.get()) {
             // if we are incredibly tipped over, don't bother, we can't save ourselves. Also disable safeties,
             // they will be re-enabled once we right ourselves.
@@ -90,16 +92,9 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
             // if we are pitching a lot, AND tip prevention is enabled, AND we haven't fully tipped over recently,
             // try and fix the situation using tipPower.
             else if (isRobotInDangerOfFlipping()) {
-                double tipPower = tipPreventionPower.get();
-                if (pose.getRobotPitch() > 0) {            
-                    leftPower = -tipPower;
-                    rightPower = -tipPower;
-                }
-                else
-                {
-                    leftPower = tipPower;
-                    rightPower = tipPower;
-                }
+                double fixPower = fixTipping();
+                leftPower = fixPower;
+                rightPower = fixPower;
             }
             // if our pitch looks relatively safe
             else if (isRobotSafeToDrive()) {
@@ -116,6 +111,19 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
         
         // Drive with the potentially-modified power values.
         tankDrive(leftPower, rightPower);
+    }
+
+    private double fixTipping() {
+        double tipPower = tipPreventionPower.get();
+        double fixPower = 0;
+        if (pose.getRobotPitch() > 0) {            
+            fixPower = -tipPower;
+        }
+        else
+        {
+            fixPower = tipPower;
+        }
+        return fixPower;
     }
 
     private boolean isRobotSafeToDrive() {
