@@ -31,7 +31,7 @@ public class PoseSubsystem extends BaseSubsystem {
     public XEncoder leftDriveEncoder;
     public XEncoder rightDriveEncoder;
     
-    public DefenseState defenseState;
+    public DefenseState defenseState = DefenseState.NotOnDefense;
     
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
@@ -258,6 +258,9 @@ public class PoseSubsystem extends BaseSubsystem {
     }
     
     public void setDefenseState(DefenseState defenseState) {
+        if(this.defenseState != defenseState) {
+            log.info("Entering defense state:" + defenseState.toString());
+        }
         this.defenseState = defenseState;
     }
 }
