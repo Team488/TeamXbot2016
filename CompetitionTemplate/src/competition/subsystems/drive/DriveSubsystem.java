@@ -29,6 +29,8 @@ public class DriveSubsystem extends BaseSubsystem {
     
     private DoubleProperty leftPowerProp;
     private DoubleProperty rightPowerProp;
+    
+    public BooleanProperty enableSafeTankDrive;
         
     @Inject
     public DriveSubsystem(WPIFactory factory, XPropertyManager propManager, PoseSubsystem pose)
@@ -50,6 +52,8 @@ public class DriveSubsystem extends BaseSubsystem {
         
         leftPowerProp = propManager.createEphemeralProperty("LeftPower", 0.0);
         rightPowerProp = propManager.createEphemeralProperty("RightPower", 0.0);
+        
+        enableSafeTankDrive = propManager.createPersistentProperty("EnableSafeTankDrive", false);
     }
     
     public void tankDrive(double leftPower, double rightPower) {
@@ -66,38 +70,39 @@ public class DriveSubsystem extends BaseSubsystem {
     
     public void tankDriveSafely(double leftPower, double rightPower) {
         
-        
-        // if we are incredibly tipped over, don't bother, we can't save ourselves. Also disable safeties,
-        // they will be re-enabled once we right ourselves.
-        if (Math.abs(pose.getRobotPitch()) > 90) {
-            tippedRecently = true;
-            leftPower = 0;
-            rightPower = 0;
-        }
-        // if we are pitching a lot, AND tip prevention is enabled, AND we haven't fully tipped over recently,
-        // try and fix the situation using tipPower.
-        else if (Math.abs(pose.getRobotPitch()) > 30 
-                && tipPreventionEnabled.get() == true 
-                && tippedRecently == false) {
-            double tipPower = tipPreventionPower.get();
-            if (pose.getRobotPitch() > 0) {            
-                leftPower = -tipPower;
-                rightPower = -tipPower;
+        if (enableSafeTankDrive.get()) {
+            // if we are incredibly tipped over, don't bother, we can't save ourselves. Also disable safeties,
+            // they will be re-enabled once we right ourselves.
+            if (Math.abs(pose.getRobotPitch()) > 90) {
+                tippedRecently = true;
+                leftPower = 0;
+                rightPower = 0;
             }
-            else
-            {
-                leftPower = tipPower;
-                rightPower = tipPower;
+            // if we are pitching a lot, AND tip prevention is enabled, AND we haven't fully tipped over recently,
+            // try and fix the situation using tipPower.
+            else if (Math.abs(pose.getRobotPitch()) > 30 
+                    && tipPreventionEnabled.get() == true 
+                    && tippedRecently == false) {
+                double tipPower = tipPreventionPower.get();
+                if (pose.getRobotPitch() > 0) {            
+                    leftPower = -tipPower;
+                    rightPower = -tipPower;
+                }
+                else
+                {
+                    leftPower = tipPower;
+                    rightPower = tipPower;
+                }
             }
-        }
-        // if our pitch looks relatively safe
-        else if (Math.abs(pose.getRobotPitch()) <= 30) {
-            tippedRecently = false;
-        }
-        else if (tippedRecently == true) {
-            // we've tipped recently, don't drive!
-            leftPower = 0;
-            rightPower = 0;
+            // if our pitch looks relatively safe
+            else if (Math.abs(pose.getRobotPitch()) <= 30) {
+                tippedRecently = false;
+            }
+            else if (tippedRecently == true) {
+                // we've tipped recently, don't drive!
+                leftPower = 0;
+                rightPower = 0;
+            }
         }
         
         // Drive with the potentially-modified power values.
