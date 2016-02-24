@@ -38,7 +38,7 @@ public class TurnToHeadingCommand extends BaseCommand{
 
     @Override
     public void execute(){
-        double power = Math.abs(headingModule.calculateHeadingPower(targetHeading));
+        double power = headingModule.calculateHeadingPower(targetHeading);
         driveSubsystem.tankDrive(power, power * -1);
     }
     
