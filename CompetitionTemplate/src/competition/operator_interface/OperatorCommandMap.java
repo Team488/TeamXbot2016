@@ -15,6 +15,7 @@ import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
+import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
@@ -35,7 +36,8 @@ public class OperatorCommandMap {
             OperatorInterface operatorInterface,
             CalibrateHeadingCommand calibrateHeading,
             HeadingDriveCommand headingDrive,
-            DriveToWallCommand driveToWall
+            DriveToWallCommand driveToWall,
+            ResetRobotPositionCommand resetPosition
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
@@ -45,6 +47,8 @@ public class OperatorCommandMap {
         
         driveToWall.setDesiredDistance(50);
         operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
+        
+        resetPosition.includeOnSmartDashboard("Reset Position");
     }
     
     @Inject

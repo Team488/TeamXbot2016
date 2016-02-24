@@ -18,10 +18,10 @@ public class ShiftingSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(ShiftingSubsystem.class);
     
     @Inject
-    public ShiftingSubsystem(WPIFactory factory) {
+    public ShiftingSubsystem(WPIFactory factory){
         log.info("Creating ShiftingSubsystem");
-        shiftHighSolenoid = factory.getSolenoid(1);
-        shiftLowSolenoid = factory.getSolenoid(2);
+        shiftHighSolenoid = factory.getSolenoid(2);
+        shiftLowSolenoid = factory.getSolenoid(3);
     }
     
     public void shiftHigh(){

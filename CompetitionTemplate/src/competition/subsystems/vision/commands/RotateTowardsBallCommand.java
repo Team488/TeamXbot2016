@@ -43,7 +43,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
             BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
 
             double newRotationalPower = rotationalPidManager.calculate(0, targetBall.relativeHeading);
-            driveSubsystem.tankRotate(newRotationalPower);
+            driveSubsystem.tankRotateSafely(newRotationalPower);
         }
     }
     
