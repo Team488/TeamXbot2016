@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import competition.subsystems.drive.commands.MonitorDefenseTraversalModule.DefenseState;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
@@ -30,6 +31,8 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public XEncoder leftDriveEncoder;
     public XEncoder rightDriveEncoder;
+    
+    public DefenseState defenseState = DefenseState.NotOnDefense;
     
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
@@ -261,5 +264,16 @@ public class PoseSubsystem extends BaseSubsystem {
             return imu.getPitch();
         }
         return imu.getRoll();
+    }
+    
+    public DefenseState getDefenseState() {
+        return this.defenseState;
+    }
+    
+    public void setDefenseState(DefenseState defenseState) {
+        if(this.defenseState != defenseState) {
+            log.info("Entering defense state:" + defenseState.toString());
+        }
+        this.defenseState = defenseState;
     }
 }
