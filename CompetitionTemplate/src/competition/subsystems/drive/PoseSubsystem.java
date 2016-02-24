@@ -92,8 +92,8 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
         
-        leftDriveEncoder = factory.getEncoder("LeftDrive", 8, 9, 1.0);
-        rightDriveEncoder = factory.getEncoder("RightDrive", 6, 7, 1.0);
+        leftDriveEncoder = factory.getEncoder("LeftDrive", 9, 8, 1.0);
+        rightDriveEncoder = factory.getEncoder("RightDrive", 7, 6, 1.0);
         rightDriveEncoder.setInverted(true);
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);

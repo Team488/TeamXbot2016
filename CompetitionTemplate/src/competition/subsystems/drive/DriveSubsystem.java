@@ -41,8 +41,8 @@ public class DriveSubsystem extends BaseSubsystem {
         this.rightFrontDrive = factory.getSpeedController(3);
         this.rightRearDrive = factory.getSpeedController(5);
         
-        this.leftFrontDrive.setInverted(true);
-        this.leftRearDrive.setInverted(true);
+        this.rightFrontDrive.setInverted(true);
+        this.rightRearDrive.setInverted(true);
         
         this.pose = pose;
         tipPreventionEnabled = propManager.createEphemeralProperty("TipPreventionEnabled", true);

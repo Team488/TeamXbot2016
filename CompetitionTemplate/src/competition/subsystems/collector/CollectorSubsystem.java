@@ -19,9 +19,10 @@ public class CollectorSubsystem {
     
     @Inject
     public CollectorSubsystem(WPIFactory factory, XPropertyManager propMan){
-        this.collectorMotorLeft = factory.getSpeedController(1);
-        this.ballExistsSensor = factory.getDigitalInput(1);
-        this.ballInCollector = propMan.createEphemeralProperty("BallInCollector", false);
+        collectorMotorLeft = factory.getSpeedController(0);
+        collectorMotorLeft.setInverted(true);
+        ballExistsSensor = factory.getDigitalInput(1);
+        ballInCollector = propMan.createEphemeralProperty("BallInCollector", false);
     }
     
     public void setIntakePower(double power) {
