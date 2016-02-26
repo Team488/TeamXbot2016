@@ -3,6 +3,7 @@ package competition.subsystems.autonomous.selection;
 import org.apache.log4j.Logger;
 
 import xbot.common.command.BaseCommand;
+import xbot.common.command.BaseSubsystem;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -13,7 +14,7 @@ import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.drive.commands.TraverseDefenseCommand;
 
 @Singleton
-public class AutonomousModeSelector {
+public class AutonomousModeSelector extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(AutonomousModeSelector.class);
     
