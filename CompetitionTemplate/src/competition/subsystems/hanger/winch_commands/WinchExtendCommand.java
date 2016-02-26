@@ -1,5 +1,7 @@
 package competition.subsystems.hanger.winch_commands;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import competition.subsystems.hanger.WinchSubsystem;
@@ -8,6 +10,7 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class WinchExtendCommand extends BaseCommand{
+    private static Logger log = Logger.getLogger(WinchExtendCommand.class);
     WinchSubsystem winchSubsystem;
     DoubleProperty winchExtentionPower;
     
@@ -20,6 +23,7 @@ public class WinchExtendCommand extends BaseCommand{
 
     @Override
     public void initialize() {
+        log.info("initializing WinchExtendCommand");
         winchSubsystem.setWinchMotorPower(winchExtentionPower.get());
     }
 

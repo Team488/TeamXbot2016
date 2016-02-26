@@ -1,11 +1,14 @@
 package competition.subsystems.hanger.winch_commands;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import competition.subsystems.hanger.WinchSubsystem;
 import xbot.common.command.BaseCommand;
 
 public class WinchStopCommand extends BaseCommand{
+    private static Logger log = Logger.getLogger(WinchStopCommand.class);
     WinchSubsystem winchSubsystem;
     
     @Inject
@@ -16,6 +19,7 @@ public class WinchStopCommand extends BaseCommand{
 
     @Override
     public void initialize() {
+        log.info("initializing WinchStopCommand");
         winchSubsystem.setWinchMotorPower(0);
     }
 
