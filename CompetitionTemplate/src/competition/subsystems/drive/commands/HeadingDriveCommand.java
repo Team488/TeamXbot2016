@@ -51,6 +51,7 @@ public class HeadingDriveCommand extends BaseCommand {
     
     @Override
     public void initialize() {
+        log.info("initializing HeadingDriveCommand with power " + targetPower + " and heading " + targetHeading);
         headingModule.reset();
     }
 
