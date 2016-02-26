@@ -15,6 +15,7 @@ public class ArmTestBase extends BaseRobotTest {
     @Before
     public void setup() {
         this.armSubsystem = this.injector.getInstance(ArmSubsystem.class);
+        setLimitSwitches(false, false);
     }
     
     protected void setMockEncoder(double value) {
@@ -22,7 +23,7 @@ public class ArmTestBase extends BaseRobotTest {
     }
     
     protected void setLimitSwitches(boolean up, boolean down) {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(up);
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(down);
+        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(!up);
+        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(!down);
     }
 }

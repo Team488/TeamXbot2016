@@ -11,14 +11,18 @@ import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
+import competition.subsystems.autonomous.DriveForDistanceCommand;
+import competition.subsystems.autonomous.LowBarScoreCommandGroup;
+import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
-import competition.subsystems.hanger.hook_commands.copy.HookExtendCommand;
-import competition.subsystems.hanger.hook_commands.copy.HookRetractCommand;
+import competition.subsystems.hanger.hook_commands.HookExtendCommand;
+import competition.subsystems.hanger.hook_commands.HookRetractCommand;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
+import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
@@ -39,7 +43,8 @@ public class OperatorCommandMap {
             OperatorInterface operatorInterface,
             CalibrateHeadingCommand calibrateHeading,
             HeadingDriveCommand headingDrive,
-            DriveToWallCommand driveToWall
+            DriveToWallCommand driveToWall,
+            ResetRobotPositionCommand resetPosition
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
@@ -49,6 +54,8 @@ public class OperatorCommandMap {
         
         driveToWall.setDesiredDistance(50);
         operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
+        
+        resetPosition.includeOnSmartDashboard("Reset Position");
     }
     
     @Inject
@@ -99,6 +106,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getifAvailable(2).whileHeld(collectorEjectCommand);
     }
     
+    @Inject
     public void setupWristCommands(
             OperatorInterface operatorInterface,
             MoveWristDownCommand moveWristDown,
@@ -107,6 +115,7 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getifAvailable(3).whenPressed(moveWristDown);
     }
     
+    @Inject
     public void setupPortcullisCommands(
             OperatorInterface oi,
             SpinPortcullisWheelsCommand up,
@@ -129,5 +138,21 @@ public class OperatorCommandMap {
         
         oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
         oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
+    }
+    @Inject
+    public void setupAutonomousCommands(
+            OperatorInterface oi,
+            DriveForDistanceCommand driveToTurningPoint,
+            DriveForDistanceCommand driveToLowGoal,
+            LowBarScoreCommandGroup lowBarScoreGroup,
+            TurnToHeadingCommand turnToHeading){
+        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
+        driveToTurningPoint.includeOnSmartDashboard();
+        
+        turnToHeading.setTargetHeading(lowBarScoreGroup.targetHeading.get());
+        turnToHeading.includeOnSmartDashboard();
+        
+        driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
+        driveToLowGoal.includeOnSmartDashboard();
     }
 }

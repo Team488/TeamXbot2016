@@ -1,4 +1,4 @@
-package competition.subsystems.hanger.hook_commands.copy;
+package competition.subsystems.hanger.hook_commands;
 
 import com.google.inject.Inject;
 
@@ -11,6 +11,7 @@ public class HookStopCommand extends BaseCommand{
     @Inject
     public HookStopCommand(HookSubsystem hookSubsystem){
         this.hookSubsystem =  hookSubsystem;
+        this.requires(hookSubsystem);
     }
 
     @Override

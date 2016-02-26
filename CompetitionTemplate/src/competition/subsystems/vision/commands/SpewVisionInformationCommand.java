@@ -33,11 +33,13 @@ public class SpewVisionInformationCommand extends BaseCommand {
         if(isPastInterval()) {
             updateSpewInfo();
         }
+        
+        visionSubsystem.updateMonitorLogging();
     }
     
     public void updateSpewInfo() {
         int numSpatial = visionSubsystem.getBoulderInfo() == null ? 0 : visionSubsystem.getBoulderInfo().length;
-        log.debug("Currently has " + numSpatial + " spatial coords"
+        log.info("Currently has " + numSpatial + " spatial coords"
                 + " (connection is " + (visionSubsystem.isConnectionHealthy() ? "healthy" : "unhealthy") + ")");
         
         this.lastSpewTimestamp = Timer.getFPGATimestamp();

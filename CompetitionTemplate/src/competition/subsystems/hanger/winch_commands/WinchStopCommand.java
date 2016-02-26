@@ -11,6 +11,7 @@ public class WinchStopCommand extends BaseCommand{
     @Inject
     public WinchStopCommand(WinchSubsystem winchSubsystem){
         this.winchSubsystem =  winchSubsystem;
+        this.requires(winchSubsystem);
     }
 
     @Override

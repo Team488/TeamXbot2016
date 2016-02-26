@@ -13,7 +13,7 @@ public class HookSubsystem extends BaseSubsystem{
     
     @Inject
     public HookSubsystem(WPIFactory factory) {
-        hookMotor = factory.getSpeedController(2);
+        hookMotor = factory.getSpeedController(9);
     }
     
     public void setHookMotorPower(double power) {

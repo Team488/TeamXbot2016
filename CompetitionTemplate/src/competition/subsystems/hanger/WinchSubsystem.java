@@ -13,7 +13,7 @@ public class WinchSubsystem extends BaseSubsystem{
     
     @Inject
     public WinchSubsystem(WPIFactory factory) {
-        winchMotor = factory.getSpeedController(3);
+        winchMotor = factory.getSpeedController(8);
     }
     
     public void setWinchMotorPower(double power) {

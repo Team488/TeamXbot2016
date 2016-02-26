@@ -1,7 +1,10 @@
 package competition.subsystems.shifting;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import competition.subsystems.wrist.WristSubsystem;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
@@ -12,10 +15,13 @@ public class ShiftingSubsystem extends BaseSubsystem {
     public final XSolenoid shiftHighSolenoid;
     public final XSolenoid shiftLowSolenoid;
     
+    private static Logger log = Logger.getLogger(ShiftingSubsystem.class);
+    
     @Inject
     public ShiftingSubsystem(WPIFactory factory){
-        shiftHighSolenoid = factory.getSolenoid(1);
-        shiftLowSolenoid = factory.getSolenoid(2);
+        log.info("Creating ShiftingSubsystem");
+        shiftHighSolenoid = factory.getSolenoid(2);
+        shiftLowSolenoid = factory.getSolenoid(3);
     }
     
     public void shiftHigh(){
