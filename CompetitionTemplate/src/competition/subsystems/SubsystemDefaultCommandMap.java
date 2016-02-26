@@ -68,12 +68,17 @@ public class SubsystemDefaultCommandMap {
     }
     
     @Inject
-    public void setupHangerSubsystem(
+    public void setupWinchSubsystem(
             WinchSubsystem winchSubsystem,
-            HookSubsystem hookSubsystem,
-            WinchStopCommand winchStop,
-            HookStopCommand hookStop){
+            WinchStopCommand winchStop){
         winchSubsystem.setDefaultCommand(winchStop);
+    }
+    
+    @Inject
+    public void setupHookSubsystem(
+            HookSubsystem hookSubsystem,
+            HookStopCommand hookStop){
         hookSubsystem.setDefaultCommand(hookStop);
     }
+    
 }
