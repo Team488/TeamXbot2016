@@ -14,6 +14,8 @@ import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
+import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
+import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
@@ -129,7 +131,9 @@ public class OperatorCommandMap {
             DriveForDistanceCommand driveToTurningPoint,
             DriveForDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
-            TurnToHeadingCommand turnToHeading){
+            TurnToHeadingCommand turnToHeading,
+            SetupTraverseDefenseCommand setupTraverseDefenseCommand,
+            DisableAutonomousCommand disableAutonomousCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -138,6 +142,9 @@ public class OperatorCommandMap {
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
+        
+        setupTraverseDefenseCommand.includeOnSmartDashboard();
+        disableAutonomousCommand.includeOnSmartDashboard();
         
     }
 }
