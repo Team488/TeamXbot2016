@@ -24,7 +24,8 @@ public class CollectorSubsystem  extends BaseSubsystem {
     
     @Inject
     public CollectorSubsystem(WPIFactory factory, XPropertyManager propMan){
-        this.collectorMotorLeft = factory.getSpeedController(1);
+        this.collectorMotorLeft = factory.getSpeedController(0);
+        this.collectorMotorLeft.setInverted(true);
         this.ballExistsSensor = factory.getDigitalInput(1);
         this.ballInCollector = propMan.createEphemeralProperty("BallInCollector", false);
 
