@@ -29,6 +29,8 @@ import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCom
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
+import competition.subsystems.vision.commands.AcquireBallCommand;
+import competition.subsystems.vision.commands.CollectForwardBallCommand;
 import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
@@ -158,7 +160,9 @@ public class OperatorCommandMap {
     }
     
     @Inject
-    public void setupDashboard(RotateTowardsBallCommand rotate) {
+    public void setupDashboard(RotateTowardsBallCommand rotate, CollectForwardBallCommand collect, AcquireBallCommand acquire) {
         rotate.includeOnSmartDashboard();
+        collect.includeOnSmartDashboard();
+        acquire.includeOnSmartDashboard();
     }
 }

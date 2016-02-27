@@ -10,15 +10,17 @@ import competition.subsystems.vision.VisionStateMonitor;
 import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.PIDManager;
+import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class RotateTowardsBallCommand extends BaseCommand {
     static Logger log = Logger.getLogger(RotateTowardsBallCommand.class);
     
-    private VisionSubsystem visionSubsystem;
+    protected VisionSubsystem visionSubsystem;
     private DriveSubsystem driveSubsystem;
     
     private PIDManager rotationalPidManager;
+    protected DoubleProperty cameraCenterHeading;
     
     @Inject
     public RotateTowardsBallCommand(VisionSubsystem visionSubsystem, DriveSubsystem driveSubsystem, XPropertyManager propMan) {
@@ -27,6 +29,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
         requires(driveSubsystem);
         
         rotationalPidManager = new PIDManager("Ball rotation", propMan, 1d/20d, 0, 0);
+        cameraCenterHeading = propMan.createEphemeralProperty("Centered cam heading", -15d);
     }
     
     @Override
@@ -42,7 +45,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
         else {
             BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
 
-            double newRotationalPower = rotationalPidManager.calculate(0, targetBall.relativeHeading);
+            double newRotationalPower = rotationalPidManager.calculate(cameraCenterHeading.get(), targetBall.relativeHeading);
             driveSubsystem.tankRotateSafely(newRotationalPower);
         }
     }

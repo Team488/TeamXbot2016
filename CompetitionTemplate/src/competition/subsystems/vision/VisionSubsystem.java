@@ -35,8 +35,9 @@ public class VisionSubsystem extends BaseSubsystem {
     public BallSpatialInfo findTargetBall() {
         BallSpatialInfo[] ballInfo = this.getBoulderInfo();
         
-        if(ballInfo == null)
+        if(ballInfo == null) {
             return null;
+        }
         
         BallSpatialInfo targetBall = null;
         for(BallSpatialInfo ball : ballInfo) {
