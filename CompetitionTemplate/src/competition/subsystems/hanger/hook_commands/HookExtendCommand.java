@@ -10,8 +10,8 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class HookExtendCommand extends BaseCommand{
-    public HookSubsystem hookSubsystem;
-    DoubleProperty hookExtentionPower;
+    HookSubsystem hookSubsystem;
+    public DoubleProperty hookExtentionPower;
     private static Logger log = Logger.getLogger(HookExtendCommand.class);
     
     @Inject

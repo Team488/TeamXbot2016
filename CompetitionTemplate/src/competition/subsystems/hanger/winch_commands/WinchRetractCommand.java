@@ -12,7 +12,7 @@ import xbot.common.properties.XPropertyManager;
 public class WinchRetractCommand extends BaseCommand{
     private static Logger log = Logger.getLogger(WinchExtendCommand.class);
     WinchSubsystem winchSubsystem;
-    DoubleProperty winchRetractionPower;
+    public DoubleProperty winchRetractionPower;
     
     @Inject
     public WinchRetractCommand (WinchSubsystem winchSubsystem, XPropertyManager propManager){
