@@ -28,7 +28,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
         this.driveSubsystem = driveSubsystem;
         requires(driveSubsystem);
         
-        rotationalPidManager = new PIDManager("Ball rotation", propMan, 1d/20d, 0, 0);
+        rotationalPidManager = new PIDManager("Ball rotation", propMan, 0.04, 0, 0);
         cameraCenterHeading = propMan.createEphemeralProperty("Centered cam heading", -15d);
     }
     
@@ -38,13 +38,12 @@ public class RotateTowardsBallCommand extends BaseCommand {
     }
 
     @Override
-    public void execute() {        
-        if(!visionSubsystem.isConnectionHealthy() || !visionSubsystem.trackingAnyBalls()) {
+    public void execute() {
+        BallSpatialInfo targetBall;
+        if(!visionSubsystem.isConnectionHealthy() || (targetBall = visionSubsystem.findTargetBall()) == null) {
            driveSubsystem.stopDrive();
         }
         else {
-            BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
-
             double newRotationalPower = rotationalPidManager.calculate(cameraCenterHeading.get(), targetBall.relativeHeading);
             driveSubsystem.tankRotateSafely(newRotationalPower);
         }

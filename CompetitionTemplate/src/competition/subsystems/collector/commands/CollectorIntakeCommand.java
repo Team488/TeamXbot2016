@@ -30,14 +30,14 @@ public class CollectorIntakeCommand extends BaseCommand{
     public void execute() {
         if (enableCollectorAutoStop.get()) {
             if (!collectorSubsystem.isBallInCollector()) {
-                collectorSubsystem.startIntake();
+                collectorSubsystem.intake();
             }
             else {
                 collectorSubsystem.stopCollector();
             }
         }
         else {
-            collectorSubsystem.startIntake();
+            collectorSubsystem.intake();
         }
     }
 

@@ -37,11 +37,11 @@ public class CollectorSubsystem  extends BaseSubsystem {
         this.collectorMotorLeft.set(power);
     }
     
-    public void startEject() {
+    public void eject() {
         setCollectorPower(ejectPower.get());
     }
     
-    public void startIntake() {
+    public void intake() {
         setCollectorPower(intakePower.get());
     }
     

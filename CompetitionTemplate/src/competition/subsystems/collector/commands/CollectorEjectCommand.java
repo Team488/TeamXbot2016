@@ -21,7 +21,7 @@ public class CollectorEjectCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        collectorSubsystem.startEject();
+        collectorSubsystem.eject();
     }
 
     public void end() {

@@ -19,7 +19,9 @@ public class CollectForwardBallCommand extends BaseCommand {
     protected CollectorSubsystem collectorSubsystem;
 
     protected double targetDistance;
+    protected boolean isInvalid = false;
     protected DoubleProperty powerProperty;
+    protected DoubleProperty maxDistanceProperty;
 
     @Inject
     public CollectForwardBallCommand(PoseSubsystem poseSubsystem, DriveSubsystem driveSubsystem,
@@ -34,20 +36,29 @@ public class CollectForwardBallCommand extends BaseCommand {
         requires(collectorSubsystem);
 
         powerProperty = propMan.createPersistentProperty("Vision collect speed", 0.4);
+        maxDistanceProperty = propMan.createPersistentProperty("Max ball collect dist", 96d);
     }
 
     @Override
     public void initialize() {
-        BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
-        targetDistance = targetBall.distanceInches + 12;
-
         poseSubsystem.resetDistanceTraveled();
+        
+        BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
+        
+        if(targetBall == null || targetBall.distanceInches > maxDistanceProperty.get()) {
+            targetDistance = 0;
+            isInvalid = true;
+            
+            return;
+        }
+        
+        targetDistance = targetBall.distanceInches + 12;
     }
 
     @Override
     public void execute() {
         driveSubsystem.tankDriveSafely(powerProperty.get(), powerProperty.get());
-        collectorSubsystem.startIntake();
+        collectorSubsystem.intake();
     }
     
     @Override
@@ -58,6 +69,6 @@ public class CollectForwardBallCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        return poseSubsystem.getRobotOrientedTotalDistanceTraveled().y >= targetDistance;
+        return isInvalid || poseSubsystem.getRobotOrientedTotalDistanceTraveled().y >= targetDistance;
     }
 }

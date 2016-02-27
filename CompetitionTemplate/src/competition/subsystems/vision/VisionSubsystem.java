@@ -53,7 +53,7 @@ public class VisionSubsystem extends BaseSubsystem {
         return jetsonServer.isConnectionHealthy();
     }
 
-    public boolean trackingAnyBalls() {
+    public boolean isTrackingAnyBalls() {
         BallSpatialInfo[] ballInfo = this.getBoulderInfo();
         return ballInfo == null || ballInfo.length <= 0;
     }
