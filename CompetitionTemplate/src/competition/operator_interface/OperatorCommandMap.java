@@ -142,6 +142,7 @@ public class OperatorCommandMap {
         oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
         oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
     }
+    
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
@@ -157,6 +158,13 @@ public class OperatorCommandMap {
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
+    }
+    
+    @Inject
+    public void setupVisionCommands(
+            OperatorInterface oi,
+            AcquireBallCommand acquireCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
     }
     
     @Inject

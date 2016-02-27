@@ -39,13 +39,20 @@ public class RotateTowardsBallCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        BallSpatialInfo targetBall;
-        if(!visionSubsystem.isConnectionHealthy() || (targetBall = visionSubsystem.findTargetBall()) == null) {
-           driveSubsystem.stopDrive();
+        if (!visionSubsystem.isConnectionHealthy()) {
+            driveSubsystem.stopDrive();
         }
         else {
-            double newRotationalPower = rotationalPidManager.calculate(cameraCenterHeading.get(), targetBall.relativeHeading);
-            driveSubsystem.tankRotateSafely(newRotationalPower);
+            BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
+
+            if (targetBall == null) {
+                driveSubsystem.stopDrive();
+            }
+            else {
+                double newRotationalPower = rotationalPidManager.calculate(cameraCenterHeading.get(),
+                        targetBall.relativeHeading);
+                driveSubsystem.tankRotateSafely(newRotationalPower);
+            }
         }
     }
     
