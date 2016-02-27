@@ -26,6 +26,8 @@ public class DriveSubsystemTest extends DriveTestBase {
     
     @Test
     public void testSafeTankDrive() {
+        driveSubsystem.enableSafeTankDrive.set(true);
+        
         driveSubsystem.tankDriveSafely(1, 1);
         checkChassisPower(1, 1);
         

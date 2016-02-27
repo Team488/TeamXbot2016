@@ -18,6 +18,10 @@ import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
+import competition.subsystems.hanger.hook_commands.HookExtendCommand;
+import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
+import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
@@ -124,6 +128,18 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(6).whileHeld(down);
     }
     
+    public void setupHangerCommands(
+            OperatorInterface oi,
+            HookExtendCommand hookExtend,
+            HookRetractCommand hookRetract,
+            WinchExtendCommand winchExtend,
+            WinchRetractCommand winchRetract){
+        oi.leftButtons.getifAvailable(8).whenPressed(hookExtend);
+        oi.leftButtons.getifAvailable(9).whenPressed(hookRetract);
+        
+        oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
+        oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
+    }
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
@@ -139,7 +155,6 @@ public class OperatorCommandMap {
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
-        
     }
     
     @Inject

@@ -11,6 +11,10 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
+import competition.subsystems.hanger.HookSubsystem;
+import competition.subsystems.hanger.WinchSubsystem;
+import competition.subsystems.hanger.hook_commands.HookStopCommand;
+import competition.subsystems.hanger.winch_commands.WinchStopCommand;
 import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
@@ -60,4 +64,19 @@ public class SubsystemDefaultCommandMap {
     public void setupVisionSubsystem(
             VisionSubsystem visionSubsystem) {
     }
+    
+    @Inject
+    public void setupWinchSubsystem(
+            WinchSubsystem winchSubsystem,
+            WinchStopCommand winchStop){
+        winchSubsystem.setDefaultCommand(winchStop);
+    }
+    
+    @Inject
+    public void setupHookSubsystem(
+            HookSubsystem hookSubsystem,
+            HookStopCommand hookStop){
+        hookSubsystem.setDefaultCommand(hookStop);
+    }
+    
 }
