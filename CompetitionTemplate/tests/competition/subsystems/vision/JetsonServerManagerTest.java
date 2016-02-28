@@ -21,17 +21,19 @@ public class JetsonServerManagerTest extends BaseRobotTest {
         
        assertNull(serverManager.getLastSpatialInfoArray());
        
-       innerServer.simulateNewPacket(new JetsonCommPacket(new int[] { Integer.MAX_VALUE, 2, 4, 1000, 500, 200, 100 }));
+       innerServer.simulateNewPacket(new JetsonCommPacket(new int[] { Integer.MAX_VALUE, 2, 6, 1000, 500, 50, 200, 100, 80 }));
        
        assertEquals(2, serverManager.getLastSpatialInfoArray().length);
 
        BallSpatialInfo parsedInfoA = serverManager.getLastSpatialInfoArray()[0];
        assertEquals(10, parsedInfoA.relativeHeading, 0.001);
        assertEquals(5, parsedInfoA.distanceInches, 0.001);
+       assertEquals(0.5, parsedInfoA.confidence, 0.001);
 
        BallSpatialInfo parsedInfoB = serverManager.getLastSpatialInfoArray()[1];
        assertEquals(2, parsedInfoB.relativeHeading, 0.001);
        assertEquals(1, parsedInfoB.distanceInches, 0.001);
+       assertEquals(0.8, parsedInfoB.confidence, 0.001);
     }
     
     @Test
