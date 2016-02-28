@@ -69,10 +69,10 @@ public class PoseSubsystem extends BaseSubsystem {
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        frontDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rearDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        leftDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rightDistanceSensor = factory.getAnalogDistanceSensor(4, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        frontDistanceSensor = factory.getAnalogDistanceSensor(0, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rearDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        leftDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rightDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
         
         
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
