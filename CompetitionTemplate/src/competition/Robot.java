@@ -9,6 +9,7 @@ import competition.subsystems.vision.InertJetsonServer;
 import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
 import xbot.common.command.BaseCommand;
+import competition.subsystems.vision.commands.VisionTelemetryReporterCommand;
 import xbot.common.command.BaseRobot;
 import xbot.common.injection.RobotModule;
 
@@ -45,5 +46,7 @@ public class Robot extends BaseRobot {
         this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
         // Base implementation will run the command
         super.autonomousInit();
+        
+        this.injector.getInstance(VisionTelemetryReporterCommand.class).start();
     }
 }
