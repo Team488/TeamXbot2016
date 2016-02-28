@@ -10,17 +10,21 @@ import com.google.inject.Singleton;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.properties.XPropertyManager;
+import xbot.common.properties.DoubleProperty;
 
 @Singleton
 public class VisionSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(VisionSubsystem.class);
     
     private JetsonServerManager jetsonServer;
+    protected DoubleProperty maxDistanceProperty;
     
     @Inject
-    public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propManager) {
+    public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating VisionSubsystem");
         this.jetsonServer = jetsonServer;
+
+        maxDistanceProperty = propMan.createPersistentProperty("Max ball collect dist", 96d);
     }
     
     @Deprecated
@@ -41,7 +45,7 @@ public class VisionSubsystem extends BaseSubsystem {
         
         BallSpatialInfo targetBall = null;
         for(BallSpatialInfo ball : ballInfo) {
-            if(targetBall == null || ball.distanceInches < targetBall.distanceInches) {
+            if(targetBall == null || (ball.confidence > targetBall.confidence && ball.distanceInches <= getMaxBallAcquireDistance())) {
                 targetBall = ball;
             }
         }
@@ -56,5 +60,9 @@ public class VisionSubsystem extends BaseSubsystem {
     public boolean isTrackingAnyBalls() {
         BallSpatialInfo[] ballInfo = this.getBoulderInfo();
         return ballInfo == null || ballInfo.length <= 0;
+    }
+    
+    public double getMaxBallAcquireDistance() {
+        return maxDistanceProperty.get();
     }
 }
