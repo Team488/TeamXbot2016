@@ -10,13 +10,11 @@ import xbot.common.properties.XPropertyManager;
 
 public class CollectorIntakeCommand extends BaseCommand{
     CollectorSubsystem collectorSubsystem;
-    DoubleProperty intakePower;
     public BooleanProperty enableCollectorAutoStop;
 
     @Inject
     public CollectorIntakeCommand(CollectorSubsystem collectorSubsystem, XPropertyManager propManager) {
         this.collectorSubsystem = collectorSubsystem;
-        intakePower = propManager.createPersistentProperty("CollectorIntakePower", 1.0);
         enableCollectorAutoStop = propManager.createPersistentProperty("Enable Collector Auto Stop", false);
     }
     
@@ -25,21 +23,21 @@ public class CollectorIntakeCommand extends BaseCommand{
     }
 
     public void end() {
-        collectorSubsystem.setIntakePower(0);
+        collectorSubsystem.stopCollector();
     }
 
     @Override
     public void execute() {
         if (enableCollectorAutoStop.get()) {
             if (!collectorSubsystem.isBallInCollector()) {
-                collectorSubsystem.setIntakePower(intakePower.get());
+                collectorSubsystem.intake();
             }
             else {
-                collectorSubsystem.setIntakePower(0);
+                collectorSubsystem.stopCollector();
             }
         }
         else {
-            collectorSubsystem.setIntakePower(intakePower.get());
+            collectorSubsystem.intake();
         }
     }
 

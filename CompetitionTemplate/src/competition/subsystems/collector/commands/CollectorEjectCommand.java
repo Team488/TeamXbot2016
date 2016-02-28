@@ -9,27 +9,23 @@ import xbot.common.properties.XPropertyManager;
 
 public class CollectorEjectCommand extends BaseCommand{
     CollectorSubsystem collectorSubsystem;
-    DoubleProperty intakePower;
 
     @Inject
     public CollectorEjectCommand(CollectorSubsystem collectorSubsystem, XPropertyManager propManager) {
         this.collectorSubsystem = collectorSubsystem;
-        intakePower = propManager.createPersistentProperty("CollectorEjectPower", -1.0);
     }
     
     @Override
     public void initialize() {
-        collectorSubsystem.setIntakePower(intakePower.get()); 
-    }
-
-    public void end() {
-        collectorSubsystem.setIntakePower(0);
     }
 
     @Override
     public void execute() {
-        
+        collectorSubsystem.eject();
     }
 
+    public void end() {
+        collectorSubsystem.stopCollector();
+    }
 
 }

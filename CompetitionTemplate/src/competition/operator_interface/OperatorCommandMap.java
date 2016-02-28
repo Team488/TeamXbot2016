@@ -29,6 +29,9 @@ import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCom
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
+import competition.subsystems.vision.commands.AcquireBallCommand;
+import competition.subsystems.vision.commands.CollectForwardBallCommand;
+import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
 
@@ -139,6 +142,7 @@ public class OperatorCommandMap {
         oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
         oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
     }
+    
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
@@ -154,5 +158,19 @@ public class OperatorCommandMap {
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
+    }
+    
+    @Inject
+    public void setupVisionCommands(
+            OperatorInterface oi,
+            AcquireBallCommand acquireCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+    }
+    
+    @Inject
+    public void setupDashboard(RotateTowardsBallCommand rotate, CollectForwardBallCommand collect, AcquireBallCommand acquire) {
+        rotate.includeOnSmartDashboard();
+        collect.includeOnSmartDashboard();
+        acquire.includeOnSmartDashboard();
     }
 }
