@@ -122,14 +122,22 @@ public class OperatorCommandMap {
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
-            DriveForDistanceCommand driveToTurningPoint,
             DriveForDistanceCommand driveToLowGoal,
+            DriveToWallCommand driveToWall,
+            DriveToWallCommand driveToTurningPoint,
             LowBarScoreCommandGroup lowBarScoreGroup,
-            TurnToHeadingCommand turnToHeading){
-        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
+            TurnToHeadingCommand turnToHeading,
+            TurnToHeadingCommand turnToSideWall){
+        driveToWall.setDesiredDistance(lowBarScoreGroup.distanceFromWallToTurningPoint.get());
+        driveToWall.includeOnSmartDashboard();
+        
+        turnToSideWall.setTargetHeading(lowBarScoreGroup.headingToFaceSideWall.get());
+        turnToSideWall.includeOnSmartDashboard();
+        
+        driveToTurningPoint.setDesiredDistance(lowBarScoreGroup.distanceToTurningPointFromSideWall.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
-        turnToHeading.setTargetHeading(lowBarScoreGroup.targetHeading.get());
+        turnToHeading.setTargetHeading(lowBarScoreGroup.headingToFaceLowGoal.get());
         turnToHeading.includeOnSmartDashboard();
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
