@@ -28,7 +28,6 @@ public class LowBarScoreCommandGroup extends CommandGroup{
             CollectorSubsystem collector,
             Provider<DriveToWallCommand> driveToWallProvider,
             Provider<TurnToHeadingCommand> turnToHeadingProvider){
-        
         DriveToWallCommand driveToWall = driveToWallProvider.get();
         distanceFromWallToTurningPoint = propManager.createPersistentProperty("distanceFromWallToTurningPointInInches", 90.3);
         driveToWall.setDesiredDistance(distanceFromWallToTurningPoint.get());

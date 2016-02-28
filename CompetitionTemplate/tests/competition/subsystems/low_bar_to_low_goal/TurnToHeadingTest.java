@@ -22,11 +22,23 @@ public class TurnToHeadingTest extends DriveTestBase{
         
         turnToHeadingCommand.setTargetHeading(lowScoreCommands.headingToFaceLowGoal.get());
         
+        turnToHeadingCommand.turnRight(false);
+        
         setMockGyroHeading(0);
         
         turnToHeadingCommand.execute();
         
         verifyTurningLeft();
+        
+        turnToHeadingCommand.setTargetHeading(lowScoreCommands.headingToFaceLowGoal.get());
+        
+        turnToHeadingCommand.turnRight(true);
+        
+        setMockGyroHeading(0);
+        
+        turnToHeadingCommand.execute();
+        
+        verifyTurningRight();
         
         setMockGyroHeading(lowScoreCommands.headingToFaceLowGoal.get());
         
