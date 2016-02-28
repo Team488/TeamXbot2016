@@ -37,6 +37,8 @@ public class ArmSubsystem extends BaseSubsystem {
     
     DoubleProperty armPower;
     
+    DoubleProperty upperAngleLimit;
+    
     BooleanProperty enableSafeArmOperation;
 
     @Inject
@@ -53,6 +55,7 @@ public class ArmSubsystem extends BaseSubsystem {
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
+        upperAngleLimit = propManager.createPersistentProperty("upperArmAngleLimit", 90.0);
                
         armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
@@ -75,7 +78,7 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMaximumHeight() {
-        return false;
+        return getArmAngle() > upperAngleLimit.get();
         //return upperLimitSwitch.get();
     }
     
