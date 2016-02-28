@@ -45,10 +45,9 @@ public class ArmSubsystemTest extends ArmTestBase {
         assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0); 
         
         lowerArmCommand.initialize(); //runs initialize in lowerArmCommand
-        
         lowerArmCommand.execute(); //runs execute in the lowerArmCommand
         
-        //the motor power should be greater than 0 after initialize and execute runs
+        //the motor power should be less than 0 after initialize and execute runs
         assertTrue(armSubsystem.leftArmMotor.get() < 0 && armSubsystem.rightArmMotor.get() < 0); 
         
         lowerArmCommand.end();
@@ -57,6 +56,7 @@ public class ArmSubsystemTest extends ArmTestBase {
     }
     
     @Test
+    @Ignore("Currently no upper limit switch on robot")
     public void limitSwitchTest() {
         ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(true); //mocks the upper limit switch being pressed
         
@@ -68,7 +68,6 @@ public class ArmSubsystemTest extends ArmTestBase {
     }
     
     @Test
-    @Ignore("Calibration currently disabled")
     public void testCalibration() {
         setMockEncoder(0);
         assertEquals(0, armSubsystem.getArmAngle(), 0.001);

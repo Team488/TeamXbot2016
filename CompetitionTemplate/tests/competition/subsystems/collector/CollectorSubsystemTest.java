@@ -27,7 +27,8 @@ public class CollectorSubsystemTest extends BaseRobotTest {
          CollectorEjectCommand collectorEjectCommand = this.injector.getInstance(CollectorEjectCommand.class);
          
          collectorEjectCommand.initialize();
-         
+         collectorEjectCommand.execute();
+
          assertTrue(getCollectorPower() < 0);
          
          collectorEjectCommand.end();

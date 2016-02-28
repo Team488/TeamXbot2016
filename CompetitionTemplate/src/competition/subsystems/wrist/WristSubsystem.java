@@ -25,13 +25,13 @@ public class WristSubsystem extends BaseSubsystem {
     }
     
     public void moveWristUp() {
-        solenoidA.set(true);
-        solenoidB.set(false);
+        solenoidA.set(false);
+        solenoidB.set(true);
     }
     
     public void moveWristDown() {
-        solenoidA.set(false);
-        solenoidB.set(true);
+        solenoidA.set(true);
+        solenoidB.set(false);
     }
 
 }

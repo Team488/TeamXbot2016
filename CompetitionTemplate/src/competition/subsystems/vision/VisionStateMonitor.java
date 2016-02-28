@@ -17,6 +17,7 @@ public class VisionStateMonitor implements Observer {
     
     public VisionStateMonitor(VisionSubsystem subsystem) {
         this.subsystem = subsystem;
+        
         healthLatch = new Latch(false, EdgeType.Both);
         healthLatch.addObserver(this);
     }

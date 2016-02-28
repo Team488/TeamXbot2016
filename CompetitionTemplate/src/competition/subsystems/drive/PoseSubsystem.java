@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import competition.subsystems.drive.commands.MonitorDefenseTraversalModule.DefenseState;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.sensors.DistanceSensor;
@@ -13,6 +14,7 @@ import xbot.common.controls.sensors.XGyro;
 import xbot.common.injection.wpi_factories.WPIFactory;
 import xbot.common.math.ContiguousHeading;
 import xbot.common.math.XYPair;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -29,6 +31,8 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public XEncoder leftDriveEncoder;
     public XEncoder rightDriveEncoder;
+    
+    public DefenseState defenseState = DefenseState.NotOnDefense;
     
     private DoubleProperty leftDriveDistance;
     private DoubleProperty rightDriveDistance;
@@ -59,14 +63,16 @@ public class PoseSubsystem extends BaseSubsystem {
     private double previousLeftDistance;
     private double previousRightDistance;
     
+    private BooleanProperty rioRotated;
+    
     @Inject
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        frontDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rearDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        leftDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rightDistanceSensor = factory.getAnalogDistanceSensor(4, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        frontDistanceSensor = factory.getAnalogDistanceSensor(0, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rearDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        leftDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rightDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
         
         
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
@@ -86,8 +92,8 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
         
-        leftDriveEncoder = factory.getEncoder("LeftDrive", 8, 9, 1.0);
-        rightDriveEncoder = factory.getEncoder("RightDrive", 6, 7, 1.0);
+        leftDriveEncoder = factory.getEncoder("LeftDrive", 9, 8, 1.0);
+        rightDriveEncoder = factory.getEncoder("RightDrive", 7, 6, 1.0);
         rightDriveEncoder.setInverted(true);
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
@@ -95,6 +101,8 @@ public class PoseSubsystem extends BaseSubsystem {
         
         totalDistanceX = propManager.createEphemeralProperty("TotalDistanceX", 0.0);
         totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
+        
+        rioRotated = propManager.createPersistentProperty("RioRotated", false);
     }
     
     public static class TemporaryVoltageMap
@@ -243,10 +251,29 @@ public class PoseSubsystem extends BaseSubsystem {
     }
     
     public double getRobotPitch() {
+        if (rioRotated.get())
+        {
+            return imu.getRoll();
+        }
         return imu.getPitch();
     }
     
     public double getRobotRoll() {
+        if (rioRotated.get())
+        {
+            return imu.getPitch();
+        }
         return imu.getRoll();
+    }
+    
+    public DefenseState getDefenseState() {
+        return this.defenseState;
+    }
+    
+    public void setDefenseState(DefenseState defenseState) {
+        if(this.defenseState != defenseState) {
+            log.info("Entering defense state:" + defenseState.toString());
+        }
+        this.defenseState = defenseState;
     }
 }

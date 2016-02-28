@@ -45,11 +45,11 @@ public class ArmSubsystem extends BaseSubsystem {
         
         leftArmMotor = factory.getSpeedController(6);        
         rightArmMotor = factory.getSpeedController(7);
-        rightArmMotor.setInverted(true);
+        leftArmMotor.setInverted(true);
         
         upperLimitSwitch = factory.getDigitalInput(2);
         lowerLimitSwitch = factory.getDigitalInput(0);
-        encoder = factory.getEncoder("ArmEncoder", 4, 5, 1.0);
+        encoder = factory.getEncoder("ArmEncoder", 5, 4, 1.0);
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
@@ -75,7 +75,8 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMaximumHeight() {
-        return upperLimitSwitch.get();
+        return false;
+        //return upperLimitSwitch.get();
     }
     
     public double getArmAngle() {
@@ -112,11 +113,18 @@ public class ArmSubsystem extends BaseSubsystem {
             if (isArmAtMaximumHeight()) {
                 power = Math.min(power, 0);
             }
+            
+            setArmRawPower(power);
         }
         else {
-            leftArmMotor.set(power);
-            rightArmMotor.set(power);
+            setArmRawPower(power);
         }
+    }
+    
+    private void setArmRawPower(double power) {
+        armPower.set(power);
+        leftArmMotor.set(power);
+        rightArmMotor.set(power);
     }
     
     public void calibrateCurrentPositionAsLow() {
