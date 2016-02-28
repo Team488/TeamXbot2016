@@ -69,10 +69,10 @@ public class PoseSubsystem extends BaseSubsystem {
     public PoseSubsystem(WPIFactory factory, XPropertyManager propManager) {
         log.info("Creating PoseSubsystem");
         imu = factory.getGyro(ImuType.navX);
-        frontDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rearDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        leftDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
-        rightDistanceSensor = factory.getAnalogDistanceSensor(4, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        frontDistanceSensor = factory.getAnalogDistanceSensor(0, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rearDistanceSensor = factory.getAnalogDistanceSensor(1, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        leftDistanceSensor = factory.getAnalogDistanceSensor(2, voltage -> TemporaryVoltageMap.placeholder(voltage));
+        rightDistanceSensor = factory.getAnalogDistanceSensor(3, voltage -> TemporaryVoltageMap.placeholder(voltage));
         
         
         leftSensorMountingDistanceInches = propManager.createPersistentProperty("LeftSensorMountingDistanceInches", 16.0);
@@ -92,8 +92,8 @@ public class PoseSubsystem extends BaseSubsystem {
         
         leftDistanceToWall = propManager.createEphemeralProperty("LeftDistanceToWall", 0.0);
         
-        leftDriveEncoder = factory.getEncoder("LeftDrive", 8, 9, 1.0);
-        rightDriveEncoder = factory.getEncoder("RightDrive", 6, 7, 1.0);
+        leftDriveEncoder = factory.getEncoder("LeftDrive", 9, 8, 1.0);
+        rightDriveEncoder = factory.getEncoder("RightDrive", 7, 6, 1.0);
         rightDriveEncoder.setInverted(true);
         
         leftDriveDistance = propManager.createEphemeralProperty("LeftDriveDistance", 0.0);
