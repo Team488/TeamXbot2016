@@ -16,6 +16,6 @@ public abstract class BaseAutonomousModeSetCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        // no-op, all work done in initialize
+        // no-op, all work should be done in initialize of subclasses
     }
 }
