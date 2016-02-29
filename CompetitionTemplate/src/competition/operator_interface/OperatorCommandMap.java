@@ -139,11 +139,11 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract){
-        oi.leftButtons.getifAvailable(8).whenPressed(hookExtend);
-        oi.leftButtons.getifAvailable(9).whenPressed(hookRetract);
+        oi.leftButtons.getifAvailable(8).whileHeld(hookExtend);
+        oi.leftButtons.getifAvailable(9).whileHeld(hookRetract);
         
-        oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
-        oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
+        oi.rightButtons.getifAvailable(10).whileHeld(winchExtend);
+        oi.rightButtons.getifAvailable(11).whileHeld(winchRetract);
     }
     
     @Inject
