@@ -17,7 +17,7 @@ public class HookSubsystem extends BaseSubsystem{
     public XSpeedController hookMotor;
     private static Logger log = Logger.getLogger(HookSubsystem.class);
     public XEncoder hookEncoder;
-    DoubleProperty hookHeight;
+    public DoubleProperty hookHeight;
     
     @Inject
     public HookSubsystem(WPIFactory factory, XPropertyManager propMan) {

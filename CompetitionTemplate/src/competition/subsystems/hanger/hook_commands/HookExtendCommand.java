@@ -29,7 +29,11 @@ public class HookExtendCommand extends BaseCommand{
 
     @Override
     public void execute(){
-        
+        hookSubsystem.setHookMotorPower(hookExtentionPower.get());
+    }
+    
+    public boolean isFinished(){
+        return hookSubsystem.getHookDistance() >= hookSubsystem.hookHeight.get();
     }
     
     public void end(){

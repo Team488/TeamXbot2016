@@ -17,7 +17,7 @@ public class WinchSubsystem extends BaseSubsystem{
     public XSpeedController winchMotor;
     private static Logger log = Logger.getLogger(WinchSubsystem.class);
     public XEncoder winchEncoder;
-    DoubleProperty winchDistance;
+    public DoubleProperty winchDistance;
     
     @Inject
     public WinchSubsystem(WPIFactory factory, XPropertyManager propMan) {
