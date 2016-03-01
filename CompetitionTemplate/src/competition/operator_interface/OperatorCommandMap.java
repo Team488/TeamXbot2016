@@ -14,6 +14,8 @@ import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
+import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
+import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
@@ -29,6 +31,9 @@ import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCom
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
 import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
+import competition.subsystems.vision.commands.AcquireBallCommand;
+import competition.subsystems.vision.commands.CollectForwardBallCommand;
+import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
 
@@ -127,6 +132,7 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(6).whileHeld(down);
     }
     
+    @Inject
     public void setupHangerCommands(
             OperatorInterface oi,
             HookExtendCommand hookExtend,
@@ -139,13 +145,16 @@ public class OperatorCommandMap {
         oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
         oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
     }
+    
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
             DriveForDistanceCommand driveToTurningPoint,
             DriveForDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
-            TurnToHeadingCommand turnToHeading){
+            TurnToHeadingCommand turnToHeading,
+            SetupTraverseDefenseCommand setupTraverseDefenseCommand,
+            DisableAutonomousCommand disableAutonomousCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -154,5 +163,22 @@ public class OperatorCommandMap {
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
+        
+        setupTraverseDefenseCommand.includeOnSmartDashboard();
+        disableAutonomousCommand.includeOnSmartDashboard();
+    }
+    
+    @Inject
+    public void setupVisionCommands(
+            OperatorInterface oi,
+            AcquireBallCommand acquireCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+    }
+    
+    @Inject
+    public void setupDashboard(RotateTowardsBallCommand rotate, CollectForwardBallCommand collect, AcquireBallCommand acquire) {
+        rotate.includeOnSmartDashboard();
+        collect.includeOnSmartDashboard();
+        acquire.includeOnSmartDashboard();
     }
 }

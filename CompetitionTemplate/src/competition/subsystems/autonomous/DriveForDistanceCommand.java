@@ -10,8 +10,8 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class DriveForDistanceCommand extends BaseCommand{
-    DriveSubsystem driveSubsystem; 
-    PoseSubsystem poseSubsystem;
+    protected DriveSubsystem driveSubsystem; 
+    protected PoseSubsystem poseSubsystem;
     
     DoubleProperty targetRange;
     
@@ -36,7 +36,7 @@ public class DriveForDistanceCommand extends BaseCommand{
 
     @Override
     public void initialize() {
-        
+        poseSubsystem.resetDistanceTraveled();
     }
 
     @Override
