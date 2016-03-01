@@ -16,7 +16,7 @@ public class WinchExtendCommand extends BaseCommand{
     
     @Inject
     public WinchExtendCommand (WinchSubsystem winchSubsystem, XPropertyManager propManager){
-        winchExtentionPower = propManager.createPersistentProperty("winch extention power", -1.0);
+        winchExtentionPower = propManager.createPersistentProperty("winch extention power", 1.0);
         this.winchSubsystem = winchSubsystem;
         this.requires(winchSubsystem);
     }
