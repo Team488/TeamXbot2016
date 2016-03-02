@@ -74,12 +74,11 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMinimumHeight() {
-        return !lowerLimitSwitch.get();
+        return lowerLimitSwitch.get();
     }
 
     public boolean isArmAtMaximumHeight() {
-        return false;
-        //return upperLimitSwitch.get();
+        return upperLimitSwitch.get();
     }
     
     public boolean isArmAtMaxAngleHeight(){
