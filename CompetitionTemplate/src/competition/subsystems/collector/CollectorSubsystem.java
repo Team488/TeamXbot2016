@@ -27,6 +27,7 @@ public class CollectorSubsystem  extends BaseSubsystem {
         this.collectorMotorLeft = factory.getSpeedController(0);
         this.collectorMotorLeft.setInverted(true);
         this.ballExistsSensor = factory.getDigitalInput(1);
+        
         this.ballInCollector = propMan.createEphemeralProperty("BallInCollector", false);
 
         intakePower = propMan.createPersistentProperty("Collector intake power", 1.0);
@@ -49,11 +50,14 @@ public class CollectorSubsystem  extends BaseSubsystem {
         setCollectorPower(0);
     }
     
-    public boolean isBallInCollector() {
+    public void updateBoulderSensor() {
         boolean isBallIn = !ballExistsSensor.get();
-        
         ballInCollector.set(isBallIn);
-        return isBallIn;
+    }
+    
+    public boolean isBallInCollector() {
+        updateBoulderSensor();
+        return ballInCollector.get();
     }
 
 }

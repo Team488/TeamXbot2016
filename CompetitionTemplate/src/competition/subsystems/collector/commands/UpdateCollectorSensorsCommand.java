@@ -23,7 +23,7 @@ public class UpdateCollectorSensorsCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        collectorSubsystem.isBallInCollector();
+        collectorSubsystem.updateBoulderSensor();
     }
 
 }
