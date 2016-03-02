@@ -25,7 +25,7 @@ public class HeadingDriveCommandTest extends DriveSubsystemTest {
         
         command.initialize();
         command.execute();
-        checkChassisPower(0.0, 0.0);
+        checkChassisPower(0.5, 0.5);
     }
     
     @Test
