@@ -22,7 +22,7 @@ public class HookSubsystem extends BaseSubsystem{
     @Inject
     public HookSubsystem(WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating HookSubsystem");
-        hookMotor = factory.getSpeedController(9);
+        hookMotor = factory.getSpeedController(8);
         hookEncoder = factory.getEncoder("Hook", 10, 11, 1.0);
         hookHeight = propMan.createEphemeralProperty("HookHeight", 0.0);
     }

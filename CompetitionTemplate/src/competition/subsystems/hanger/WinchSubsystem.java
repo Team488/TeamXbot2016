@@ -22,7 +22,7 @@ public class WinchSubsystem extends BaseSubsystem{
     @Inject
     public WinchSubsystem(WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating WinchSubsystem");
-        winchMotor = factory.getSpeedController(8);
+        winchMotor = factory.getSpeedController(9);
         winchEncoder = factory.getEncoder("Winch", 12, 13, 1.0);
         winchDistance = propMan.createEphemeralProperty("WinchDistance", 0.0);
     }

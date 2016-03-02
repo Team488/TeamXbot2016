@@ -33,6 +33,7 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     public VisionTelemetryReporterCommand(VisionSubsystem visionSubsystem, XPropertyManager propMan) {
         this.visionSubsystem = visionSubsystem;
         setRunWhenDisabled(true);
+        requires(visionSubsystem);
         
         monitor = new VisionStateMonitor(visionSubsystem);
         

@@ -83,9 +83,6 @@ public class OperatorCommandMap {
             ArmManualControlCommand armManual,
             CalibrateArmLowCommand calibrateArmLow)
     {
-        operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
-        operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
-        
         double minValue = 0.15;
         AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
         AnalogHIDDescription yDown = new AnalogHIDDescription(1, -1, -minValue);
@@ -139,11 +136,11 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract){
-        oi.leftButtons.getifAvailable(8).whenPressed(hookExtend);
-        oi.leftButtons.getifAvailable(9).whenPressed(hookRetract);
+        oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
+        oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
-        oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
-        oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
+        oi.rightButtons.getifAvailable(10).whileHeld(winchExtend);
+        oi.rightButtons.getifAvailable(12).whileHeld(winchRetract);
     }
     
     @Inject
