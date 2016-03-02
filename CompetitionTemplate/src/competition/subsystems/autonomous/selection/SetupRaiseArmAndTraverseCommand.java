@@ -7,6 +7,7 @@ import xbot.common.properties.XPropertyManager;
 import com.google.inject.Inject;
 
 import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
+import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TraverseDefenseCommand;
 
 
@@ -19,6 +20,7 @@ public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetComman
     final DoubleProperty autoArmGoal;
     final DoubleProperty traverseMinTime;
     final DoubleProperty traverseMaxTime;
+    final DoubleProperty initialAutoHeading;
     
     @Inject
     public SetupRaiseArmAndTraverseCommand(XPropertyManager propMan, 
@@ -31,7 +33,7 @@ public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetComman
         autoArmGoal = propMan.createPersistentProperty("autonomousArmGoal", 30.0);
         traverseMinTime = propMan.createPersistentProperty("traverseDefenseMinTime", 1.0);
         traverseMaxTime = propMan.createPersistentProperty("traverseDefenseMaxTime", 3.0);
-        
+        initialAutoHeading = propMan.createPersistentProperty("initialAutoHeading", PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         
         this.auto = auto;
     }
@@ -44,10 +46,6 @@ public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetComman
                 traverseMinTime.get(),
                 traverseMaxTime.get());
         auto.setArmAngle(autoArmGoal.get());
-    }
-    
-    @Override
-    public boolean isFinished() {
-        return true;
+        auto.setInitialHeading(initialAutoHeading.get());
     }
 }
