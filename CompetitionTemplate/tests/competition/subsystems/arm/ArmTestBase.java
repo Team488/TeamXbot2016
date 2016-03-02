@@ -11,10 +11,12 @@ import edu.wpi.first.wpilibj.MockEncoder;
 public class ArmTestBase extends BaseRobotTest {
     
     protected ArmSubsystem armSubsystem;
+    protected ArmTargetSubsystem armTargetSubsystem;
     
     @Before
     public void setup() {
         this.armSubsystem = this.injector.getInstance(ArmSubsystem.class);
+        this.armTargetSubsystem = this.injector.getInstance(ArmTargetSubsystem.class);
         setLimitSwitches(false, false);
     }
     
