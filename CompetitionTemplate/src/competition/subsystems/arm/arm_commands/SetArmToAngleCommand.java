@@ -19,6 +19,7 @@ public class SetArmToAngleCommand extends BaseCommand{
     @Inject
     public SetArmToAngleCommand(ArmTargetSubsystem armTarget) {
         this.armTarget = armTarget;
+        this.requires(armTarget);
     }
     
     public void setGoalAngle(double angle) {
