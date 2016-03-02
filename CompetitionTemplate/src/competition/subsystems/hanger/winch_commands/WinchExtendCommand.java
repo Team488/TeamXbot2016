@@ -12,12 +12,12 @@ import xbot.common.properties.XPropertyManager;
 public class WinchExtendCommand extends BaseCommand{
     private static Logger log = Logger.getLogger(WinchExtendCommand.class);
     WinchSubsystem winchSubsystem;
-    DoubleProperty winchExtentionPower;
+    public DoubleProperty winchExtentionPower;
     
     @Inject
     public WinchExtendCommand (WinchSubsystem winchSubsystem, XPropertyManager propManager){
+        winchExtentionPower = propManager.createPersistentProperty("winch extention power", 1.0);
         this.winchSubsystem = winchSubsystem;
-        winchExtentionPower = propManager.createPersistentProperty("winch extention power", -1.0);
         this.requires(winchSubsystem);
     }
 
@@ -29,7 +29,11 @@ public class WinchExtendCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        
+        winchSubsystem.setWinchMotorPower(winchExtentionPower.get());
+    }
+    
+    public boolean isFinished(){
+        return winchSubsystem.getWinchDistance() >= winchSubsystem.winchDistance.get();
     }
     
     public void end(){
