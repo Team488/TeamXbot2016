@@ -20,8 +20,8 @@ public class WristSubsystem extends BaseSubsystem {
     @Inject
     public WristSubsystem (WPIFactory factory) {
         log.info("Creating WristSubsystem");
-        solenoidA = factory.getSolenoid(0);
-        solenoidB = factory.getSolenoid(1);
+        solenoidA = factory.getSolenoid(2);
+        solenoidB = factory.getSolenoid(3);
     }
     
     public void moveWristUp() {
