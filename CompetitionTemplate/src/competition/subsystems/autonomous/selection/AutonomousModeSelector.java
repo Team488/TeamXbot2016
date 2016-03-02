@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import xbot.common.command.BaseCommand;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.StringProperty;
 import xbot.common.properties.XPropertyManager;
 
 import com.google.inject.Inject;
@@ -18,19 +19,27 @@ public class AutonomousModeSelector extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(AutonomousModeSelector.class);
     
+    final StringProperty currentAutonomousCommandName;
+    
     BaseCommand currentAutonomousCommand;
 
+    @Inject
+    public AutonomousModeSelector(XPropertyManager propManager) {
+        currentAutonomousCommandName = propManager.createEphemeralProperty("currentAutonomousCommandName", "No command set");
+    }
+    
     public BaseCommand getCurrentAutonomousCommand() {
         return currentAutonomousCommand;
     }
 
     public void setCurrentAutonomousCommand(BaseCommand currentAutonomousCommand) {
         log.info("Setting CurrentAutonomousCommand to " + currentAutonomousCommand);
+        if(currentAutonomousCommand != null) {
+            this.currentAutonomousCommandName.set(currentAutonomousCommand.toString());
+        } else {
+            this.currentAutonomousCommandName.set("No command set");
+        }
         this.currentAutonomousCommand = currentAutonomousCommand;
     }
-    
-    @Inject
-    public AutonomousModeSelector() {
 
-    }
 }

@@ -12,6 +12,7 @@ public abstract class BaseAutonomousModeSetCommand extends BaseCommand {
     public BaseAutonomousModeSetCommand(AutonomousModeSelector autonomousModeSelector) {
         this.autonomousModeSelector = autonomousModeSelector;
         this.requires(this.autonomousModeSelector);
+        this.setRunWhenDisabled(true);
     }
 
     @Override
