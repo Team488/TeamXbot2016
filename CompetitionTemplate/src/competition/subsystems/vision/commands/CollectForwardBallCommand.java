@@ -21,7 +21,6 @@ public class CollectForwardBallCommand extends BaseCommand {
     protected double targetDistance;
     protected boolean isInvalid = false;
     protected DoubleProperty powerProperty;
-    protected DoubleProperty maxDistanceProperty;
 
     @Inject
     public CollectForwardBallCommand(PoseSubsystem poseSubsystem, DriveSubsystem driveSubsystem,
@@ -36,7 +35,6 @@ public class CollectForwardBallCommand extends BaseCommand {
         requires(collectorSubsystem);
 
         powerProperty = propMan.createPersistentProperty("Vision collect speed", 0.4);
-        maxDistanceProperty = propMan.createPersistentProperty("Max ball collect dist", 96d);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class CollectForwardBallCommand extends BaseCommand {
         
         BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
         
-        if(targetBall == null || targetBall.distanceInches > maxDistanceProperty.get()) {
+        if(targetBall == null || targetBall.distanceInches > visionSubsystem.getMaxBallAcquireDistance()) {
             targetDistance = 0;
             isInvalid = true;
             

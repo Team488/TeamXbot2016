@@ -132,6 +132,7 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(6).whileHeld(down);
     }
     
+    @Inject
     public void setupHangerCommands(
             OperatorInterface oi,
             HookExtendCommand hookExtend,

@@ -5,6 +5,9 @@ import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
 import competition.subsystems.arm.arm_commands.UpdateArmSensorsCommand;
 import competition.subsystems.autonomous.selection.AutonomousModeSelector;
+import competition.subsystems.collector.commands.UpdateCollectorSensorsCommand;
+import competition.subsystems.hanger.hook_commands.UpdateHookSensorsCommand;
+import competition.subsystems.hanger.winch_commands.UpdateWinchSensorsCommand;
 import competition.subsystems.vision.InertJetsonServer;
 import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
@@ -37,6 +40,9 @@ public class Robot extends BaseRobot {
         
         // Always running sensor updating commands
         this.injector.getInstance(UpdateArmSensorsCommand.class).start();
+        this.injector.getInstance(UpdateHookSensorsCommand.class).start();
+        this.injector.getInstance(UpdateWinchSensorsCommand.class).start();
+        this.injector.getInstance(UpdateCollectorSensorsCommand.class).start();
         
         this.autonomousModeSelector = this.injector.getInstance(AutonomousModeSelector.class);
     }
