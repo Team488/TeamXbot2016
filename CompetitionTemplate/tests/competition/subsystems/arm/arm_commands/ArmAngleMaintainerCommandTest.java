@@ -3,29 +3,18 @@ package competition.subsystems.arm.arm_commands;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import competition.subsystems.arm.ArmSubsystem;
-import competition.subsystems.arm.ArmTargetSubsystem;
 import competition.subsystems.arm.ArmTestBase;
-import edu.wpi.first.wpilibj.MockDigitalInput;
-import edu.wpi.first.wpilibj.MockEncoder;
 import edu.wpi.first.wpilibj.MockTimer;
-import edu.wpi.first.wpilibj.Timer;
-import xbot.common.injection.BaseWPITest;
 
 public class ArmAngleMaintainerCommandTest extends ArmTestBase {
     ArmAngleMaintainerCommand angleMaintainer;
-    ArmTargetSubsystem armTargetSubsystem;
-    ArmSubsystem armSubsystem;
 
     @Before
     public void setup() {
         super.setup();
         angleMaintainer = this.injector.getInstance(ArmAngleMaintainerCommand.class);
-        armSubsystem = this.injector.getInstance(ArmSubsystem.class);
-        armTargetSubsystem = this.injector.getInstance(ArmTargetSubsystem.class);
     }
 
     @Test
