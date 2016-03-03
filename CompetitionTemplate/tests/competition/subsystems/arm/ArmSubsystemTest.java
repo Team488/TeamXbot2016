@@ -56,15 +56,25 @@ public class ArmSubsystemTest extends ArmTestBase {
     }
     
     @Test
-    @Ignore("Currently no upper limit switch on robot")
     public void limitSwitchTest() {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(true); //mocks the upper limit switch being pressed
+        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
         
         assertTrue(armSubsystem.isArmAtMaximumHeight()); //say true if the arm is at maximum height
         
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(true); //mocks the lower limit switch being pressed
+        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(false); //mocks the lower limit switch being pressed
         
         assertTrue(armSubsystem.isArmAtMinimumHeight()); //say true is the arm is at minimum height
+    }
+    
+    @Test
+    public void maxAngleHeightTest(){
+        setMockEncoder(90);
+        assertTrue(armSubsystem.isArmAtMaxAngleHeight());
+        
+        armSubsystem.setArmMotorPower(1.0);
+        
+        setMockEncoder(91);
+        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0);
     }
     
     @Test
