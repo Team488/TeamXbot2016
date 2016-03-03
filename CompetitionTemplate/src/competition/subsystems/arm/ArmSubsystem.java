@@ -38,6 +38,8 @@ public class ArmSubsystem extends BaseSubsystem {
     DoubleProperty armPower;
     
     BooleanProperty enableSafeArmOperation;
+    
+    DoubleProperty armMaximumSafeAngle; 
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -68,6 +70,8 @@ public class ArmSubsystem extends BaseSubsystem {
         if (armExtensionAngleDangerZoneBegin.get() < armExtensionAngleIllegalZoneBegin.get()) {
             log.warn("The Illegal zone for the arm is greater than the warning zone! This may cause illegal robot behavior!!");
         }
+        
+        armMaximumSafeAngle = propManager.createPersistentProperty("ArmMaximumSafeAngle", 90.0);
     }
 
     public boolean isArmAtMinimumHeight() {
@@ -77,6 +81,10 @@ public class ArmSubsystem extends BaseSubsystem {
     public boolean isArmAtMaximumHeight() {
         return false;
         //return upperLimitSwitch.get();
+    }
+    
+    public double getArmMaximumSafeAngle() {
+        return armMaximumSafeAngle.get();
     }
     
     public double getArmAngle() {
