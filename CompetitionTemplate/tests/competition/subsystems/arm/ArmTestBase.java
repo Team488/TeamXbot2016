@@ -28,4 +28,17 @@ public class ArmTestBase extends BaseRobotTest {
         ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(!up);
         ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(!down);
     }
+    
+    protected void verifyArmPower(double power) {
+        assertEquals(power, armSubsystem.leftArmMotor.get(), 0.001);
+        assertEquals(power, armSubsystem.rightArmMotor.get(), 0.001);
+    }
+    
+    protected void verifyArmGoingUp() {
+        assertTrue(armSubsystem.leftArmMotor.get() > 0 && armSubsystem.rightArmMotor.get() > 0);
+    }
+    
+    protected void verifyArmGoingDown() {
+        assertTrue(armSubsystem.leftArmMotor.get() < 0 && armSubsystem.rightArmMotor.get() < 0);
+    }
 }
