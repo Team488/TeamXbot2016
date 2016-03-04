@@ -18,7 +18,6 @@ public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousMode
     final DoubleProperty autoArmGoal;
     final DoubleProperty traverseMinTime;
     final DoubleProperty traverseMaxTime;
-    final DoubleProperty initialAutoHeading;
     
     final String label = "";
     
@@ -33,7 +32,6 @@ public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousMode
         autoArmGoal = propMan.createPersistentProperty(label + "autonomousArmGoal", 30.0);
         traverseMinTime = propMan.createPersistentProperty(label + "traverseDefenseMinTime", 1.0);
         traverseMaxTime = propMan.createPersistentProperty(label + "traverseDefenseMaxTime", 3.0);
-        initialAutoHeading = propMan.createPersistentProperty(label + "initialAutoHeading", PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         
         this.auto = auto;
     }
@@ -46,6 +44,6 @@ public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousMode
                 traverseMinTime.get(),
                 traverseMaxTime.get());
         auto.setArmAngle(autoArmGoal.get());
-        auto.setInitialHeading(initialAutoHeading.get());
+        auto.setInitialHeading(traverseDefenseHeading.get());
     }
 }

@@ -7,12 +7,12 @@ import com.google.inject.Inject;
 import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 
 
-public class SetupRoughDefenseCommand extends SetupRaiseArmAndTraverseCommand {
+public class SetupRoughDefenseBackwardsCommand extends SetupRaiseArmAndTraverseCommand {
     
-    final String label = "RoughDefenseForwardsAuto ";
+    final String label = "RoughDefenseBackwardsAuto ";
     
     @Inject
-    public SetupRoughDefenseCommand(XPropertyManager propMan, RaiseArmAndTraverseDefenseCommandGroup auto,
+    public SetupRoughDefenseBackwardsCommand(XPropertyManager propMan, RaiseArmAndTraverseDefenseCommandGroup auto,
             AutonomousModeSelector autonomousModeSelector) {
         super(propMan, auto, autonomousModeSelector);
     }
