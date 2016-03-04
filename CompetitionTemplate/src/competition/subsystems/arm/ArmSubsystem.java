@@ -78,11 +78,14 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMaximumHeight() {
-        return !upperLimitSwitch.get();
+        // TODO: We don't have an upper limit switch yet
+        //return !upperLimitSwitch.get();
+        return false;
     }
     
     public boolean isArmAtMaxAngleHeight(){
-        return getArmAngle() >= upperAngleLimit.get();
+        // only trust the arm angle if we're calibrated.
+        return getArmAngle() >= upperAngleLimit.get() && this.isCalibrated();
     }
     
     public double getArmAngle() {

@@ -56,6 +56,7 @@ public class ArmSubsystemTest extends ArmTestBase {
     }
     
     @Test
+    @Ignore
     public void limitSwitchTest() {
         ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
         
