@@ -20,6 +20,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     AttemptCalibrationState calibration;
     BooleanProperty autoCalibrationEnabled;
     DoubleProperty autoCalibrationTimeout;
+    BooleanProperty gaveUpCalibrating;
     double beginCalibrationTime = 0;
     
     PIDManager pidManager;
@@ -43,6 +44,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
         calibration = AttemptCalibrationState.NotCalibrated;
         autoCalibrationEnabled = propManager.createPersistentProperty("AutoCalibrationEnabled", false);
         autoCalibrationTimeout = propManager.createPersistentProperty("AutoCalibrationTimeout", 5.0);
+        gaveUpCalibrating = propManager.createEphemeralProperty("GaveUpCalibrating", false);
         this.requires(this.armSubsystem);
     }
 
@@ -59,7 +61,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     public void execute() {
         
         // just in case the system underneath is not running        
-        if (armSubsystem.isCalibrated()) {
+        if (armSubsystem.isCalibrated() || gaveUpCalibrating.get()) {
         
             double currentArmAngle = armSubsystem.getArmAngle();
             double targetArmAngle = armTargetSubsystem.getTargetAngle();
@@ -91,20 +93,29 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
                     if (Timer.getFPGATimestamp() - beginCalibrationTime > autoCalibrationTimeout.get()) {
                         // calibration is taking too long - abort and only drive manually
                         calibration = AttemptCalibrationState.AbortCalibration;
-                        armSubsystem.setArmMotorPower(0);
+                        giveUpCalibrating();
                         break;
                     }
                     armSubsystem.setArmMotorToCalibratePower();
                     break;
                 case AbortCalibration:
                     // we could not calibrate - don't drive automatically.
-                    armSubsystem.setArmMotorPower(0);
+                    giveUpCalibrating();
                     break;
                 default: 
                     // no idea how you got here
-                    armSubsystem.setArmMotorPower(0);
+                    giveUpCalibrating();
                     break;
             }
         }
+    }
+    
+    private void giveUpCalibrating() {
+        armSubsystem.setArmMotorPower(0);
+        gaveUpCalibrating.set(true);
+    }
+    
+    public boolean hasGivenUpCalibration() {
+        return gaveUpCalibrating.get();
     }
 }
