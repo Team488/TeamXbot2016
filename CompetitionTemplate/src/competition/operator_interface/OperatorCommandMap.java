@@ -55,12 +55,6 @@ public class OperatorCommandMap {
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
-        headingDrive.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
-        operatorInterface.rightButtons.getifAvailable(2).whileHeld(headingDrive);
-        
-        driveToWall.setDesiredDistance(50);
-        operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
-        
         resetPosition.includeOnSmartDashboard("Reset Position");
     }
     
