@@ -192,6 +192,6 @@ public class OperatorCommandMap {
             EnableSafeArmOperationCommand enableSafeArm,
             DisableSafeArmOperationCommand disableSafeArm){
         oi.operatorButtons.getifAvailable(13).whenPressed(enableSafeArm);
-        oi.operatorButtons.getifAvailable(13).whenPressed(disableSafeArm);
+        oi.operatorButtons.getifAvailable(14).whenPressed(disableSafeArm);
     }
 }
