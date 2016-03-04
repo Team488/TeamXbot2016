@@ -5,10 +5,13 @@ import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
+import competition.subsystems.arm.arm_commands.DisableSafeArmOperationCommand;
+import competition.subsystems.arm.arm_commands.EnableSafeArmOperationCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.autonomous.DriveForDistanceCommand;
@@ -180,5 +183,15 @@ public class OperatorCommandMap {
         rotate.includeOnSmartDashboard();
         collect.includeOnSmartDashboard();
         acquire.includeOnSmartDashboard();
+    }
+    
+    @Inject
+    public void switchenableSafeArmOperation(
+            OperatorInterface oi,
+            ArmSubsystem arm,
+            EnableSafeArmOperationCommand enableSafeArm,
+            DisableSafeArmOperationCommand disableSafeArm){
+        oi.operatorButtons.getifAvailable(13).whenPressed(enableSafeArm);
+        oi.operatorButtons.getifAvailable(13).whenPressed(disableSafeArm);
     }
 }

@@ -66,7 +66,7 @@ public class ArmSubsystemTest extends ArmTestBase {
         
         assertTrue(armSubsystem.isArmAtMinimumHeight()); //say true is the arm is at minimum height
     }
-    
+     
     @Test
     public void testCalibration() {
         setMockEncoder(0);

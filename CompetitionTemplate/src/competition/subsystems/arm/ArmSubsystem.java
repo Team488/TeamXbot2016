@@ -37,7 +37,7 @@ public class ArmSubsystem extends BaseSubsystem {
     
     DoubleProperty armPower;
     
-    BooleanProperty enableSafeArmOperation;
+    public BooleanProperty enableSafeArmOperation;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -119,6 +119,14 @@ public class ArmSubsystem extends BaseSubsystem {
         else {
             setArmRawPower(power);
         }
+    }
+    
+    public void enableSafeArmOperation(){
+        enableSafeArmOperation.set(true);
+    }
+    
+    public void disableSafeArmOperation(){
+        enableSafeArmOperation.set(false);
     }
     
     private void setArmRawPower(double power) {
