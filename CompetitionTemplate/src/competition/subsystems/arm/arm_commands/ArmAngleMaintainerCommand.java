@@ -23,6 +23,8 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     BooleanProperty gaveUpCalibrating;
     double beginCalibrationTime = 0;
     
+    boolean oldIsCalibrated = false;
+    
     PIDManager pidManager;
     
     public enum AttemptCalibrationState {
@@ -60,8 +62,17 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     @Override
     public void execute() {
         
+        boolean isCurrentlyCalibrated = armSubsystem.isCalibrated();
+        
+        if (!oldIsCalibrated && isCurrentlyCalibrated) {
+            // we just got calibrated!
+            armTargetSubsystem.setTargetAngle(0);
+        }
+        
+        oldIsCalibrated = isCurrentlyCalibrated;
+        
         // just in case the system underneath is not running        
-        if (armSubsystem.isCalibrated() || gaveUpCalibrating.get()) {
+        if (isCurrentlyCalibrated || gaveUpCalibrating.get()) {
         
             double currentArmAngle = armSubsystem.getArmAngle();
             double targetArmAngle = armTargetSubsystem.getTargetAngle();
@@ -73,6 +84,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
         else {
             attemptCalibration();
         }
+         
     }
 
     private void attemptCalibration() {

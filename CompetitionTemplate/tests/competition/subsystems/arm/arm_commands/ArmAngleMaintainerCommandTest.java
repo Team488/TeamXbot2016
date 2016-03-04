@@ -24,6 +24,8 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         armSubsystem.calibrateCurrentPositionAsLow();
         setMockEncoder(0);
         
+        angleMaintainer.execute();
+        
         armTargetSubsystem.setTargetAngle(90);
         
         angleMaintainer.execute();
@@ -65,6 +67,10 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         setLimitSwitches(false, true);
         
         assertTrue(waitForCalibrate.isFinished());
+        
+        angleMaintainer.execute();
+
+        armTargetSubsystem.setTargetAngle(90);
         
         angleMaintainer.execute();
         // should be going up as normal now
