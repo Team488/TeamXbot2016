@@ -3,8 +3,12 @@ package competition;
 
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
+import competition.subsystems.arm.ArmSubsystem;
+import competition.subsystems.arm.ArmTargetSubsystem;
 import competition.subsystems.arm.arm_commands.UpdateArmSensorsCommand;
+import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 import competition.subsystems.autonomous.selection.AutonomousModeSelector;
+import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
 import competition.subsystems.collector.commands.UpdateCollectorSensorsCommand;
 import competition.subsystems.hanger.hook_commands.UpdateHookSensorsCommand;
 import competition.subsystems.hanger.winch_commands.UpdateWinchSensorsCommand;
@@ -19,6 +23,8 @@ import xbot.common.injection.RobotModule;
 public class Robot extends BaseRobot {
     
     AutonomousModeSelector autonomousModeSelector;
+    ArmSubsystem arm;
+    ArmTargetSubsystem armTarget;
     
     public Robot() {
         super();
@@ -45,14 +51,44 @@ public class Robot extends BaseRobot {
         this.injector.getInstance(UpdateCollectorSensorsCommand.class).start();
         
         this.autonomousModeSelector = this.injector.getInstance(AutonomousModeSelector.class);
+        
+        this.arm = this.injector.getInstance(ArmSubsystem.class);
+        this.armTarget = this.injector.getInstance(ArmTargetSubsystem.class);
+        
+        rat = this.injector.getInstance(SetupRaiseArmAndTraverseCommand.class);
     }
+    
+    SetupRaiseArmAndTraverseCommand rat;
     
     @Override
     public void autonomousInit() {
-        this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
+        //this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
+        /*RaiseArmAndTraverseDefenseCommandGroup r = this.injector.getInstance(RaiseArmAndTraverseDefenseCommandGroup.class);
+        r.setArmAngle(30);
+        r.setInitialHeading(-90);
+        r.setTraversalProperties(0.5, -90, 1, 3);*/
+        
+        //r.start();
+        
+        
+        rat.start();
+        
+        
         // Base implementation will run the command
         super.autonomousInit();
         
         this.injector.getInstance(VisionTelemetryReporterCommand.class).start();
+        resetSystems();
+    }
+    
+    @Override
+    public void teleopInit() {
+        super.teleopInit();
+        rat.cancel();
+        resetSystems();
+    }
+    
+    private void resetSystems() {
+        armTarget.setTargetAngle(arm.getArmAngle());
     }
 }

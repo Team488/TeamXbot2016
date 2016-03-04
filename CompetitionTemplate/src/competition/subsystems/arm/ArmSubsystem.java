@@ -85,7 +85,7 @@ public class ArmSubsystem extends BaseSubsystem {
     
     public boolean isArmAtMaxAngleHeight(){
         // only trust the arm angle if we're calibrated.
-        return getArmAngle() >= upperAngleLimit.get() && this.isCalibrated();
+        return (getArmAngle() >= upperAngleLimit.get()) && (this.isCalibrated());
     }
     
     public double getArmAngle() {

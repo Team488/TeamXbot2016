@@ -13,6 +13,7 @@ import com.google.inject.Singleton;
 
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.drive.commands.TraverseDefenseCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
 @Singleton
 public class AutonomousModeSelector extends BaseSubsystem {
@@ -21,18 +22,18 @@ public class AutonomousModeSelector extends BaseSubsystem {
     
     final StringProperty currentAutonomousCommandName;
     
-    BaseCommand currentAutonomousCommand;
+    Command currentAutonomousCommand;
 
     @Inject
     public AutonomousModeSelector(XPropertyManager propManager) {
         currentAutonomousCommandName = propManager.createEphemeralProperty("currentAutonomousCommandName", "No command set");
     }
     
-    public BaseCommand getCurrentAutonomousCommand() {
+    public Command getCurrentAutonomousCommand() {
         return currentAutonomousCommand;
     }
 
-    public void setCurrentAutonomousCommand(BaseCommand currentAutonomousCommand) {
+    public void setCurrentAutonomousCommand(Command currentAutonomousCommand) {
         log.info("Setting CurrentAutonomousCommand to " + currentAutonomousCommand);
         if(currentAutonomousCommand != null) {
             this.currentAutonomousCommandName.set(currentAutonomousCommand.toString());

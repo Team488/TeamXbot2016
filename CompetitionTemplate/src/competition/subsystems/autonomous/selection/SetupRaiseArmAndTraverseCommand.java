@@ -45,5 +45,7 @@ public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousMode
                 traverseMaxTime.get());
         auto.setArmAngle(autoArmGoal.get());
         auto.setInitialHeading(traverseDefenseHeading.get());
+        
+        this.autonomousModeSelector.setCurrentAutonomousCommand(auto);
     }
 }

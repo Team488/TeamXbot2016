@@ -70,6 +70,8 @@ public class ArmSubsystemTest extends ArmTestBase {
     @Test
     public void maxAngleHeightTest(){
         setMockEncoder(45);
+        setLimitSwitches(false, true);
+        armSubsystem.updateSensors();
         
         armSubsystem.setArmMotorPower(1.0);
         verifyArmPower(1);
@@ -77,6 +79,8 @@ public class ArmSubsystemTest extends ArmTestBase {
         setMockEncoder(100);
         armSubsystem.setArmMotorPower(1.0);
         
+        assertTrue(armSubsystem.isCalibrated());
+        assertTrue(armSubsystem.getArmAngle() > 90.0);
         assertTrue(armSubsystem.isArmAtMaxAngleHeight());
         verifyArmPower(0);
     }
