@@ -20,7 +20,7 @@ public class AutonomousModeSelector extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(AutonomousModeSelector.class);
     
-    final StringProperty currentAutonomousCommandName;
+    public final StringProperty currentAutonomousCommandName;
     
     Command currentAutonomousCommand;
 

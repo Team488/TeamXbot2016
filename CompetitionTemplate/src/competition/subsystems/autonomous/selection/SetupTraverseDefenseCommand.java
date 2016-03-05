@@ -16,7 +16,7 @@ public class SetupTraverseDefenseCommand extends BaseAutonomousModeSetCommand {
     final DoubleProperty traverseMinTime;
     final DoubleProperty traverseMaxTime;
     
-    final TraverseDefenseCommand traverseDefenseCommand;
+    public final TraverseDefenseCommand traverseDefenseCommand;
     
     @Inject
     public SetupTraverseDefenseCommand(XPropertyManager propMan, 

@@ -17,7 +17,7 @@ import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
 import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
-import competition.subsystems.autonomous.selection.SetupRoughDefenseCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
@@ -147,10 +147,9 @@ public class OperatorCommandMap {
             DriveForDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
-            SetupTraverseDefenseCommand setupTraverseDefenseCommand,
             DisableAutonomousCommand disableAutonomousCommand,
             SetupLowBarCommand setupLowBarCommand,
-            SetupRoughDefenseCommand setupRoughDefenseCommand){
+            SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -160,12 +159,13 @@ public class OperatorCommandMap {
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
         
-        // TODO: remove this entry once we've tested the fancier ones below 
-        setupTraverseDefenseCommand.includeOnSmartDashboard();
-        
         disableAutonomousCommand.includeOnSmartDashboard();
         setupLowBarCommand.includeOnSmartDashboard();
         setupRoughDefenseCommand.includeOnSmartDashboard();
+        
+        oi.leftButtons.getifAvailable(8).whenPressed(setupLowBarCommand);
+        oi.leftButtons.getifAvailable(9).whenPressed(setupRoughDefenseCommand);
+        oi.leftButtons.getifAvailable(10).whenPressed(disableAutonomousCommand);
     }
     
     @Inject

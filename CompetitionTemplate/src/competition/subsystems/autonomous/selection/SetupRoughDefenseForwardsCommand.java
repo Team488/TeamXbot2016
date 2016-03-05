@@ -7,12 +7,12 @@ import com.google.inject.Inject;
 import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 
 
-public class SetupLowBarCommand extends SetupRaiseArmAndTraverseCommand {
+public class SetupRoughDefenseForwardsCommand extends SetupRaiseArmAndTraverseCommand {
     
-    final String label = "LowBarAuto ";
+    final String label = "RoughDefenseForwardsAuto ";
     
     @Inject
-    public SetupLowBarCommand(XPropertyManager propMan, RaiseArmAndTraverseDefenseCommandGroup auto,
+    public SetupRoughDefenseForwardsCommand(XPropertyManager propMan, RaiseArmAndTraverseDefenseCommandGroup auto,
             AutonomousModeSelector autonomousModeSelector) {
         super(propMan, auto, autonomousModeSelector);
         
