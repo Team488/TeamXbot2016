@@ -54,8 +54,6 @@ public class Robot extends BaseRobot {
         
         this.arm = this.injector.getInstance(ArmSubsystem.class);
         this.armTarget = this.injector.getInstance(ArmTargetSubsystem.class);
-        
-        rat = this.injector.getInstance(SetupRaiseArmAndTraverseCommand.class);
     }
     
     SetupRaiseArmAndTraverseCommand rat;
@@ -63,15 +61,13 @@ public class Robot extends BaseRobot {
     @Override
     public void autonomousInit() {
         //this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
-        /*RaiseArmAndTraverseDefenseCommandGroup r = this.injector.getInstance(RaiseArmAndTraverseDefenseCommandGroup.class);
-        r.setArmAngle(30);
+        
+        // Hacky hardcoded auto program, drives backwards with the arm down:
+        RaiseArmAndTraverseDefenseCommandGroup r = this.injector.getInstance(RaiseArmAndTraverseDefenseCommandGroup.class);
+        r.setArmAngle(0);
         r.setInitialHeading(-90);
-        r.setTraversalProperties(0.5, -90, 1, 3);*/
-        
-        //r.start();
-        
-        
-        rat.start();
+        r.setTraversalProperties(-0.75, -90, 2, 3);
+        this.autonomousCommand = r;
         
         
         // Base implementation will run the command

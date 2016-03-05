@@ -9,7 +9,7 @@ import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 import competition.subsystems.drive.PoseSubsystem;
 
 
-public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetCommand {
+public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetCommand {
 
     RaiseArmAndTraverseDefenseCommandGroup auto;
     
