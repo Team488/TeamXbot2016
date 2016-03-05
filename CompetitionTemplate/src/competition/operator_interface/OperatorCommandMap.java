@@ -175,7 +175,7 @@ public class OperatorCommandMap {
     public void setupVisionCommands(
             OperatorInterface oi,
             AcquireBallCommand acquireCommand) {
-        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+        //oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
     }
     
     @Inject
