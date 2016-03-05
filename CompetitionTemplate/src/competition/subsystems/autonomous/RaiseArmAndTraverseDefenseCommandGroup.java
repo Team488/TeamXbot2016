@@ -38,9 +38,9 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         
         moveFirstDuration = propMan.createPersistentProperty("MoveFirstDuration", 0.75);
         
+        this.addSequential(this.calibrateHeading);
         this.addSequential(moveFirst);
         this.addSequential(waitForArmCalibration);
-        this.addSequential(this.calibrateHeading);
         this.addSequential(this.setArm);
         this.addSequential(this.traverse);
     }
