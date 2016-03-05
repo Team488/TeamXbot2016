@@ -60,15 +60,7 @@ public class Robot extends BaseRobot {
     
     @Override
     public void autonomousInit() {
-        //this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
-        
-        // Hacky hardcoded auto program, drives backwards with the arm down:
-        RaiseArmAndTraverseDefenseCommandGroup r = this.injector.getInstance(RaiseArmAndTraverseDefenseCommandGroup.class);
-        r.setArmAngle(0);
-        r.setInitialHeading(-90);
-        r.setTraversalProperties(-0.75, -90, 2, 3);
-        this.autonomousCommand = r;
-        
+        this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
         
         // Base implementation will run the command
         super.autonomousInit();
@@ -80,7 +72,6 @@ public class Robot extends BaseRobot {
     @Override
     public void teleopInit() {
         super.teleopInit();
-        rat.cancel();
         resetSystems();
     }
     

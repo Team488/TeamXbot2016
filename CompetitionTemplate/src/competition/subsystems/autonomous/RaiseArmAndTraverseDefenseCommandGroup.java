@@ -15,6 +15,8 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     SetArmToAngleCommand setArm;
     CalibrateHeadingCommand calibrateHeading;
     
+    public String label;
+    
     @Inject
     public RaiseArmAndTraverseDefenseCommandGroup(
             WaitForArmCalibrationCommand waitForArmCalibration,
@@ -46,4 +48,13 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         calibrateHeading.setHeading(initialHeading);
     }
 
+    @Override
+    public String toString() {
+        if(label != null){
+            return label;
+        }
+        else {
+            return super.toString();
+        }
+    }
 }

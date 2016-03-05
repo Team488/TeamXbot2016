@@ -21,6 +21,6 @@ public class SetupRoughDefenseForwardsCommand extends SetupRaiseArmAndTraverseCo
         autoArmGoal = propMan.createPersistentProperty(label + "autonomousArmGoal", 30.0);
         traverseMinTime = propMan.createPersistentProperty(label + "traverseDefenseMinTime", 1.0);
         traverseMaxTime = propMan.createPersistentProperty(label + "traverseDefenseMaxTime", 3.0);
-
+        this.auto.label = this.label;
     }
 }

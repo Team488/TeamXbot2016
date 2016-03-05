@@ -17,6 +17,7 @@ import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
 import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
@@ -149,6 +150,7 @@ public class OperatorCommandMap {
             TurnToHeadingCommand turnToHeading,
             DisableAutonomousCommand disableAutonomousCommand,
             SetupLowBarCommand setupLowBarCommand,
+            SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
             SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
@@ -166,6 +168,7 @@ public class OperatorCommandMap {
         oi.leftButtons.getifAvailable(8).whenPressed(setupLowBarCommand);
         oi.leftButtons.getifAvailable(9).whenPressed(setupRoughDefenseCommand);
         oi.leftButtons.getifAvailable(10).whenPressed(disableAutonomousCommand);
+        oi.leftButtons.getifAvailable(7).whenPressed(setupRoughDefenseBackwardsCommand);
     }
     
     @Inject
