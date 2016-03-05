@@ -61,8 +61,8 @@ public class JetsonServerManager {
         } else if (newPacket.getPayloadType() == PacketPayloadType.BALL_SPATIAL_INFO) {
             
             lastSentSpatialInfo = new BallSpatialInfo[0];
-            lastSentSpatialInfo = parseObjectsFromPayload(payload, 2, data -> {
-                return new BallSpatialInfo(data[0] / 100f, data[1] / 100f);
+            lastSentSpatialInfo = parseObjectsFromPayload(payload, 3, data -> {
+                return new BallSpatialInfo(data[0] / 100f, data[1] / 100f, data[2] / 100f);
             }).toArray(lastSentSpatialInfo);
         } else {
             log.error("Unhandled packet header type!");

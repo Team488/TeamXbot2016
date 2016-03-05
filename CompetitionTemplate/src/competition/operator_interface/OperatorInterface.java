@@ -35,9 +35,9 @@ public class OperatorInterface {
         operatorJoystick.setXInversion(true);
         operatorJoystick.setYInversion(true);
         
-        leftButtons = new JoystickButtonManager(8, factory, assertionManager, leftJoystick);
-        rightButtons = new JoystickButtonManager(8, factory, assertionManager, rightJoystick);
-        operatorButtons = new JoystickButtonManager(12, factory, assertionManager, operatorJoystick);
+        leftButtons = new JoystickButtonManager(12, factory, assertionManager, leftJoystick);
+        rightButtons = new JoystickButtonManager(12, factory, assertionManager, rightJoystick);
+        operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);
     }
 }
 

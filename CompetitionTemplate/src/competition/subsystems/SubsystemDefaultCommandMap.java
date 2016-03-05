@@ -62,7 +62,9 @@ public class SubsystemDefaultCommandMap {
     
     @Inject
     public void setupVisionSubsystem(
-            VisionSubsystem visionSubsystem) {
+            VisionSubsystem visionSubsystem,
+            VisionTelemetryReporterCommand reporter) {
+        visionSubsystem.setDefaultCommand(reporter);
     }
     
     @Inject

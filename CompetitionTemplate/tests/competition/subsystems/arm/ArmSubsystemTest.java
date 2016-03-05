@@ -24,17 +24,17 @@ public class ArmSubsystemTest extends ArmTestBase {
     public void testRaiseArmCommand() {
         RaiseArmCommand raiseArmCommand = this.injector.getInstance(RaiseArmCommand.class);
         
-        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0);
+        verifyArmPower(0);
         
         raiseArmCommand.initialize();
         
         raiseArmCommand.execute();
         
-        assertTrue(armSubsystem.leftArmMotor.get() > 0 && armSubsystem.rightArmMotor.get() > 0);
+        verifyArmGoingUp();
         
         raiseArmCommand.end();
         
-        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0);
+        verifyArmPower(0);
     }
     
     @Test
@@ -42,29 +42,47 @@ public class ArmSubsystemTest extends ArmTestBase {
         LowerArmCommand lowerArmCommand = this.injector.getInstance(LowerArmCommand.class); //black magic that says to test this class
         
        //at the beginning, the motor powers should be 0. Say true if the motors are 0
-        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0); 
+        verifyArmPower(0); 
         
         lowerArmCommand.initialize(); //runs initialize in lowerArmCommand
         lowerArmCommand.execute(); //runs execute in the lowerArmCommand
         
         //the motor power should be less than 0 after initialize and execute runs
-        assertTrue(armSubsystem.leftArmMotor.get() < 0 && armSubsystem.rightArmMotor.get() < 0); 
+        verifyArmGoingDown(); 
         
         lowerArmCommand.end();
         
-        assertTrue(armSubsystem.leftArmMotor.get() == 0 && armSubsystem.rightArmMotor.get() == 0); //the motor power should be 0 after end. if so, report true
+        verifyArmPower(0);
     }
     
     @Test
-    @Ignore("Currently no upper limit switch on robot")
+    @Ignore
     public void limitSwitchTest() {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(true); //mocks the upper limit switch being pressed
+        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
         
         assertTrue(armSubsystem.isArmAtMaximumHeight()); //say true if the arm is at maximum height
         
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(true); //mocks the lower limit switch being pressed
+        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(false); //mocks the lower limit switch being pressed
         
         assertTrue(armSubsystem.isArmAtMinimumHeight()); //say true is the arm is at minimum height
+    }
+    
+    @Test
+    public void maxAngleHeightTest(){
+        setMockEncoder(45);
+        setLimitSwitches(false, true);
+        armSubsystem.updateSensors();
+        
+        armSubsystem.setArmMotorPower(1.0);
+        verifyArmPower(1);
+        
+        setMockEncoder(100);
+        armSubsystem.setArmMotorPower(1.0);
+        
+        assertTrue(armSubsystem.isCalibrated());
+        assertTrue(armSubsystem.getArmAngle() > 90.0);
+        assertTrue(armSubsystem.isArmAtMaxAngleHeight());
+        verifyArmPower(0);
     }
     
     @Test

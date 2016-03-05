@@ -10,8 +10,8 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class HookRetractCommand extends BaseCommand{
-    public HookSubsystem hookSubsystem;
-    DoubleProperty hookRetractionPower;
+    HookSubsystem hookSubsystem;
+    public DoubleProperty hookRetractionPower;
     private static Logger log = Logger.getLogger(HookRetractCommand.class);
     
     @Inject
@@ -29,7 +29,11 @@ public class HookRetractCommand extends BaseCommand{
 
     @Override
     public void execute(){
-        
+        hookSubsystem.setHookMotorPower(hookRetractionPower.get());
+    }
+    
+    public boolean isFinished(){
+        return hookSubsystem.getHookDistance() <= hookSubsystem.hookHeight.get();
     }
     
     public void end(){

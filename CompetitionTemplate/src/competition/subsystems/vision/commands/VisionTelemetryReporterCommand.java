@@ -23,6 +23,7 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     private DoubleProperty ballAngleProp;
     private DoubleProperty ballDistanceProp;
     private DoubleProperty numBallsProp;
+    private DoubleProperty confidenceProp;
     private BooleanProperty visionHealthProp;
     
     private VisionSubsystem visionSubsystem;
@@ -32,11 +33,13 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     public VisionTelemetryReporterCommand(VisionSubsystem visionSubsystem, XPropertyManager propMan) {
         this.visionSubsystem = visionSubsystem;
         setRunWhenDisabled(true);
+        requires(visionSubsystem);
         
         monitor = new VisionStateMonitor(visionSubsystem);
         
         ballAngleProp = propMan.createEphemeralProperty("Target ball angle", 0d);
         ballDistanceProp = propMan.createEphemeralProperty("Target ball distance", -1d);
+        confidenceProp = propMan.createEphemeralProperty("Target ball confidence", 0d);
         numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0d);
         visionHealthProp = propMan.createEphemeralProperty("Is vision connection healthy?", false);
     }
@@ -62,6 +65,7 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         this.ballAngleProp.set(targetBall == null ? 0 : targetBall.relativeHeading);
         this.ballDistanceProp.set(targetBall == null ? 0 : targetBall.distanceInches);
+        this.confidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.confidence * 100));
         this.numBallsProp.set(ballInfo == null ? 0 : ballInfo.length);
         this.visionHealthProp.set(visionSubsystem.isConnectionHealthy());
     }
