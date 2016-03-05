@@ -137,8 +137,8 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
-        oi.rightButtons.getifAvailable(10).whileHeld(winchExtend);
-        oi.rightButtons.getifAvailable(12).whileHeld(winchRetract);
+        oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
+        oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
     }
     
     @Inject

@@ -8,26 +8,37 @@ import competition.subsystems.arm.arm_commands.WaitForArmCalibrationCommand;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.TraverseDefenseCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.XPropertyManager;
 
 public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
       
+    TraverseDefenseCommand moveFirst;
     TraverseDefenseCommand traverse;
     SetArmToAngleCommand setArm;
     CalibrateHeadingCommand calibrateHeading;
+    
+    DoubleProperty moveFirstDuration;
     
     public String label;
     
     @Inject
     public RaiseArmAndTraverseDefenseCommandGroup(
+            TraverseDefenseCommand moveFirst,
             WaitForArmCalibrationCommand waitForArmCalibration,
             SetArmToAngleCommand setArm,
             TraverseDefenseCommand traverse,
-            CalibrateHeadingCommand calibrateHeading) {
+            CalibrateHeadingCommand calibrateHeading,
+            XPropertyManager propMan) {
         
         this.traverse = traverse;
         this.setArm = setArm;
         this.calibrateHeading = calibrateHeading;
+        this.moveFirst = moveFirst;
         
+        moveFirstDuration = propMan.createPersistentProperty("MoveFirstDuration", 0.75);
+        
+        this.addSequential(moveFirst);
         this.addSequential(waitForArmCalibration);
         this.addSequential(this.calibrateHeading);
         this.addSequential(this.setArm);
@@ -38,6 +49,16 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         traverse.setPower(power);
         traverse.setTarget(heading);
         traverse.setTimeLimits(minSeconds, maxSeconds);
+        
+        moveFirst.setTarget(heading);
+        moveFirst.setTimeLimits(moveFirstDuration.get(), moveFirstDuration.get() + 0.05);
+        
+        double moveFirstPower = 0.4;
+        if (power < 0) {
+            moveFirstPower *= -1;
+        }
+        
+        moveFirst.setPower(moveFirstPower);
     }
     
     public void setArmAngle(double goalAngle) {

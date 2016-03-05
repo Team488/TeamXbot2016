@@ -64,5 +64,10 @@ public class HeadingDriveCommand extends BaseCommand {
         
         driveSubsystem.tankDriveSafely(leftPower, rightPower);
     }
+    
+    @Override
+    public void end() {
+        driveSubsystem.stopDrive();
+    }
 
 }
