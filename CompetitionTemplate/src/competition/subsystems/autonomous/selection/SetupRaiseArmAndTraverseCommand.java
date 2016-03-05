@@ -1,6 +1,5 @@
 package competition.subsystems.autonomous.selection;
 
-import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -8,33 +7,24 @@ import com.google.inject.Inject;
 
 import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 import competition.subsystems.drive.PoseSubsystem;
-import competition.subsystems.drive.commands.TraverseDefenseCommand;
 
 
-public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetCommand {
+public abstract class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetCommand {
 
-    RaiseArmAndTraverseDefenseCommandGroup auto;
+    public final RaiseArmAndTraverseDefenseCommandGroup auto;
     
-    final DoubleProperty traverseDefensePower;
-    final DoubleProperty traverseDefenseHeading;
-    final DoubleProperty autoArmGoal;
-    final DoubleProperty traverseMinTime;
-    final DoubleProperty traverseMaxTime;
-    final DoubleProperty initialAutoHeading;
-    
+    DoubleProperty traverseDefensePower;
+    DoubleProperty traverseDefenseHeading;
+    DoubleProperty autoArmGoal;
+    DoubleProperty traverseMinTime;
+    DoubleProperty traverseMaxTime;
+
     @Inject
     public SetupRaiseArmAndTraverseCommand(XPropertyManager propMan, 
             RaiseArmAndTraverseDefenseCommandGroup auto,
             AutonomousModeSelector autonomousModeSelector) {
         super(autonomousModeSelector);
-        
-        traverseDefenseHeading = propMan.createPersistentProperty("traverseDefenseHeading", 90.0);
-        traverseDefensePower = propMan.createPersistentProperty("traverseDefensePower", 0.75);
-        autoArmGoal = propMan.createPersistentProperty("autonomousArmGoal", 30.0);
-        traverseMinTime = propMan.createPersistentProperty("traverseDefenseMinTime", 1.0);
-        traverseMaxTime = propMan.createPersistentProperty("traverseDefenseMaxTime", 3.0);
-        initialAutoHeading = propMan.createPersistentProperty("initialAutoHeading", PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
-        
+                
         this.auto = auto;
     }
 
@@ -46,6 +36,8 @@ public class SetupRaiseArmAndTraverseCommand extends BaseAutonomousModeSetComman
                 traverseMinTime.get(),
                 traverseMaxTime.get());
         auto.setArmAngle(autoArmGoal.get());
-        auto.setInitialHeading(initialAutoHeading.get());
+        auto.setInitialHeading(traverseDefenseHeading.get());
+        
+        this.autonomousModeSelector.setCurrentAutonomousCommand(auto);
     }
 }

@@ -10,17 +10,21 @@ import edu.wpi.first.wpilibj.MockTimer;
 
 public class ArmAngleMaintainerCommandTest extends ArmTestBase {
     ArmAngleMaintainerCommand angleMaintainer;
+    WaitForArmCalibrationCommand waitForCalibrate;
 
     @Before
     public void setup() {
         super.setup();
         angleMaintainer = this.injector.getInstance(ArmAngleMaintainerCommand.class);
+        waitForCalibrate = this.injector.getInstance(WaitForArmCalibrationCommand.class);
     }
 
     @Test
     public void testArmAngle0to90() {
         armSubsystem.calibrateCurrentPositionAsLow();
         setMockEncoder(0);
+        
+        angleMaintainer.execute();
         
         armTargetSubsystem.setTargetAngle(90);
         
@@ -48,6 +52,9 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
     
     @Test
     public void testAutoCalibration() {
+        
+        assertTrue(!waitForCalibrate.isFinished());
+        
         angleMaintainer.setAutoCalibration(true);
         angleMaintainer.initialize();
         armTargetSubsystem.setTargetAngle(90);
@@ -59,6 +66,12 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         // set up calibration conditions
         setLimitSwitches(false, true);
         
+        assertTrue(waitForCalibrate.isFinished());
+        
+        angleMaintainer.execute();
+
+        armTargetSubsystem.setTargetAngle(90);
+        
         angleMaintainer.execute();
         // should be going up as normal now
         assertTrue(armSubsystem.leftArmMotor.get() > 0);
@@ -69,8 +82,10 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         angleMaintainer.setAutoCalibration(true);
         armTargetSubsystem.setTargetAngle(90);
         
-        angleMaintainer.initialize();
         angleMaintainer.execute();
+        
+        assertTrue(!waitForCalibrate.isFinished());
+        assertTrue(!angleMaintainer.hasGivenUpCalibration());
         
         // arm trying to go down and calibrate
         assertTrue(armSubsystem.leftArmMotor.get() < 0);
@@ -81,6 +96,32 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         angleMaintainer.execute();
         // should be going up as normal now
         assertEquals(0, armSubsystem.leftArmMotor.get(), 0.001);
+        
+        assertTrue(!waitForCalibrate.isFinished());
+        assertTrue(angleMaintainer.hasGivenUpCalibration());
+    }
+    
+    @Test
+    public void testMaintainerWorksAfterCalibrationTimeout() {
+        angleMaintainer.setAutoCalibration(true);
+        armTargetSubsystem.setTargetAngle(90);
+        
+        angleMaintainer.execute();
+        
+        // arm trying to go down and calibrate
+        assertTrue(armSubsystem.leftArmMotor.get() < 0);
+        
+        MockTimer timer = injector.getInstance(MockTimer.class);
+        timer.setTimeInSeconds(10);
+        
+        angleMaintainer.execute();
+        
+        assertTrue(!waitForCalibrate.isFinished());
+        assertTrue(angleMaintainer.hasGivenUpCalibration());
+        
+        angleMaintainer.execute();
+        verifyArmGoingUp();
+        
     }
 
 }

@@ -16,16 +16,16 @@ public class SetupTraverseDefenseCommand extends BaseAutonomousModeSetCommand {
     final DoubleProperty traverseMinTime;
     final DoubleProperty traverseMaxTime;
     
-    final TraverseDefenseCommand traverseDefenseCommand;
+    public final TraverseDefenseCommand traverseDefenseCommand;
     
     @Inject
     public SetupTraverseDefenseCommand(XPropertyManager propMan, 
             TraverseDefenseCommand traverseDefenseCommand, AutonomousModeSelector autonomousModeSelector) {
         super(autonomousModeSelector);
-        traverseDefenseHeading = propMan.createPersistentProperty("traverseDefenseHeading", 90.0);
-        traverseDefensePower = propMan.createPersistentProperty("traverseDefensePower", 0.75);
+        traverseDefenseHeading = propMan.createPersistentProperty("traverseDefenseHeading", -90.0);
+        traverseDefensePower = propMan.createPersistentProperty("traverseDefensePower", -0.90);
         traverseMinTime = propMan.createPersistentProperty("traverseMinTime", 1.5);
-        traverseMaxTime = propMan.createPersistentProperty("traverseMaxTime", 3.5);
+        traverseMaxTime = propMan.createPersistentProperty("traverseMaxTime", 4);
         
         this.traverseDefenseCommand = traverseDefenseCommand;
     }

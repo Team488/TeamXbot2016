@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import competition.subsystems.arm.arm_commands.ArmAngleMaintainerCommand;
 import competition.subsystems.arm.arm_commands.SetArmToAngleCommand;
+import competition.subsystems.arm.arm_commands.WaitForArmCalibrationCommand;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.TraverseDefenseCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -14,8 +15,11 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     SetArmToAngleCommand setArm;
     CalibrateHeadingCommand calibrateHeading;
     
+    public String label;
+    
     @Inject
     public RaiseArmAndTraverseDefenseCommandGroup(
+            WaitForArmCalibrationCommand waitForArmCalibration,
             SetArmToAngleCommand setArm,
             TraverseDefenseCommand traverse,
             CalibrateHeadingCommand calibrateHeading) {
@@ -24,6 +28,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         this.setArm = setArm;
         this.calibrateHeading = calibrateHeading;
         
+        this.addSequential(waitForArmCalibration);
         this.addSequential(this.calibrateHeading);
         this.addSequential(this.setArm);
         this.addSequential(this.traverse);
@@ -43,4 +48,13 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         calibrateHeading.setHeading(initialHeading);
     }
 
+    @Override
+    public String toString() {
+        if(label != null){
+            return label;
+        }
+        else {
+            return super.toString();
+        }
+    }
 }

@@ -15,7 +15,10 @@ import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
+import competition.subsystems.autonomous.selection.SetupLowBarCommand;
 import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
@@ -145,9 +148,10 @@ public class OperatorCommandMap {
             DriveForDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
-            SetupTraverseDefenseCommand setupTraverseDefenseCommand,
             DisableAutonomousCommand disableAutonomousCommand,
-            SetupRaiseArmAndTraverseCommand setupRaiseAndTraverse){
+            SetupLowBarCommand setupLowBarCommand,
+            SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
+            SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -157,9 +161,14 @@ public class OperatorCommandMap {
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
         
-        setupTraverseDefenseCommand.includeOnSmartDashboard();
         disableAutonomousCommand.includeOnSmartDashboard();
-        setupRaiseAndTraverse.includeOnSmartDashboard();
+        setupLowBarCommand.includeOnSmartDashboard();
+        setupRoughDefenseCommand.includeOnSmartDashboard();
+        
+        oi.leftButtons.getifAvailable(8).whenPressed(setupLowBarCommand);
+        oi.leftButtons.getifAvailable(9).whenPressed(setupRoughDefenseCommand);
+        oi.leftButtons.getifAvailable(10).whenPressed(disableAutonomousCommand);
+        oi.leftButtons.getifAvailable(7).whenPressed(setupRoughDefenseBackwardsCommand);
     }
     
     @Inject

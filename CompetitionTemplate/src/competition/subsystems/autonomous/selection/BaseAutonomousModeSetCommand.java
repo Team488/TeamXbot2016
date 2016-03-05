@@ -14,7 +14,7 @@ public abstract class BaseAutonomousModeSetCommand extends BaseCommand {
         this.requires(this.autonomousModeSelector);
         this.setRunWhenDisabled(true);
     }
-
+    
     @Override
     public void execute() {
         // no-op, all work should be done in initialize of subclasses
