@@ -1,6 +1,8 @@
 
 package competition;
 
+import org.apache.log4j.Logger;
+
 import competition.operator_interface.OperatorCommandMap;
 import competition.subsystems.SubsystemDefaultCommandMap;
 import competition.subsystems.arm.ArmSubsystem;
@@ -17,10 +19,13 @@ import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
 import xbot.common.command.BaseCommand;
 import competition.subsystems.vision.commands.VisionTelemetryReporterCommand;
+import edu.wpi.first.wpilibj.DriverStation;
 import xbot.common.command.BaseRobot;
 import xbot.common.injection.RobotModule;
 
 public class Robot extends BaseRobot {
+
+    static Logger log = Logger.getLogger(Robot.class);
     
     AutonomousModeSelector autonomousModeSelector;
     ArmSubsystem arm;
@@ -60,6 +65,7 @@ public class Robot extends BaseRobot {
     
     @Override
     public void autonomousInit() {
+        logMatchInfo();
         this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
         
         // Base implementation will run the command
@@ -71,11 +77,23 @@ public class Robot extends BaseRobot {
     
     @Override
     public void teleopInit() {
+        logMatchInfo();
         super.teleopInit();
         resetSystems();
     }
     
     private void resetSystems() {
         armTarget.setTargetAngle(arm.getArmAngle());
+    }
+    
+    private void logMatchInfo() {
+        DriverStation ds = DriverStation.getInstance();
+        
+        log.info("MATCH METADATA:"
+                + " DS connected: " + ds.isDSAttached() + ";"
+                + " Connected to FMS: " + ds.isFMSAttached() + ";"
+                + " On alliance " + ds.getAlliance().name() + " at station #" + ds.getLocation() + ";"
+                + " In autonomous: " + ds.isAutonomous() + ";"
+                + " Battery voltage: " + ds.getBatteryVoltage());
     }
 }
