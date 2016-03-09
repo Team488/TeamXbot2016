@@ -17,16 +17,19 @@ public class OperatorInterface {
     public XJoystick leftJoystick;
     public XJoystick rightJoystick;
     public XJoystick operatorJoystick;
+    public XJoystick driverGamePad;
     
     public JoystickButtonManager leftButtons; 
     public JoystickButtonManager rightButtons;
     public JoystickButtonManager operatorButtons;
+    public JoystickButtonManager driverGamePadButtons;
     
     @Inject
     public OperatorInterface(WPIFactory factory, RobotAssertionManager assertionManager) {
         leftJoystick = factory.getJoystick(1);
         rightJoystick = factory.getJoystick(2);
         operatorJoystick = factory.getJoystick(3);
+        driverGamePad = factory.getJoystick(5);
 
         leftJoystick.setXInversion(true);
         leftJoystick.setYInversion(true);
@@ -34,10 +37,13 @@ public class OperatorInterface {
         rightJoystick.setYInversion(true);
         operatorJoystick.setXInversion(true);
         operatorJoystick.setYInversion(true);
+        driverGamePad.setXInversion(true);
+        driverGamePad.setYInversion(true);
         
         leftButtons = new JoystickButtonManager(11, factory, assertionManager, leftJoystick);
         rightButtons = new JoystickButtonManager(11, factory, assertionManager, rightJoystick);
         operatorButtons = new JoystickButtonManager(12, factory, assertionManager, operatorJoystick);
+        driverGamePadButtons = new JoystickButtonManager(14, factory, assertionManager, driverGamePad);
     }
 }
 
