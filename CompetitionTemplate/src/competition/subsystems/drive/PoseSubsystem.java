@@ -166,11 +166,11 @@ public class PoseSubsystem extends BaseSubsystem {
     
     public ContiguousHeading getCurrentHeading() {
         updateCurrentHeading();
-        return currentHeading;
+        return currentHeading.clone();
     }
     
     public XYPair getFieldOrientedTotalDistanceTraveled() {
-        return getTravelVector();
+        return getTravelVector().clone();
     }
     
     private XYPair getTravelVector() {
@@ -181,7 +181,7 @@ public class PoseSubsystem extends BaseSubsystem {
         // if we are facing 90 degrees, no change.
         // if we are facing 0 degrees (right), this rotates left by 90. Makes sense - if you rotate right, you want
         // your perception of distance traveled to be that you have gone "leftward."
-        return getTravelVector().rotate(-(currentHeading.getValue() - 90));
+        return getTravelVector().rotate(-(currentHeading.getValue() - 90)).clone();
     }
     
     public void resetDistanceTraveled() {

@@ -142,7 +142,7 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
     }
     
     public void tankRotateSafely(double rotationalPower) {
-        tankDriveSafely(rotationalPower, -rotationalPower);
+        tankDriveSafely(-rotationalPower, rotationalPower);
     }
     
     public void stopDrive() {
