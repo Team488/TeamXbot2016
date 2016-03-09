@@ -37,8 +37,6 @@ public class OperatorInterface {
         rightJoystick.setYInversion(true);
         operatorJoystick.setXInversion(true);
         operatorJoystick.setYInversion(true);
-        driverGamePad.setXInversion(true);
-        driverGamePad.setYInversion(true);
         
         leftButtons = new JoystickButtonManager(11, factory, assertionManager, leftJoystick);
         rightButtons = new JoystickButtonManager(11, factory, assertionManager, rightJoystick);

@@ -69,6 +69,9 @@ public class OperatorCommandMap {
             ShiftHighCommand shiftHighCommand,
             ShiftLowCommand shiftLowCommand)
     {
+        operatorInterface.rightButtons.getifAvailable(1).whenPressed(shiftLowCommand);
+        operatorInterface.leftButtons.getifAvailable(1).whenPressed(shiftHighCommand);
+        
         operatorInterface.driverGamePadButtons.getifAvailable(5).whenPressed(shiftLowCommand);
         operatorInterface.driverGamePadButtons.getifAvailable(6).whenPressed(shiftHighCommand);
     }
