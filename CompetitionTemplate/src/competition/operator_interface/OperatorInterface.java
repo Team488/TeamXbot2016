@@ -18,19 +18,22 @@ public class OperatorInterface {
     public XJoystick rightJoystick;
     public XJoystick operatorJoystick;
     public XJoystick operatorPanel;
-    
+    public XJoystick driverGamePad;
+
     public JoystickButtonManager leftButtons; 
     public JoystickButtonManager rightButtons;
     public JoystickButtonManager operatorButtons;
     public JoystickButtonManager operatorPanelButtons;
-    
+    public JoystickButtonManager driverGamePadButtons;
+
     @Inject
     public OperatorInterface(WPIFactory factory, RobotAssertionManager assertionManager) {
         leftJoystick = factory.getJoystick(1);
         rightJoystick = factory.getJoystick(2);
         operatorJoystick = factory.getJoystick(3);
-        operatorJoystick = factory.getJoystick(4);
-        operatorPanel = factory.getJoystick(5);
+        operatorPanel = factory.getJoystick(4);
+        driverGamePad = factory.getJoystick(5);
+
 
         leftJoystick.setXInversion(true);
         leftJoystick.setYInversion(true);
@@ -41,10 +44,10 @@ public class OperatorInterface {
         operatorPanel.setXInversion(true);
         operatorPanel.setYInversion(true);
         
-        leftButtons = new JoystickButtonManager(11, factory, assertionManager, leftJoystick);
-        rightButtons = new JoystickButtonManager(11, factory, assertionManager, rightJoystick);
-        operatorButtons = new JoystickButtonManager(12, factory, assertionManager, operatorJoystick);
-        operatorPanelButtons = new JoystickButtonManager(13, factory, assertionManager, operatorPanel);
+        leftButtons = new JoystickButtonManager(12, factory, assertionManager, leftJoystick);
+        rightButtons = new JoystickButtonManager(12, factory, assertionManager, rightJoystick);
+        operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);operatorPanelButtons = new JoystickButtonManager(13, factory, assertionManager, operatorPanel);
+        driverGamePadButtons = new JoystickButtonManager(10, factory, assertionManager, driverGamePad);
     }
 }
 

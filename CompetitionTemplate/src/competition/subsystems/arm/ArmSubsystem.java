@@ -37,7 +37,10 @@ public class ArmSubsystem extends BaseSubsystem {
     
     DoubleProperty armPower;
     
+
     public BooleanProperty enableSafeArmOperation;
+    DoubleProperty upperAngleLimit;
+    BooleanProperty enableSafeArmOperation;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -53,6 +56,7 @@ public class ArmSubsystem extends BaseSubsystem {
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
+        upperAngleLimit = propManager.createPersistentProperty("upperArmAngleLimit", 90.0);
                
         armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
@@ -75,8 +79,14 @@ public class ArmSubsystem extends BaseSubsystem {
     }
 
     public boolean isArmAtMaximumHeight() {
+        // TODO: We don't have an upper limit switch yet
+        //return !upperLimitSwitch.get();
         return false;
-        //return upperLimitSwitch.get();
+    }
+    
+    public boolean isArmAtMaxAngleHeight(){
+        // only trust the arm angle if we're calibrated.
+        return (getArmAngle() >= upperAngleLimit.get()) && (this.isCalibrated());
     }
     
     public double getArmAngle() {
@@ -111,6 +121,9 @@ public class ArmSubsystem extends BaseSubsystem {
                 power = Math.max(0, power);
             }
             if (isArmAtMaximumHeight()) {
+                power = Math.min(power, 0);
+            }
+            if (isArmAtMaxAngleHeight()){
                 power = Math.min(power, 0);
             }
             

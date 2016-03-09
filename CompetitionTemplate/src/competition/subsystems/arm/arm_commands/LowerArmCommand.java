@@ -29,7 +29,7 @@ public class LowerArmCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        return armSubsystem.isArmAtMinimumHeight();
+        return armSubsystem.isArmAtMaxAngleHeight();
     }
     
     @Override
