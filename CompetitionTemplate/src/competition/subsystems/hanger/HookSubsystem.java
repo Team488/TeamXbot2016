@@ -20,7 +20,7 @@ public class HookSubsystem extends BaseSubsystem{
     public XEncoder hookEncoder;
     final DoubleProperty hookHeight;
     final DoubleProperty maxSafeHookHeight;
-    final BooleanProperty EnableSafeHookOperation;
+    final BooleanProperty enableSafeHookOperation;
     
     @Inject
     public HookSubsystem(WPIFactory factory, XPropertyManager propMan) {
@@ -31,11 +31,11 @@ public class HookSubsystem extends BaseSubsystem{
         hookHeight = propMan.createEphemeralProperty("HookHeight", 0.0);
         maxSafeHookHeight = propMan.createPersistentProperty("MaxSafeHookHeight", 100.0);
         
-        EnableSafeHookOperation = propMan.createPersistentProperty("EnableSafeHookOperation", false);
+        enableSafeHookOperation = propMan.createPersistentProperty("EnableSafeHookOperation", false);
     }
     
     public void setHookMotorPower(double power) {
-        if (EnableSafeHookOperation.get()) {
+        if (enableSafeHookOperation.get()) {
             if (getHookDistance() > maxSafeHookHeight.get()) {
                 // We're at the max safe extension - only allow negative (retracting) power
                 power = Math.min(power, 0);
