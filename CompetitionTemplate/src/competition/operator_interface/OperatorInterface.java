@@ -30,6 +30,7 @@ public class OperatorInterface {
         rightJoystick = factory.getJoystick(2);
         operatorJoystick = factory.getJoystick(3);
         operatorJoystick = factory.getJoystick(4);
+        operatorPanel = factory.getJoystick(5);
 
         leftJoystick.setXInversion(true);
         leftJoystick.setYInversion(true);

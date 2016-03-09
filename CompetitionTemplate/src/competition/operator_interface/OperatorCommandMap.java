@@ -186,12 +186,12 @@ public class OperatorCommandMap {
     }
     
     @Inject
-    public void switchenableSafeArmOperation(
+    public void switchEnableSafeArmOperation(
             OperatorInterface oi,
             ArmSubsystem arm,
             EnableSafeArmOperationCommand enableSafeArm,
             DisableSafeArmOperationCommand disableSafeArm){
-        oi.operatorButtons.getifAvailable(13).whenPressed(enableSafeArm);
-        oi.operatorButtons.getifAvailable(14).whenPressed(disableSafeArm);
+        oi.operatorPanelButtons.getifAvailable(1).whenPressed(enableSafeArm);
+        oi.operatorPanelButtons.getifAvailable(2).whenPressed(disableSafeArm);
     }
 }
