@@ -27,6 +27,7 @@ import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
+import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
@@ -133,12 +134,15 @@ public class OperatorCommandMap {
             HookExtendCommand hookExtend,
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
-            WinchRetractCommand winchRetract){
+            WinchRetractCommand winchRetract,
+            WinchFollowHookProportionallyCommand winchFollow){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
+        
+        winchFollow.includeOnSmartDashboard();
     }
     
     @Inject
