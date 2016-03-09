@@ -54,6 +54,7 @@ public class RotateTowardsBallCommand extends BaseCommand {
         currentBallHeadingTarget.set(
                 poseSubsystem.getCurrentHeading()
                     .shiftValue(targetBall.relativeHeading)
+                    .shiftValue(-cameraCenterHeading.get())
                     .getValue());
     }
 
