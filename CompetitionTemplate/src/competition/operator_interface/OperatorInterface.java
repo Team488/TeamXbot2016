@@ -38,10 +38,10 @@ public class OperatorInterface {
         operatorJoystick.setXInversion(true);
         operatorJoystick.setYInversion(true);
         
-        leftButtons = new JoystickButtonManager(11, factory, assertionManager, leftJoystick);
-        rightButtons = new JoystickButtonManager(11, factory, assertionManager, rightJoystick);
-        operatorButtons = new JoystickButtonManager(12, factory, assertionManager, operatorJoystick);
-        driverGamePadButtons = new JoystickButtonManager(14, factory, assertionManager, driverGamePad);
+        leftButtons = new JoystickButtonManager(12, factory, assertionManager, leftJoystick);
+        rightButtons = new JoystickButtonManager(12, factory, assertionManager, rightJoystick);
+        operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);
+        driverGamePadButtons = new JoystickButtonManager(10, factory, assertionManager, driverGamePad);
     }
 }
 

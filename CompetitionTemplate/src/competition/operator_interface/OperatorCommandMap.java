@@ -15,6 +15,10 @@ import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
+import competition.subsystems.autonomous.selection.SetupLowBarCommand;
+import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
+import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
@@ -54,12 +58,6 @@ public class OperatorCommandMap {
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
-        headingDrive.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
-        operatorInterface.rightButtons.getifAvailable(2).whileHeld(headingDrive);
-        
-        driveToWall.setDesiredDistance(50);
-        operatorInterface.leftButtons.getifAvailable(3).whileHeld(driveToWall);
-        
         resetPosition.includeOnSmartDashboard("Reset Position");
     }
     
@@ -86,9 +84,6 @@ public class OperatorCommandMap {
             ArmManualControlCommand armManual,
             CalibrateArmLowCommand calibrateArmLow)
     {
-        operatorInterface.operatorButtons.getifAvailable(10).whileHeld(raiseArmCommand);
-        operatorInterface.operatorButtons.getifAvailable(12).whileHeld(lowerArmCommand);
-        
         double minValue = 0.15;
         AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
         AnalogHIDDescription yDown = new AnalogHIDDescription(1, -1, -minValue);
@@ -142,11 +137,11 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract){
-        oi.leftButtons.getifAvailable(8).whenPressed(hookExtend);
-        oi.leftButtons.getifAvailable(9).whenPressed(hookRetract);
+        oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
+        oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
-        oi.rightButtons.getifAvailable(10).whenPressed(winchExtend);
-        oi.rightButtons.getifAvailable(11).whenPressed(winchRetract);
+        oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
+        oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
     }
     
     @Inject
@@ -156,8 +151,10 @@ public class OperatorCommandMap {
             DriveForDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
-            SetupTraverseDefenseCommand setupTraverseDefenseCommand,
-            DisableAutonomousCommand disableAutonomousCommand){
+            DisableAutonomousCommand disableAutonomousCommand,
+            SetupLowBarCommand setupLowBarCommand,
+            SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
+            SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -167,15 +164,21 @@ public class OperatorCommandMap {
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());
         driveToLowGoal.includeOnSmartDashboard();
         
-        setupTraverseDefenseCommand.includeOnSmartDashboard();
         disableAutonomousCommand.includeOnSmartDashboard();
+        setupLowBarCommand.includeOnSmartDashboard();
+        setupRoughDefenseCommand.includeOnSmartDashboard();
+        
+        oi.leftButtons.getifAvailable(8).whenPressed(setupLowBarCommand);
+        oi.leftButtons.getifAvailable(9).whenPressed(setupRoughDefenseCommand);
+        oi.leftButtons.getifAvailable(10).whenPressed(disableAutonomousCommand);
+        oi.leftButtons.getifAvailable(7).whenPressed(setupRoughDefenseBackwardsCommand);
     }
     
     @Inject
     public void setupVisionCommands(
             OperatorInterface oi,
             AcquireBallCommand acquireCommand) {
-        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+        //oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
     }
     
     @Inject

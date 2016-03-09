@@ -13,14 +13,19 @@ public class SetupTraverseDefenseCommand extends BaseAutonomousModeSetCommand {
     final DoubleProperty traverseDefensePower;
     final DoubleProperty traverseDefenseHeading;
     
-    final TraverseDefenseCommand traverseDefenseCommand;
+    final DoubleProperty traverseMinTime;
+    final DoubleProperty traverseMaxTime;
+    
+    public final TraverseDefenseCommand traverseDefenseCommand;
     
     @Inject
     public SetupTraverseDefenseCommand(XPropertyManager propMan, 
             TraverseDefenseCommand traverseDefenseCommand, AutonomousModeSelector autonomousModeSelector) {
         super(autonomousModeSelector);
-        traverseDefenseHeading = propMan.createPersistentProperty("traverseDefenseHeading", 90.0);
-        traverseDefensePower = propMan.createPersistentProperty("traverseDefensePower", 0.75);
+        traverseDefenseHeading = propMan.createPersistentProperty("traverseDefenseHeading", -90.0);
+        traverseDefensePower = propMan.createPersistentProperty("traverseDefensePower", -0.90);
+        traverseMinTime = propMan.createPersistentProperty("traverseMinTime", 1.5);
+        traverseMaxTime = propMan.createPersistentProperty("traverseMaxTime", 4);
         
         this.traverseDefenseCommand = traverseDefenseCommand;
     }
@@ -29,6 +34,7 @@ public class SetupTraverseDefenseCommand extends BaseAutonomousModeSetCommand {
     public void initialize() {
         traverseDefenseCommand.setTarget(traverseDefenseHeading.get());
         traverseDefenseCommand.setPower(traverseDefensePower.get());
+        traverseDefenseCommand.setTimeLimits(traverseMinTime.get(), traverseMaxTime.get());
         this.autonomousModeSelector.setCurrentAutonomousCommand(traverseDefenseCommand);
     }
 
