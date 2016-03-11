@@ -1,5 +1,7 @@
 package competition.subsystems.drive.commands;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import competition.operator_interface.OperatorInterface;
@@ -15,14 +17,14 @@ import xbot.common.properties.XPropertyManager;
 
 public class HeadingDriveCommand extends BaseCommand {
 
+    private static Logger log = Logger.getLogger(HeadingDriveCommand.class);
+    
     final DriveSubsystem driveSubsystem;
     final PoseSubsystem pose;
     
     private ContiguousHeading targetHeading;
     private double targetPower;
     private HeadingModule headingModule;
-    
-    private DoubleProperty forwardPower;
     
     @Inject
     public HeadingDriveCommand(DriveSubsystem driveSubsystem, 
@@ -35,7 +37,6 @@ public class HeadingDriveCommand extends BaseCommand {
         this.headingModule = headingModule; 
         
         targetHeading = new ContiguousHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
-        forwardPower = propMan.createEphemeralProperty("ForwardPower", 0.0);
         
         this.requires(this.driveSubsystem);
     }
@@ -50,6 +51,7 @@ public class HeadingDriveCommand extends BaseCommand {
     
     @Override
     public void initialize() {
+        log.info("initializing HeadingDriveCommand with power " + targetPower + " and heading " + targetHeading);
         headingModule.reset();
     }
 
@@ -57,10 +59,15 @@ public class HeadingDriveCommand extends BaseCommand {
     public void execute() {
         double rotationalPower = headingModule.calculateHeadingPower(targetHeading.getValue());
         
-        double leftPower = forwardPower.get() - rotationalPower;
-        double rightPower = forwardPower.get() + rotationalPower;
+        double leftPower = targetPower - rotationalPower;
+        double rightPower = targetPower + rotationalPower;
         
         driveSubsystem.tankDriveSafely(leftPower, rightPower);
+    }
+    
+    @Override
+    public void end() {
+        driveSubsystem.stopDrive();
     }
 
 }

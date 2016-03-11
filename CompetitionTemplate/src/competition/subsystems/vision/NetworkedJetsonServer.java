@@ -3,8 +3,12 @@ package competition.subsystems.vision;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.function.Consumer;
 
 import org.apache.log4j.Logger;
@@ -20,7 +24,7 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
     private final double healthyTimeThreshold = 0.5; // Seconds
     
     private volatile boolean isRunning = false;
-    private volatile ServerSocket serverSocket;
+    private volatile DatagramSocket serverSocket;
     private Consumer<JetsonCommPacket> packetHandler;
     
     private JetsonCommPacket lastPacket = null;
@@ -36,7 +40,8 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
 
     public void startServer() {
         try {
-            serverSocket = new ServerSocket(this.connectionPort);
+            serverSocket = new DatagramSocket(this.connectionPort);
+            this.isRunning = true;
             this.start();
         } catch (IOException e) {
             log.error("Jetson server failed to start!");
@@ -45,54 +50,49 @@ public class NetworkedJetsonServer extends Thread implements JetsonServer {
     }
 
     public void stopServer() {
-        try {
-            this.isRunning = false;
-            serverSocket.close();
-        } catch (IOException e) {
-            log.error("Jetson server failed to stop!");
-            log.error(e.toString());
-        }
+        this.isRunning = false;
+        serverSocket.close();
     }
 
     @Override
     public void run() {
         log.debug("Jetson server thread starting");
         
-        this.isRunning = true;
-        while (isRunning) {
-            try {
-                log.info("Waiting for connection...");
-
-                Socket socket = serverSocket.accept();
-                log.info("Connected to client");
+        while(isRunning) {
+            try {            
+                byte[] receiveBuffer = new byte[1024];
+                DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, receiveBuffer.length);
+                serverSocket.receive(receivePacket);
+    
+                int[] intReceiveBuffer = convertBytesToInts(receiveBuffer);
                 
-                DataInputStream in = new DataInputStream(socket.getInputStream());
-
-                while (isRunning && socket.isConnected() && !socket.isClosed()) {
-                    JetsonCommPacket currentPacket = new JetsonCommPacket();
-
-                    int newValue;
-                    do {
-                        newValue = in.readInt();
-                        log.debug("Reading int " + newValue + "(" + Integer.toUnsignedLong(newValue) + ")");
-                    } while (currentPacket.addNewValue(newValue));
-                    
-                    currentPacket.setReciptTimestamp(Timer.getFPGATimestamp());
-                    lastPacket = currentPacket;
-                    
-                    log.debug("Read packet. Calling handler.");
-                    packetHandler.accept(currentPacket);
-                }
-
+                JetsonCommPacket currentPacket = new JetsonCommPacket(intReceiveBuffer);
+                currentPacket.setReciptTimestamp(Timer.getFPGATimestamp());
+                
+                log.debug("Read packet. Calling handler.");
+    
+                lastPacket = currentPacket;
+                packetHandler.accept(currentPacket);
+    
             } catch (EOFException e) {
                 log.error("Vision client closed connection unexpectedly!"
                         + " This may mean that it misreported packet length.");
             }
             catch (IOException e) {
-                log.error("Exception thrown in Jetson thread!");
+                log.error("Exception thrown in Jetson packet read loop!");
                 log.error(e.toString());
             }
         }
+    }
+
+    private int[] convertBytesToInts(byte[] inputBytes) {
+        ByteBuffer byteBuffer = ByteBuffer.wrap(inputBytes);
+        IntBuffer intBuffer = byteBuffer.asIntBuffer();
+        
+        int[] receiveIntBuffer = new int[intBuffer.remaining()];
+        intBuffer.get(receiveIntBuffer);
+        
+        return receiveIntBuffer;
     }
 
     @Override

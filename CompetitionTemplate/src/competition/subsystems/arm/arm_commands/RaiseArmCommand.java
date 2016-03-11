@@ -30,7 +30,7 @@ public class RaiseArmCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        return armSubsystem.isArmAtMaximumHeight();
+        return armSubsystem.isArmAtMaxAngleHeight();
     }
     
     @Override

@@ -6,20 +6,22 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.math.PIDManager;
+import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-public class DriveToWallCommand extends BaseCommand 
-{
+public class DriveToWallCommand extends BaseCommand{
     PoseSubsystem pose;
     DriveSubsystem drive;
     PIDManager wallManager;
     double targetDistanceFromWall;
+    DoubleProperty driveToWallErrorTolerance;
     
     @Inject
     public DriveToWallCommand(PoseSubsystem pose, XPropertyManager propMan, DriveSubsystem drive)
     {
         this.drive = drive;
         this.pose = pose;
+        driveToWallErrorTolerance = propMan.createPersistentProperty("driveToWallErrorTolerance", 2.0);
         wallManager = new PIDManager("FrontWallManager", propMan);
         
         this.requires(drive);
@@ -44,8 +46,13 @@ public class DriveToWallCommand extends BaseCommand
         drive.tankDriveSafely(power, power);
     }
     
+    public boolean isFinished(){
+        return Math.abs(targetDistanceFromWall - pose.getFrontRangefinderDistance()) < driveToWallErrorTolerance.get(); 
+    }
+    
     @Override
     public void end() {
         drive.tankDriveSafely(0,0);
+        
     }
 }

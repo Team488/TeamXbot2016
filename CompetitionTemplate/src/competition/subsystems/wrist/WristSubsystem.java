@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.subsystems.drive.DriveSubsystem;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.injection.wpi_factories.WPIFactory;
@@ -24,13 +25,13 @@ public class WristSubsystem extends BaseSubsystem {
     }
     
     public void moveWristUp() {
-        solenoidA.set(true);
-        solenoidB.set(false);
+        solenoidA.set(false);
+        solenoidB.set(true);
     }
     
     public void moveWristDown() {
-        solenoidA.set(false);
-        solenoidB.set(true);
+        solenoidA.set(true);
+        solenoidB.set(false);
     }
 
 }
