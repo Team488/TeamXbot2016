@@ -22,6 +22,7 @@ import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsComm
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
@@ -186,9 +187,14 @@ public class OperatorCommandMap {
     }
     
     @Inject
-    public void setupDashboard(RotateTowardsBallCommand rotate, CollectForwardBallCommand collect, AcquireBallCommand acquire) {
+    public void setupDashboard(
+            RotateTowardsBallCommand rotate, 
+            CollectForwardBallCommand collect, 
+            AcquireBallCommand acquire,
+            CalibrateInherentRioRotationCommand rioRotationCalibration) {
         rotate.includeOnSmartDashboard();
         collect.includeOnSmartDashboard();
         acquire.includeOnSmartDashboard();
+        rioRotationCalibration.includeOnSmartDashboard();
     }
 }
