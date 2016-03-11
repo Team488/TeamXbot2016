@@ -25,7 +25,7 @@ public class TankDriveWithJoysticksCommand extends BaseCommand {
         this.driveSubsystem = driveSubsystem;
         this.requires(this.driveSubsystem);
         
-        enableSquaredTankInputs = propMan.createPersistentProperty("EnableSquaredTankInputs", false);
+        enableSquaredTankInputs = propMan.createPersistentProperty("EnableSquaredTankInputs-Joystick", false);
     }
     
     @Override
