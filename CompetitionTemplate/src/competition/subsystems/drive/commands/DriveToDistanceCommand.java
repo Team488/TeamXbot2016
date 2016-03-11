@@ -4,11 +4,12 @@ import com.google.inject.Inject;
 
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
+import xbot.common.command.BaseCommand;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-public class DriveToDistanceCommand extends HeadingDriveCommand {
+public class DriveToDistanceCommand extends BaseCommand {
 
     DriveSubsystem drive;
     PoseSubsystem pose;
@@ -17,6 +18,9 @@ public class DriveToDistanceCommand extends HeadingDriveCommand {
     
     DoubleProperty driveToDistanceThreshold;
     PIDManager travelManager;
+    HeadingModule heading;
+    
+    double startingHeading;
     
     @Inject
     public DriveToDistanceCommand(
@@ -24,20 +28,20 @@ public class DriveToDistanceCommand extends HeadingDriveCommand {
             PoseSubsystem pose, 
             XPropertyManager propMan, 
             HeadingModule heading) {
-        super(drive, pose, propMan, heading);
         
         driveToDistanceThreshold = propMan.createPersistentProperty("DriveToDistanceThreshold", 2.0);
         travelManager = new PIDManager("DriveToDistance", propMan, 0.04, 0, 0, 0.5, -0.5);
+        this.heading = heading;
     }
     
     public void setTargetDistance(double robotRelativeGoalDistance) {
         this.robotRelativeGoalDistance = robotRelativeGoalDistance;
-    }
-    
+    }    
 
     @Override
     public void initialize() {
         pose.resetDistanceTraveled();        
+        startingHeading = pose.getCurrentHeading().getValue();
     }
 
     @Override
@@ -45,8 +49,8 @@ public class DriveToDistanceCommand extends HeadingDriveCommand {
         double goal = robotRelativeGoalDistance;
         double current = pose.getRobotOrientedTotalDistanceTraveled().y;
         
+        double turningPower = heading.calculateHeadingPower(startingHeading);
         double travelPower = travelManager.calculate(goal, current);
-        double turningPower = calculateHeadingPower();
         
         double leftPower = travelPower - turningPower;
         double rightPower = travelPower + turningPower;
