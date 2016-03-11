@@ -5,6 +5,7 @@ import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.defenseCommands.ChevalCommandGroup;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
@@ -53,12 +54,15 @@ public class OperatorCommandMap {
             CalibrateHeadingCommand calibrateHeading,
             HeadingDriveCommand headingDrive,
             DriveToWallCommand driveToWall,
-            ResetRobotPositionCommand resetPosition
+            ResetRobotPositionCommand resetPosition,
+            ChevalCommandGroup cheval
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         resetPosition.includeOnSmartDashboard("Reset Position");
+        
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(cheval);
     }
     
     @Inject
