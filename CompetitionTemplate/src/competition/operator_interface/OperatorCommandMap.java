@@ -16,17 +16,15 @@ import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
-import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
-import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
-import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
@@ -139,7 +137,8 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract,
-            WinchFollowHookProportionallyCommand winchFollow){
+            WinchFollowHookProportionallyCommand winchFollow,
+            ScaleViaWinch scale){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
@@ -147,6 +146,7 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
         
         winchFollow.includeOnSmartDashboard();
+        scale.includeOnSmartDashboard();
     }
     
     @Inject
