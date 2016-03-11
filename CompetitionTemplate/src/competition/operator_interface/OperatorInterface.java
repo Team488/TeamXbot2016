@@ -46,7 +46,8 @@ public class OperatorInterface {
         
         leftButtons = new JoystickButtonManager(12, factory, assertionManager, leftJoystick);
         rightButtons = new JoystickButtonManager(12, factory, assertionManager, rightJoystick);
-        operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);operatorPanelButtons = new JoystickButtonManager(13, factory, assertionManager, operatorPanel);
+        operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);
+        operatorPanelButtons = new JoystickButtonManager(13, factory, assertionManager, operatorPanel);
         driverGamePadButtons = new JoystickButtonManager(10, factory, assertionManager, driverGamePad);
     }
 }
