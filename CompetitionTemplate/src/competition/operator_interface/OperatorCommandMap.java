@@ -156,7 +156,7 @@ public class OperatorCommandMap {
             SetupLowBarCommand setupLowBarCommand,
             SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
             SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
-        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
+        driveToTurningPoint.setDesiredDistance(lowBarScoreGroup.distanceFromWallToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
         turnToHeading.setTargetHeading(lowBarScoreGroup.headingToFaceLowGoal.get());
