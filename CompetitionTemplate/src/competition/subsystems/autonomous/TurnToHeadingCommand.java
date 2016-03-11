@@ -13,8 +13,6 @@ public class TurnToHeadingCommand extends BaseCommand{
     DriveSubsystem driveSubsystem;
     PoseSubsystem poseSubsystem;
     HeadingModule headingModule;
-    double leftPower;
-    double rightPower;
     
     DoubleProperty headingTargetRange;
     
@@ -29,17 +27,6 @@ public class TurnToHeadingCommand extends BaseCommand{
         headingTargetRange = propManager.createPersistentProperty("headingTargetRange", 3.0);
     }
     
-    public void turnRight(boolean right){
-        double power = headingModule.calculateHeadingPower(targetHeading);
-        if (right) {
-            rightPower = power * -1;
-            leftPower = power;
-        } else {
-            rightPower = power;
-            leftPower = power * -1;
-        }
-    }
-    
     public void setTargetHeading(double heading){
         targetHeading = heading;
     }
@@ -51,7 +38,8 @@ public class TurnToHeadingCommand extends BaseCommand{
 
     @Override
     public void execute(){
-        driveSubsystem.tankDrive(leftPower, rightPower);
+        double power = headingModule.calculateHeadingPower(targetHeading);
+        driveSubsystem.tankDrive(power, power * -1);
     }
     
     public boolean isFinished(){

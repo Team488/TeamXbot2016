@@ -35,8 +35,7 @@ public class LowBarScoreCommandGroup extends CommandGroup{
         this.addSequential(driveToWall);
         
         TurnToHeadingCommand turnToSideWall = turnToHeadingProvider.get();
-        headingToFaceSideWall = propManager.createPersistentProperty("headingToFaceSideWall", 90.0);
-        turnToSideWall.turnRight(false);
+        headingToFaceSideWall = propManager.createPersistentProperty("headingToFaceSideWall", 270.0);
         turnToSideWall.setTargetHeading(headingToFaceSideWall.get());
         
         this.addSequential(turnToSideWall);
@@ -49,7 +48,6 @@ public class LowBarScoreCommandGroup extends CommandGroup{
         
         headingToFaceLowGoal = propManager.createPersistentProperty("Target heading to turn to low Goal", 150.0);
         TurnToHeadingCommand turnToLowGoal = turnToHeadingProvider.get();
-        turnToLowGoal.turnRight(true);
         turnToLowGoal.setTargetHeading(headingToFaceLowGoal.get());
         
         this.addSequential(turnToLowGoal);
