@@ -24,6 +24,9 @@ public class ScaleViaWinch extends BaseCommand {
         this.hook = hook;
         
         hookScalingPower = propMan.createPersistentProperty("HookScalingPower", -0.4);
+        
+        this.requires(winch);
+        this.requires(hook);
     }
 
     @Override
