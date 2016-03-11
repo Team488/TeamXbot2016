@@ -1,4 +1,4 @@
-package competition.defenseCommands;
+package competition.defense_commands;
 
 import com.google.inject.Inject;
 
