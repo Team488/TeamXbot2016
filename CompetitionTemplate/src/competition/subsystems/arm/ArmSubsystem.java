@@ -40,7 +40,6 @@ public class ArmSubsystem extends BaseSubsystem {
 
     public BooleanProperty enableSafeArmOperation;
     DoubleProperty upperAngleLimit;
-    BooleanProperty enableSafeArmOperation;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
