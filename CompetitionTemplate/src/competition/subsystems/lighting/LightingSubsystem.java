@@ -25,8 +25,8 @@ public class LightingSubsystem extends BaseSubsystem {
     
     @Inject
     public LightingSubsystem(WPIFactory factory) {
-        int initialPin = 15;
-        int numPins = 4;
+        int initialPin = 2;
+        int numPins = 2;
         outputPins = new XDigitalOutput[numPins];
         for(int i=0; i < numPins; i++) {
             outputPins[i] = factory.getDigitalOutput(i + initialPin);
