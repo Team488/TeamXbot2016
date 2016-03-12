@@ -6,13 +6,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import competition.defense_commands.ChevalCommandGroup;
+import competition.defense_commands.ChevalCommandThatNeverStops;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
-import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
@@ -23,6 +23,7 @@ import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsComm
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.DriveToDistanceCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
@@ -55,7 +56,7 @@ public class OperatorCommandMap {
             HeadingDriveCommand headingDrive,
             DriveToWallCommand driveToWall,
             ResetRobotPositionCommand resetPosition,
-            ChevalCommandGroup cheval
+            ChevalCommandThatNeverStops cheval
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
@@ -151,8 +152,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
-            DriveForDistanceCommand driveToTurningPoint,
-            DriveForDistanceCommand driveToLowGoal,
+            DriveToDistanceCommand driveToTurningPoint,
+            DriveToDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
             DisableAutonomousCommand disableAutonomousCommand,

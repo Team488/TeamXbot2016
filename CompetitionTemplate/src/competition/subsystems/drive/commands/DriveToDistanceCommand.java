@@ -13,12 +13,12 @@ public class DriveToDistanceCommand extends BaseCommand {
 
     DriveSubsystem drive;
     PoseSubsystem pose;
+    HeadingModule heading;
     
     double robotRelativeGoalDistance;
     
     DoubleProperty driveToDistanceThreshold;
     PIDManager travelManager;
-    HeadingModule heading;
     
     double startingHeading;
     
@@ -31,7 +31,10 @@ public class DriveToDistanceCommand extends BaseCommand {
         
         driveToDistanceThreshold = propMan.createPersistentProperty("DriveToDistanceThreshold", 2.0);
         travelManager = new PIDManager("DriveToDistance", propMan, 0.04, 0, 0, 0.5, -0.5);
+        
+        this.drive = drive;
         this.heading = heading;
+        this.pose = pose;
     }
     
     public void setTargetDistance(double robotRelativeGoalDistance) {
