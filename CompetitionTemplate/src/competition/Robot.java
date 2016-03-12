@@ -14,6 +14,7 @@ import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseComma
 import competition.subsystems.collector.commands.UpdateCollectorSensorsCommand;
 import competition.subsystems.hanger.hook_commands.UpdateHookSensorsCommand;
 import competition.subsystems.hanger.winch_commands.UpdateWinchSensorsCommand;
+import competition.subsystems.lighting.UpdateLightingStateCommand;
 import competition.subsystems.vision.InertJetsonServer;
 import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
@@ -54,6 +55,7 @@ public class Robot extends BaseRobot {
         this.injector.getInstance(UpdateHookSensorsCommand.class).start();
         this.injector.getInstance(UpdateWinchSensorsCommand.class).start();
         this.injector.getInstance(UpdateCollectorSensorsCommand.class).start();
+        this.injector.getInstance(UpdateLightingStateCommand.class).start();
         
         this.autonomousModeSelector = this.injector.getInstance(AutonomousModeSelector.class);
         
