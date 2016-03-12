@@ -1,6 +1,7 @@
 package competition.subsystems.vision;
 
 import java.awt.Rectangle;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -19,17 +20,19 @@ public class VisionSubsystem extends BaseSubsystem {
     private JetsonServerManager jetsonServer;
     protected DoubleProperty maxDistanceProperty;
     
+    protected DoubleProperty maxHeadingCorrelationDifference;
+    protected DoubleProperty maxDistanceCorrelationDifference;
+    
+    protected List<BallSpatialTemporalInfo> currentBalls;
+    
     @Inject
     public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating VisionSubsystem");
         this.jetsonServer = jetsonServer;
 
         maxDistanceProperty = propMan.createPersistentProperty("Max ball collect dist", 96d);
-    }
-    
-    @Deprecated
-    public Rectangle[] getBoulderRects() {
-        return jetsonServer.getLastRectArray();
+        maxHeadingCorrelationDifference = propMan.createPersistentProperty("Max heading correlation diff", 5);
+        maxDistanceCorrelationDifference = propMan.createPersistentProperty("Max dist correlation diff", 24);
     }
     
     public BallSpatialInfo[] getBoulderInfo() {
@@ -45,7 +48,7 @@ public class VisionSubsystem extends BaseSubsystem {
         
         BallSpatialInfo targetBall = null;
         for(BallSpatialInfo ball : ballInfo) {
-            if(targetBall == null || (ball.confidence > targetBall.confidence && ball.distanceInches <= getMaxBallAcquireDistance())) {
+            if(targetBall == null || (ball.colorConfidence > targetBall.colorConfidence && ball.distanceInches <= getMaxBallAcquireDistance())) {
                 targetBall = ball;
             }
         }

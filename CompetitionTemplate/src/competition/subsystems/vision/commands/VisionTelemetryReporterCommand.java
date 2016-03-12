@@ -65,7 +65,7 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         this.ballAngleProp.set(targetBall == null ? 0 : targetBall.relativeHeading);
         this.ballDistanceProp.set(targetBall == null ? 0 : targetBall.distanceInches);
-        this.confidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.confidence * 100));
+        this.confidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.colorConfidence * 100));
         this.numBallsProp.set(ballInfo == null ? 0 : ballInfo.length);
         this.visionHealthProp.set(visionSubsystem.isConnectionHealthy());
     }
