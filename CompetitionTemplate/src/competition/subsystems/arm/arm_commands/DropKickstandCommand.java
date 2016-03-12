@@ -12,7 +12,7 @@ public class DropKickstandCommand extends BaseCommand {
 
     ArmSubsystem arm;
     
-    DoubleProperty kickstandDropHeight;
+    DoubleProperty kickstandRaiseAngle;
     DoubleProperty kickstandRaisePower;
     DoubleProperty kickstandRaiseDuration;
     
@@ -20,7 +20,7 @@ public class DropKickstandCommand extends BaseCommand {
     
     @Inject
     public DropKickstandCommand(ArmSubsystem arm, XPropertyManager propMan) {
-        kickstandDropHeight = propMan.createPersistentProperty("KickstandDropHeight", 5.0);
+        kickstandRaiseAngle = propMan.createPersistentProperty("KickstandRaiseAngle", 5.0);
         kickstandRaisePower = propMan.createPersistentProperty("KickstandRaisePower", 0.2);
         kickstandRaiseDuration = propMan.createPersistentProperty("KickstandRaiseDuration", 2.0);
         
@@ -40,13 +40,9 @@ public class DropKickstandCommand extends BaseCommand {
         if (!arm.isCalibrated())
         {
             // if the arm is uncalibrated, this is probably happening at the start of the match.
-            if (arm.getArmAngle() > kickstandDropHeight.get()) {
+            if (arm.getArmAngle() > kickstandRaiseAngle.get()) {
                 power = 0;
             }
-        }
-        
-        if (Timer.getFPGATimestamp() - startTime > kickstandRaiseDuration.get()) {
-            power = 0;
         }
         
         arm.setArmMotorPower(power);
@@ -54,10 +50,7 @@ public class DropKickstandCommand extends BaseCommand {
     
     @Override
     public boolean isFinished() {
-        if (Timer.getFPGATimestamp() - startTime > kickstandRaiseDuration.get()) {
-            return true;
-        } 
-        return false;
+        return Timer.getFPGATimestamp() - startTime > kickstandRaiseDuration.get();
     }
     
     @Override

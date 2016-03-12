@@ -39,7 +39,7 @@ public class DropKickstandCommandTest extends ArmTestBase {
         MockTimer timer = injector.getInstance(MockTimer.class);
         timer.advanceTimeInSecondsBy(10);
         assertTrue(command.isFinished());    
-        command.execute();
+        command.end();
         
         verifyArmPower(0);
     }
@@ -69,8 +69,8 @@ public class DropKickstandCommandTest extends ArmTestBase {
         
         MockTimer timer = injector.getInstance(MockTimer.class);
         timer.advanceTimeInSecondsBy(10);
-        assertTrue(command.isFinished());    
-        command.execute();
+        assertTrue(command.isFinished());  
+        command.end();
         
         verifyArmPower(0);
         
