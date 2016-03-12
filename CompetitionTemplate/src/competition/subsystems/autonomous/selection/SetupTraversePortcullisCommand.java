@@ -6,8 +6,10 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class SetupTraversePortcullisCommand extends BaseAutonomousModeSetCommand{
-    public TraversePortcullisCommandGroup auto;
+    public TraversePortcullisCommandGroup traversePortcullis;
     public RaiseArmAndTraverseDefenseCommandGroup raiseArm;
+    
+    final String label = "Portcullis Auto";
     
     DoubleProperty traversePortcullisPower;
     DoubleProperty traversePortcullisHeading;
@@ -16,25 +18,20 @@ public class SetupTraversePortcullisCommand extends BaseAutonomousModeSetCommand
     
     public SetupTraversePortcullisCommand(AutonomousModeSelector autonomousModeSelector, 
             XPropertyManager propManager, 
-            RaiseArmAndTraverseDefenseCommandGroup raiseArm) {
+            TraversePortcullisCommandGroup traversePortcullis) {
         super(autonomousModeSelector);
-        traversePortcullisPower = propManager.createPersistentProperty("powerForTraversingPortcullis", 0.5);
-        traversePortcullisHeading= propManager.createPersistentProperty("headingForTraversingPortcullis", 0.0);
-        traversePortcullisMin = propManager.createPersistentProperty("minSecondsForTraversingPortcullis", 8.0);
-        traversePortcullisMax = propManager.createPersistentProperty("maxSecondsForTraversingPortcullis", 8.0);
+        traversePortcullisPower = propManager.createPersistentProperty(label + "powerForTraversingPortcullis", 0.5);
+        traversePortcullisMin = propManager.createPersistentProperty(label + "minSecondsForTraversingPortcullis", 8.0);
+        traversePortcullisMax = propManager.createPersistentProperty(label + "maxSecondsForTraversingPortcullis", 8.0);
         
-        this.raiseArm = raiseArm;
+        this.traversePortcullis = traversePortcullis;
     }
 
     @Override
     public void initialize() {
-        raiseArm.setTraversalProperties(traversePortcullisPower.get(), 
-                traversePortcullisHeading.get(), 
-                traversePortcullisMin.get(), 
-                traversePortcullisMax.get());
+        raiseArm.setTraversalProperties(traversePortcullisPower.get(), 0, traversePortcullisMin.get(), traversePortcullisMax.get());
         
-        this.autonomousModeSelector.setCurrentAutonomousCommand(auto);
-        
+        this.autonomousModeSelector.setCurrentAutonomousCommand(traversePortcullis);   
     }
 
 }
