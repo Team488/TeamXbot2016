@@ -47,10 +47,10 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     
     public void setTraversalProperties(double power, double heading, double minSeconds, double maxSeconds) {
         traverse.setPower(power);
-        traverse.setTarget(heading);
+        traverse.setTargetHeading(heading);
         traverse.setTimeLimits(minSeconds, maxSeconds);
         
-        moveFirst.setTarget(heading);
+        moveFirst.setTargetHeading(heading);
         moveFirst.setTimeLimits(moveFirstDuration.get(), moveFirstDuration.get() + 0.05);
         
         double moveFirstPower = 0.4;

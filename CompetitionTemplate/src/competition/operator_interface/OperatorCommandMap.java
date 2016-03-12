@@ -5,13 +5,14 @@ import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.defense_commands.ChevalCommandGroup;
+import competition.defense_commands.ChevalCommandThatNeverStops;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
-import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
@@ -19,6 +20,7 @@ import competition.subsystems.autonomous.selection.SetupLowBarCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.DriveToDistanceCommand;
 import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
@@ -53,12 +55,15 @@ public class OperatorCommandMap {
             CalibrateHeadingCommand calibrateHeading,
             HeadingDriveCommand headingDrive,
             DriveToWallCommand driveToWall,
-            ResetRobotPositionCommand resetPosition
+            ResetRobotPositionCommand resetPosition,
+            ChevalCommandThatNeverStops cheval
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         resetPosition.includeOnSmartDashboard("Reset Position");
+        
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(cheval);
     }
     
     @Inject
@@ -154,8 +159,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
-            DriveForDistanceCommand driveToTurningPoint,
-            DriveForDistanceCommand driveToLowGoal,
+            DriveToDistanceCommand driveToTurningPoint,
+            DriveToDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
             DisableAutonomousCommand disableAutonomousCommand,

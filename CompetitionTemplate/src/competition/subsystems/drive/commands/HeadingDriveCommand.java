@@ -19,8 +19,8 @@ public class HeadingDriveCommand extends BaseCommand {
 
     private static Logger log = Logger.getLogger(HeadingDriveCommand.class);
     
-    final DriveSubsystem driveSubsystem;
-    final PoseSubsystem pose;
+    protected final DriveSubsystem driveSubsystem;
+    protected final PoseSubsystem pose;
     
     private ContiguousHeading targetHeading;
     private double targetPower;
@@ -41,7 +41,7 @@ public class HeadingDriveCommand extends BaseCommand {
         this.requires(this.driveSubsystem);
     }
     
-    public void setTarget(double heading) {
+    public void setTargetHeading(double heading) {
         targetHeading.setValue(heading);
     }
     
@@ -63,6 +63,10 @@ public class HeadingDriveCommand extends BaseCommand {
         double rightPower = targetPower + rotationalPower;
         
         driveSubsystem.tankDriveSafely(leftPower, rightPower);
+    }
+    
+    protected double calculateHeadingPower() {
+        return headingModule.calculateHeadingPower(targetHeading.getValue());
     }
     
     @Override
