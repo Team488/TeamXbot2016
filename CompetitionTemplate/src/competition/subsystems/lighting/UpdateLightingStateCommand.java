@@ -25,10 +25,13 @@ public class UpdateLightingStateCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        if(collectorSubsystem.isBallInCollector()) {
+        if(!lightingSubsystem.isRobotEnabled()) {
+            this.lightingSubsystem.setLightingState(LightingState.Disabled);
+        }
+        else if(collectorSubsystem.isBallInCollector()) {
             this.lightingSubsystem.setLightingState(LightingState.BallCaptured);
         } else {
-            this.lightingSubsystem.setLightingState(LightingState.Disabled);
+            this.lightingSubsystem.setLightingState(LightingState.Enabled);
         }
     }
 

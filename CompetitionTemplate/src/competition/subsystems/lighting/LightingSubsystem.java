@@ -13,12 +13,14 @@ public class LightingSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(LightingSubsystem.class);
     
     public enum LightingState {
-        Disabled(0),BallCaptured(1);
+        Disabled(0), Enabled(1), BallCaptured(2);
         
         private int value; 
         private LightingState(int value) { this.value = value; }
     }
     
+    protected boolean isRobotEnabled = false;
+
     public final XDigitalOutput[] outputPins;
     
     @Inject
@@ -52,5 +54,13 @@ public class LightingSubsystem extends BaseSubsystem {
         {
             outputPins[i].set((data & (1 << i)) != 0);
         }
+    }
+    
+    public boolean isRobotEnabled() {
+        return isRobotEnabled;
+    }
+
+    public void setRobotEnabled(boolean isRobotEnabled) {
+        this.isRobotEnabled = isRobotEnabled;
     }
 }
