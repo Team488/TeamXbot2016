@@ -17,18 +17,18 @@ import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
-import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
-import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
-import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToDistanceCommand;
+import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
+import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
@@ -141,12 +141,19 @@ public class OperatorCommandMap {
             HookExtendCommand hookExtend,
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
-            WinchRetractCommand winchRetract){
+            WinchRetractCommand winchRetract,
+            WinchFollowHookProportionallyCommand winchFollow,
+            ScaleViaWinch scale){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
+        
+        oi.leftButtons.getifAvailable(12).whileHeld(scale);
+        
+        winchFollow.includeOnSmartDashboard();
+        scale.includeOnSmartDashboard();
     }
     
     @Inject
@@ -187,9 +194,14 @@ public class OperatorCommandMap {
     }
     
     @Inject
-    public void setupDashboard(RotateTowardsBallCommand rotate, CollectForwardBallCommand collect, AcquireBallCommand acquire) {
+    public void setupDashboard(
+            RotateTowardsBallCommand rotate, 
+            CollectForwardBallCommand collect, 
+            AcquireBallCommand acquire,
+            CalibrateInherentRioRotationCommand rioRotationCalibration) {
         rotate.includeOnSmartDashboard();
         collect.includeOnSmartDashboard();
         acquire.includeOnSmartDashboard();
+        rioRotationCalibration.includeOnSmartDashboard();
     }
 }

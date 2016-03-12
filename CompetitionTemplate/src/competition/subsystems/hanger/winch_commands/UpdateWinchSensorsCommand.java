@@ -23,7 +23,7 @@ public class UpdateWinchSensorsCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        winchSubsystem.getWinchDistance();
+        winchSubsystem.updateWinchSensors();
     }
 
 }

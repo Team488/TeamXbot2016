@@ -22,43 +22,46 @@ import xbot.common.properties.XPropertyManager;
 public class PoseSubsystem extends BaseSubsystem {
         
     private static Logger log = Logger.getLogger(PoseSubsystem.class);
-    public XGyro imu;
+    public final XGyro imu;
     
-    public DistanceSensor frontDistanceSensor;
-    public DistanceSensor rearDistanceSensor;
-    public DistanceSensor leftDistanceSensor;
-    public DistanceSensor rightDistanceSensor;
+    public final DistanceSensor frontDistanceSensor;
+    public final DistanceSensor rearDistanceSensor;
+    public final DistanceSensor leftDistanceSensor;
+    public final DistanceSensor rightDistanceSensor;
     
-    public XEncoder leftDriveEncoder;
-    public XEncoder rightDriveEncoder;
+    public final XEncoder leftDriveEncoder;
+    public final XEncoder rightDriveEncoder;
     
     public DefenseState defenseState = DefenseState.NotOnDefense;
     
-    private DoubleProperty leftDriveDistance;
-    private DoubleProperty rightDriveDistance;
+    private final DoubleProperty leftDriveDistance;
+    private final DoubleProperty rightDriveDistance;
     
-    private DoubleProperty totalDistanceX;
-    private DoubleProperty totalDistanceY;
+    private final DoubleProperty totalDistanceX;
+    private final DoubleProperty totalDistanceY;
     
     private ContiguousHeading currentHeading;
-    private DoubleProperty currentHeadingProp;
+    private final DoubleProperty currentHeadingProp;
     
     private ContiguousHeading lastImuHeading;
     
-    private DoubleProperty leftSensorMountingDistanceInches;
+    private final DoubleProperty leftSensorMountingDistanceInches;
     
-    private DoubleProperty frontDistance;
-    private DoubleProperty rearDistance;
-    private DoubleProperty leftDistance;
-    private DoubleProperty rightDistance;
+    private final DoubleProperty frontDistance;
+    private final DoubleProperty rearDistance;
+    private final DoubleProperty leftDistance;
+    private final DoubleProperty rightDistance;
     
     // These are two common robot starting positions - kept here as convenient shorthand.
     public static final double FACING_AWAY_FROM_DRIVERS = 90;
     public static final double FACING_TOWARDS_DRIVERS = -90;
     
-    private DoubleProperty currentPitch;
-    private DoubleProperty currentRoll;
-    private DoubleProperty leftDistanceToWall;
+    private final DoubleProperty currentPitch;
+    private final DoubleProperty currentRoll;
+    private final DoubleProperty leftDistanceToWall;
+    
+    private final DoubleProperty inherentRioPitch;
+    private final DoubleProperty inherentRioRoll;
     
     private double previousLeftDistance;
     private double previousRightDistance;
@@ -103,6 +106,8 @@ public class PoseSubsystem extends BaseSubsystem {
         totalDistanceY = propManager.createEphemeralProperty("TotalDistanceY", 0.0);
         
         rioRotated = propManager.createPersistentProperty("RioRotated", false);
+        inherentRioPitch = propManager.createPersistentProperty("InherentRioPitch", 0.0);
+        inherentRioRoll = propManager.createPersistentProperty("InherentRioRoll", 0.0);
     }
     
     public static class TemporaryVoltageMap
@@ -130,8 +135,8 @@ public class PoseSubsystem extends BaseSubsystem {
         
         currentHeadingProp.set(currentHeading.getValue());
         
-        currentPitch.set(imu.getPitch());
-        currentRoll.set(imu.getRoll());
+        currentPitch.set(getRobotPitch());
+        currentRoll.set(getRobotRoll());
     }
     
     private double getLeftDriveDistance() {
@@ -251,19 +256,30 @@ public class PoseSubsystem extends BaseSubsystem {
     }
     
     public double getRobotPitch() {
-        if (rioRotated.get())
-        {
+        return getRealPitch() - inherentRioPitch.get();
+    }
+    
+    public double getRobotRoll() {
+        return getRealRoll() - inherentRioRoll.get();
+    }
+    
+    private double getRealPitch() {
+        if (rioRotated.get()) {
             return imu.getRoll();
         }
         return imu.getPitch();
     }
     
-    public double getRobotRoll() {
-        if (rioRotated.get())
-        {
+    private double getRealRoll() {
+        if (rioRotated.get()) {
             return imu.getPitch();
         }
         return imu.getRoll();
+    }
+    
+    public void calibrateInherentRioOrientation() {
+        inherentRioPitch.set(getRealPitch());
+        inherentRioRoll.set(getRealRoll());
     }
     
     public DefenseState getDefenseState() {

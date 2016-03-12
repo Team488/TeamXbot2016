@@ -31,11 +31,7 @@ public class WinchRetractCommand extends BaseCommand{
     public void execute() {
         winchSubsystem.setWinchMotorPower(winchRetractionPower.get());
     }
-    
-    public boolean isFinished(){
-        return winchSubsystem.getWinchDistance() <= winchSubsystem.winchDistance.get();
-    }
-    
+        
     public void end(){
         winchSubsystem.setWinchMotorPower(0);
     }

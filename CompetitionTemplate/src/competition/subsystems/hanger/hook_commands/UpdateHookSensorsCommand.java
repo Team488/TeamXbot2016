@@ -22,7 +22,7 @@ public class UpdateHookSensorsCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        hookSubsystem.getHookDistance();
+        hookSubsystem.updateHookSensors();
     }
 
 }

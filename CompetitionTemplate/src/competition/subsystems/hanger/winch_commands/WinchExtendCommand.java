@@ -32,10 +32,6 @@ public class WinchExtendCommand extends BaseCommand{
         winchSubsystem.setWinchMotorPower(winchExtentionPower.get());
     }
     
-    public boolean isFinished(){
-        return winchSubsystem.getWinchDistance() >= winchSubsystem.winchDistance.get();
-    }
-    
     public void end(){
         winchSubsystem.setWinchMotorPower(0);
     }
