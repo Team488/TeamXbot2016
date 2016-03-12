@@ -14,6 +14,8 @@ import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseComma
 import competition.subsystems.collector.commands.UpdateCollectorSensorsCommand;
 import competition.subsystems.hanger.hook_commands.UpdateHookSensorsCommand;
 import competition.subsystems.hanger.winch_commands.UpdateWinchSensorsCommand;
+import competition.subsystems.lighting.LightingSubsystem;
+import competition.subsystems.lighting.UpdateLightingStateCommand;
 import competition.subsystems.vision.InertJetsonServer;
 import competition.subsystems.vision.JetsonServer;
 import competition.subsystems.vision.NetworkedJetsonServer;
@@ -29,6 +31,7 @@ public class Robot extends BaseRobot {
     
     AutonomousModeSelector autonomousModeSelector;
     ArmSubsystem arm;
+    LightingSubsystem lightingSubsystem;
     ArmTargetSubsystem armTarget;
     
     public Robot() {
@@ -54,10 +57,12 @@ public class Robot extends BaseRobot {
         this.injector.getInstance(UpdateHookSensorsCommand.class).start();
         this.injector.getInstance(UpdateWinchSensorsCommand.class).start();
         this.injector.getInstance(UpdateCollectorSensorsCommand.class).start();
+        this.injector.getInstance(UpdateLightingStateCommand.class).start();
         
         this.autonomousModeSelector = this.injector.getInstance(AutonomousModeSelector.class);
         
         this.arm = this.injector.getInstance(ArmSubsystem.class);
+        this.lightingSubsystem = this.injector.getInstance(LightingSubsystem.class);
         this.armTarget = this.injector.getInstance(ArmTargetSubsystem.class);
     }
     
@@ -65,6 +70,7 @@ public class Robot extends BaseRobot {
     
     @Override
     public void autonomousInit() {
+        this.lightingSubsystem.setRobotEnabled(true);
         logMatchInfo();
         this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
         
@@ -77,9 +83,16 @@ public class Robot extends BaseRobot {
     
     @Override
     public void teleopInit() {
+        this.lightingSubsystem.setRobotEnabled(true);
         logMatchInfo();
         super.teleopInit();
         resetSystems();
+    }
+    
+    @Override
+    public void disabledInit() {
+        super.disabledInit();
+        this.lightingSubsystem.setRobotEnabled(false);
     }
     
     private void resetSystems() {
