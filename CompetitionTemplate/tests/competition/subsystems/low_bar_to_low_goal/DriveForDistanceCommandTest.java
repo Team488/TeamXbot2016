@@ -3,10 +3,10 @@ package competition.subsystems.low_bar_to_low_goal;
 import org.junit.Before;
 import org.junit.Test;
 
-import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.drive.DriveTestBase;
 import competition.subsystems.drive.PoseSubsystem;
+import competition.subsystems.drive.commands.DriveToDistanceCommand;
 import edu.wpi.first.wpilibj.MockEncoder;
 
 public class DriveForDistanceCommandTest extends DriveTestBase{
@@ -20,7 +20,7 @@ public class DriveForDistanceCommandTest extends DriveTestBase{
     
     @Test
     public void testDriveToLowGoal() {
-        DriveForDistanceCommand driveForDistanceCommand = this.injector.getInstance(DriveForDistanceCommand.class);
+        DriveToDistanceCommand driveForDistanceCommand = this.injector.getInstance(DriveToDistanceCommand.class);
         
         PoseSubsystem poseSubsystem = this.injector.getInstance(PoseSubsystem.class);
         
@@ -32,7 +32,7 @@ public class DriveForDistanceCommandTest extends DriveTestBase{
         
         driveForDistanceCommand.execute();
        
-        checkChassisPower(1, 1);
+        verifyGoingForward();
         
         ((MockEncoder)poseSubsystem.leftDriveEncoder).setDistance(lowScoreCommands.distanceToLowGoal.get());
         

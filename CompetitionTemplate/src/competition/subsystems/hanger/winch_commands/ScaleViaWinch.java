@@ -38,4 +38,10 @@ public class ScaleViaWinch extends BaseCommand {
         hook.setHookMotorPower(hookScalingPower.get());
         winch.setWinchMotorPower(-1);
     }
+    
+    @Override
+    public void end() {
+        hook.setHookMotorPower(0);
+        winch.setWinchMotorPower(0);
+    }
 }
