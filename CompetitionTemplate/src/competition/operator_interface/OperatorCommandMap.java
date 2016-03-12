@@ -174,8 +174,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(
             OperatorInterface oi,
-            AcquireBallCommand acquireCommand) {
-        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+            RotateTowardsBallCommand rotateCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(rotateCommand);
     }
     
     @Inject

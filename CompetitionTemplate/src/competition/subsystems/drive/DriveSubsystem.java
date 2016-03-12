@@ -53,6 +53,7 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
         this.rightRearDrive = factory.getSpeedController(5);
         
         this.rightFrontDrive.setInverted(true);
+        this.rightRearDrive.setInverted(true);
         
         this.pose = pose;
         tipPreventionEnabled = propManager.createEphemeralProperty("TipPreventionEnabled", true);
