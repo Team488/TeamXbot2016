@@ -13,7 +13,7 @@ public class WinchBrakeSubsystem extends BaseSubsystem{
     
     @Inject
     public WinchBrakeSubsystem(WPIFactory factory){
-        winchBrake = factory.getSolenoid(3);
+        winchBrake = factory.getSolenoid(1);
     }
     
     public void openBrake(){
