@@ -26,24 +26,15 @@ public class ArmManualControlCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        double desire = -oi.operatorJoystick.getVector().y;
-        // offset by range joystick kicks in
-        if(desire > 0) {
-            desire -= 0.15;
-        } else {
-            desire += 0.15;
-        }
-        
-        // rescale back to -1 to 1 range
-        desire = desire / 0.85;
-        
+        double power = -oi.operatorJoystick.getVector().y;
+
         // square input
-        desire = desire * Math.abs(desire);
+        power *= Math.abs(power);
         
         // and scale down
-        desire = desire / 1.5;
+        power *= 0.5;
         
-        armSubsystem.setArmMotorPower(desire);
+        armSubsystem.setArmMotorPower(power);
     }
     
     @Override
