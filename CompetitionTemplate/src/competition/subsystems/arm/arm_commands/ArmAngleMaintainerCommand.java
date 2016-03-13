@@ -48,7 +48,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
-        this.pidManager = new PIDManager("ArmPID", propManager, 0.01, 0, 0);
+        this.pidManager = new PIDManager("ArmPID", propManager, 0.01, 0, 0, 0.5, -.3);
         calibration = AttemptCalibrationState.NotCalibrated;
         autoCalibrationEnabled = propManager.createPersistentProperty("AutoCalibrationEnabled", false);
         autoCalibrationTimeout = propManager.createPersistentProperty("AutoCalibrationTimeout", 5.0);
