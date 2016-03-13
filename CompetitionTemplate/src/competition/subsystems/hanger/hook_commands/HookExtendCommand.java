@@ -31,11 +31,7 @@ public class HookExtendCommand extends BaseCommand{
     public void execute(){
         hookSubsystem.setHookMotorPower(hookExtentionPower.get());
     }
-    
-    public boolean isFinished(){
-        return hookSubsystem.getHookDistance() >= hookSubsystem.hookHeight.get();
-    }
-    
+        
     public void end(){
         hookSubsystem.setHookMotorPower(0);
     }
