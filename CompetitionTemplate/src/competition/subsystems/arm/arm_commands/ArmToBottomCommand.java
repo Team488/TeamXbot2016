@@ -19,7 +19,7 @@ public class ArmToBottomCommand extends BaseCommand {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
         bottom = propManager.createPersistentProperty("ArmLowestAngle", 0.0);
-        this.requires(this.armSubsystem);
+        this.requires(armTargetSubsystem);
     }
 
     @Override
