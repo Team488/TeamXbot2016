@@ -56,4 +56,9 @@ public class WinchFollowHookProportionallyCommand extends BaseCommand{
         // follow the hook!
         winch.setWinchMotorPower(power);
     }
+    
+    @Override
+    public void end() {
+        hook.setHookMotorPower(0);
+    }
 }

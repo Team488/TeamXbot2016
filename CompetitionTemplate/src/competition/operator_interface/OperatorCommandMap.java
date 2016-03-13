@@ -5,32 +5,36 @@ import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import competition.defense_commands.ChevalCommandGroup;
+import competition.defense_commands.ChevalCommandThatNeverStops;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
-import competition.subsystems.autonomous.DriveForDistanceCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
-import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
 import competition.subsystems.autonomous.selection.SetupTraversePortcullisCommand;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
+import competition.subsystems.drive.commands.DriveToDistanceCommand;
 import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.DisengageBrakeCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.EngageBrakeCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
@@ -56,12 +60,15 @@ public class OperatorCommandMap {
             CalibrateHeadingCommand calibrateHeading,
             HeadingDriveCommand headingDrive,
             DriveToWallCommand driveToWall,
-            ResetRobotPositionCommand resetPosition
+            ResetRobotPositionCommand resetPosition,
+            ChevalCommandThatNeverStops cheval
             )
     {
         operatorInterface.leftButtons.getifAvailable(2).whenPressed(calibrateHeading);
         
         resetPosition.includeOnSmartDashboard("Reset Position");
+        
+        operatorInterface.leftButtons.getifAvailable(3).whileHeld(cheval);
     }
     
     @Inject
@@ -140,21 +147,30 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract,
-            WinchFollowHookProportionallyCommand winchFollow){
+            EngageBrakeCommand engageBrake,
+            DisengageBrakeCommand disengageBrake,
+            WinchFollowHookProportionallyCommand winchFollow,
+            ScaleViaWinch scale){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
+
+        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBrake);
+        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBrake);
+        
+        oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
         winchFollow.includeOnSmartDashboard();
+        scale.includeOnSmartDashboard();
     }
     
     @Inject
     public void setupAutonomousCommands(
             OperatorInterface oi,
-            DriveForDistanceCommand driveToTurningPoint,
-            DriveForDistanceCommand driveToLowGoal,
+            DriveToDistanceCommand driveToTurningPoint,
+            DriveToDistanceCommand driveToLowGoal,
             LowBarScoreCommandGroup lowBarScoreGroup,
             TurnToHeadingCommand turnToHeading,
             DisableAutonomousCommand disableAutonomousCommand,
@@ -165,7 +181,7 @@ public class OperatorCommandMap {
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
-        turnToHeading.setTargetHeading(lowBarScoreGroup.targetHeading.get());
+        turnToHeading.setTargetHeading(lowBarScoreGroup.headingToFaceLowGoal.get());
         turnToHeading.includeOnSmartDashboard();
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());

@@ -23,7 +23,7 @@ public class SetArmToAngleCommandTest extends ArmTestBase {
         command.setGoalAngle(40);
         command.initialize();
         
-        assertEquals(40, armTargetSubsystem.getTargetAngle(), 0.001);
+        assertEquals(40, armTarget.getTargetAngle(), 0.001);
     }
     
     @Test
@@ -31,12 +31,12 @@ public class SetArmToAngleCommandTest extends ArmTestBase {
         command.setGoalAngle(100);
         command.initialize();
         
-        assertEquals(90, armTargetSubsystem.getTargetAngle(), 0.001);
+        assertEquals(90, armTarget.getTargetAngle(), 0.001);
         
         command.setGoalAngle(-10);
         command.initialize();
         
-        assertEquals(0, armTargetSubsystem.getTargetAngle(), 0.001);
+        assertEquals(0, armTarget.getTargetAngle(), 0.001);
     }
     
 }

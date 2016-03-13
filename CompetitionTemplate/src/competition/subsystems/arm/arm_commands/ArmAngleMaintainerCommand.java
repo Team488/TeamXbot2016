@@ -21,6 +21,11 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     BooleanProperty autoCalibrationEnabled;
     DoubleProperty autoCalibrationTimeout;
     BooleanProperty gaveUpCalibrating;
+    
+    DoubleProperty kickstandRaiseAngle;
+    DoubleProperty kickstandRaisePower;
+    DoubleProperty kickstandRaiseDuration;
+    
     double beginCalibrationTime = 0;
     
     boolean oldIsCalibrated = false;
@@ -29,6 +34,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     
     public enum AttemptCalibrationState {
         NotCalibrated,
+        RaiseArmToLowerKickstand,
         WaitForArmToLower,
         AbortCalibration
     }
@@ -42,12 +48,16 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             XPropertyManager propManager) {
         this.armSubsystem = armSubsystem;
         this.armTargetSubsystem = armTargetSubsystem;
-        this.pidManager = new PIDManager("ArmPID", propManager, 0.01, 0, 0);
+        this.pidManager = new PIDManager("ArmPID", propManager, 0.01, 0, 0, 0.5, -.3);
         calibration = AttemptCalibrationState.NotCalibrated;
         autoCalibrationEnabled = propManager.createPersistentProperty("AutoCalibrationEnabled", false);
         autoCalibrationTimeout = propManager.createPersistentProperty("AutoCalibrationTimeout", 5.0);
         gaveUpCalibrating = propManager.createEphemeralProperty("GaveUpCalibrating", false);
         this.requires(this.armSubsystem);
+        
+        kickstandRaiseAngle = propManager.createPersistentProperty("KickstandRaiseAngle", 5.0);
+        kickstandRaisePower = propManager.createPersistentProperty("KickstandRaisePower", 0.4);
+        kickstandRaiseDuration = propManager.createPersistentProperty("KickstandRaiseDuration", 2.0);
     }
 
     @Override
@@ -98,8 +108,22 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             switch (calibration) {
                 case NotCalibrated:
                     beginCalibrationTime = Timer.getFPGATimestamp();
-                    calibration = AttemptCalibrationState.WaitForArmToLower;
+                    calibration = AttemptCalibrationState.RaiseArmToLowerKickstand;
                     armSubsystem.setArmMotorToCalibratePower();
+                    break;
+                case RaiseArmToLowerKickstand:
+                    double power = kickstandRaisePower.get();
+                    
+                    if (armSubsystem.getArmAngle() > kickstandRaiseAngle.get()) {
+                        power = 0;
+                    }
+                    
+                    armSubsystem.setArmMotorPower(power);
+                    
+                    if (Timer.getFPGATimestamp() - beginCalibrationTime > kickstandRaiseDuration.get()) {
+                        calibration = AttemptCalibrationState.WaitForArmToLower;
+                    }
+                    
                     break;
                 case WaitForArmToLower:
                     if (Timer.getFPGATimestamp() - beginCalibrationTime > autoCalibrationTimeout.get()) {
