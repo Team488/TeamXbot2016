@@ -94,8 +94,10 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         timer.setTimeInSeconds(10);
         
         angleMaintainer.execute();
-        // should be going up as normal now
-        assertEquals(0, arm.leftArmMotor.get(), 0.001);
+        angleMaintainer.execute();
+        angleMaintainer.execute();
+        // should be going up as normal now, since it gave up
+        verifyArmGoingUp();
         
         assertTrue(!waitForCalibrate.isFinished());
         assertTrue(angleMaintainer.hasGivenUpCalibration());
@@ -114,6 +116,7 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         MockTimer timer = injector.getInstance(MockTimer.class);
         timer.setTimeInSeconds(10);
         
+        angleMaintainer.execute();
         angleMaintainer.execute();
         
         assertTrue(!waitForCalibrate.isFinished());
