@@ -21,7 +21,7 @@ public class DropKickstandCommand extends BaseCommand {
     @Inject
     public DropKickstandCommand(ArmSubsystem arm, XPropertyManager propMan) {
         kickstandRaiseAngle = propMan.createPersistentProperty("KickstandRaiseAngle", 5.0);
-        kickstandRaisePower = propMan.createPersistentProperty("KickstandRaisePower", 0.2);
+        kickstandRaisePower = propMan.createPersistentProperty("KickstandRaisePower", 0.4);
         kickstandRaiseDuration = propMan.createPersistentProperty("KickstandRaiseDuration", 2.0);
         
         this.arm = arm;
