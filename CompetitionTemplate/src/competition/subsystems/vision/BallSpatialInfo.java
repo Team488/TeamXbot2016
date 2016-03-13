@@ -10,4 +10,10 @@ public class BallSpatialInfo {
         this.distanceInches = distanceInches;
         this.colorConfidence = colorConfidence;
     }
+
+    public void copySpatialInfoFrom(BallSpatialInfo other) {
+        this.relativeHeading = other.relativeHeading;
+        this.distanceInches = other.distanceInches;
+        this.colorConfidence = other.colorConfidence;
+    }
 }

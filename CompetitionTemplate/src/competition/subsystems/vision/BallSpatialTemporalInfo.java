@@ -11,12 +11,8 @@ public class BallSpatialTemporalInfo extends BallSpatialInfo {
         this.temporalConfidence = initialTemporalConfidence;
     }
     
-    public BallSpatialTemporalInfo(float heading, float distanceInches, float colorConfidence) {
-        this(heading, distanceInches, colorConfidence, 0.3);
-    }
-    
-    public BallSpatialTemporalInfo(BallSpatialInfo sourceVal) {
-        this(sourceVal.relativeHeading, sourceVal.distanceInches, sourceVal.distanceInches);
+    public BallSpatialTemporalInfo(BallSpatialInfo sourceVal, double initialTemporalConfidence) {
+        this(sourceVal.relativeHeading, sourceVal.distanceInches, sourceVal.distanceInches, initialTemporalConfidence);
     }
     
     public double getTemporalConfidence() {
@@ -25,12 +21,10 @@ public class BallSpatialTemporalInfo extends BallSpatialInfo {
     
     public void adjustTemporalConfidence(double shift) {
         temporalConfidence += shift;
-        
         constrainTemporalConfidence();
     }
     
     private void constrainTemporalConfidence() {
-        // TODO: Don't use hard-coded magic numbers
         temporalConfidence = MathUtils.constrainDouble(temporalConfidence, 0, 1);
     }
 }
