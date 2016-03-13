@@ -178,7 +178,7 @@ public class OperatorCommandMap {
             SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
             SetupRoughDefenseForwardsCommand setupRoughDefenseCommand,
             SetupTraversePortcullisCommand setupTraversePortcullisCommand){
-        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
+        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceFromWallToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
         turnToHeading.setTargetHeading(lowBarScoreGroup.headingToFaceLowGoal.get());
