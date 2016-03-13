@@ -46,12 +46,12 @@ public class BallConfidenceTracker {
             }
             
             uncorrelatedBalls.removeAll(ballsInRange);
-            existingBall.copySpatialInfoFrom(closestBall);
             
             if(ballsInRange.isEmpty()) {
                 existingBall.adjustTemporalConfidence(confidenceDecrement);
             }
             else {
+                existingBall.copySpatialInfoFrom(closestBall);
                 existingBall.adjustTemporalConfidence(confidenceIncrement);
             }
             
@@ -61,7 +61,7 @@ public class BallConfidenceTracker {
             }
         }
         
-        ballsToPrune.removeAll(ballsToPrune);
+        currentBalls.removeAll(ballsToPrune);
         
         for(BallSpatialInfo newBall : uncorrelatedBalls) {
             BallSpatialTemporalInfo newTemporalBall = new BallSpatialTemporalInfo(newBall, initialConfidence);
