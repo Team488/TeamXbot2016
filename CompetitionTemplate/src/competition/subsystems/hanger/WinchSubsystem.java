@@ -19,7 +19,6 @@ public class WinchSubsystem extends BaseSubsystem{
     public XSpeedController winchMotor;
     private static Logger log = Logger.getLogger(WinchSubsystem.class);
     public XEncoder winchEncoder;
-    public XSolenoid winchBreak;
     
     public DoubleProperty winchDistance;
     public DoubleProperty winchMaxSafeDistance;
@@ -43,12 +42,4 @@ public class WinchSubsystem extends BaseSubsystem{
         return distance;
     }
     
-    public void openBreak(){
-        winchBreak.set(true);
-    }
-    
-    public void closeBreak(){
-        winchBreak.set(false);
-    }
-
 }

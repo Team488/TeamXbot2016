@@ -26,10 +26,10 @@ import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
-import competition.subsystems.hanger.winch_commands.DisengageBreakCommand;
-import competition.subsystems.hanger.winch_commands.EngageBreakCommand;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.DisengageBrakeCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.EngageBrakeCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
@@ -139,16 +139,16 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract,
-            EngageBreakCommand engageBreak,
-            DisengageBreakCommand disengageBreak){
+            EngageBrakeCommand engageBrake,
+            DisengageBrakeCommand disengageBrake){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
         
-        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBreak);
-        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBreak);
+        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBrake);
+        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBrake);
     }
     
     @Inject
