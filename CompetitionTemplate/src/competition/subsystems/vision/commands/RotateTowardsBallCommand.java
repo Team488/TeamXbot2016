@@ -8,10 +8,8 @@ import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.HeadingModule;
 import competition.subsystems.vision.BallSpatialInfo;
-import competition.subsystems.vision.VisionStateMonitor;
 import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
-import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -29,7 +27,11 @@ public class RotateTowardsBallCommand extends BaseCommand {
     protected DoubleProperty currentBallHeadingTarget;
     
     @Inject
-    public RotateTowardsBallCommand(VisionSubsystem visionSubsystem, DriveSubsystem driveSubsystem, PoseSubsystem poseSubsystem, XPropertyManager propMan, HeadingModule headingModule) {
+    public RotateTowardsBallCommand(VisionSubsystem visionSubsystem,
+            DriveSubsystem driveSubsystem,
+            PoseSubsystem poseSubsystem,
+            XPropertyManager propMan,
+            HeadingModule headingModule) {
         this.visionSubsystem = visionSubsystem;
         this.driveSubsystem = driveSubsystem;
         this.headingModule = headingModule;

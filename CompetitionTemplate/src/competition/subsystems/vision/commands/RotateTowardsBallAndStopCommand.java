@@ -10,7 +10,11 @@ import xbot.common.properties.XPropertyManager;
 public class RotateTowardsBallAndStopCommand extends RotateTowardsBallCommand {
     private DoubleProperty headingTolerance;
     
-    public RotateTowardsBallAndStopCommand(VisionSubsystem visionSubsystem, DriveSubsystem driveSubsystem, PoseSubsystem poseSubsystem, HeadingModule headingModule,
+    public RotateTowardsBallAndStopCommand(
+            VisionSubsystem visionSubsystem,
+            DriveSubsystem driveSubsystem,
+            PoseSubsystem poseSubsystem,
+            HeadingModule headingModule,
             XPropertyManager propMan) {
         super(visionSubsystem, driveSubsystem, poseSubsystem, propMan, headingModule);
         headingTolerance = propMan.createPersistentProperty("Cam heading tolerance", 5d);
@@ -18,6 +22,7 @@ public class RotateTowardsBallAndStopCommand extends RotateTowardsBallCommand {
     
     @Override
     public boolean isFinished() {        
-        return Math.abs(poseSubsystem.getCurrentHeading().difference(currentBallHeadingTarget.get())) <= headingTolerance.get();
+        return Math.abs(poseSubsystem.getCurrentHeading().difference(currentBallHeadingTarget.get()))
+                <= headingTolerance.get();
     }
 }

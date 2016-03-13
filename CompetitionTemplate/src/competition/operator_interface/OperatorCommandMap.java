@@ -16,11 +16,8 @@ import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
-import competition.subsystems.autonomous.selection.SetupRaiseArmAndTraverseCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
-import competition.subsystems.autonomous.selection.SetupTraverseDefenseCommand;
-import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
@@ -37,6 +34,7 @@ import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
 import competition.subsystems.vision.commands.AcquireBallCommand;
 import competition.subsystems.vision.commands.CollectForwardBallCommand;
+import competition.subsystems.vision.commands.RotateTowardsBallAndStopCommand;
 import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
@@ -174,8 +172,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(
             OperatorInterface oi,
-            AcquireBallCommand acquireCommand) {
-        oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+            RotateTowardsBallCommand rotateCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(rotateCommand);
     }
     
     @Inject
