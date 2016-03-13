@@ -35,6 +35,8 @@ public class VisionSubsystem extends BaseSubsystem {
     protected DoubleProperty confidenceDecrement;
     protected DoubleProperty initialConfidence;
     
+    protected DoubleProperty maxConfidenceProp;
+    
     @Inject
     public VisionSubsystem(JetsonServerManager jetsonServer, WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating VisionSubsystem");
@@ -52,6 +54,8 @@ public class VisionSubsystem extends BaseSubsystem {
         confidenceIncrement = propMan.createPersistentProperty("Ball confidence increment", 10);
         confidenceDecrement = propMan.createPersistentProperty("Ball confidence decrement", -10);
         initialConfidence = propMan.createPersistentProperty("Ball initial confidence", 30);
+
+        maxConfidenceProp = propMan.createEphemeralProperty("Maximum ball confidence", 0);
         
     }
     
@@ -65,6 +69,9 @@ public class VisionSubsystem extends BaseSubsystem {
                         (int)confidenceDecrement.get(),
                         (int)initialConfidence.get()
                     );
+
+            // TODO: This might consume a fair amount of processor time
+            this.maxConfidenceProp.set(getMaxConfidence());
         }
     }    
     
@@ -73,16 +80,18 @@ public class VisionSubsystem extends BaseSubsystem {
     }
     
     public BallSpatialInfo findTargetBall() {
-        // TODO: Update this method now that we have temporal confidence
+        // TODO: Update this method for intelligent temporal logic
         BallSpatialTemporalInfo[] ballInfo = this.getTrackedBoulders();
         
         if(ballInfo == null) {
             return null;
         }
         
-        BallSpatialInfo targetBall = null;
-        for(BallSpatialInfo ball : ballInfo) {
-            if(targetBall == null || (ball.colorConfidence > targetBall.colorConfidence && ball.distanceInches <= getMaxBallAcquireDistance())) {
+        BallSpatialTemporalInfo targetBall = null;
+        for(BallSpatialTemporalInfo ball : ballInfo) {
+            if(targetBall == null
+                    || (ball.getTemporalConfidence() > targetBall.getTemporalConfidence()
+                            && ball.distanceInches <= getMaxBallAcquireDistance())) {
                 targetBall = ball;
             }
         }

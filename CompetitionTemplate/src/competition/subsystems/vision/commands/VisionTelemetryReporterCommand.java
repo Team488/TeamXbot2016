@@ -18,14 +18,13 @@ import xbot.common.properties.XPropertyManager;
 public class VisionTelemetryReporterCommand extends BaseCommand {
     static Logger log = Logger.getLogger(VisionTelemetryReporterCommand.class);
     
-    private final double spewInterval = 10; // Seconds
+    private DoubleProperty spewInterval;
     private double lastSpewTimestamp = Double.NEGATIVE_INFINITY;
 
     private DoubleProperty ballAngleProp;
     private DoubleProperty ballDistanceProp;
     private DoubleProperty numBallsProp;
     private DoubleProperty colorConfidenceProp;
-    private DoubleProperty maxConfidenceProp;
     private BooleanProperty visionHealthProp;
     
     private VisionSubsystem visionSubsystem;
@@ -39,12 +38,12 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         monitor = new VisionStateMonitor(visionSubsystem);
         
+        spewInterval = propMan.createPersistentProperty("Ball telemetry interval", 10);
+        
         ballAngleProp = propMan.createEphemeralProperty("Target ball angle", 0d);
         ballDistanceProp = propMan.createEphemeralProperty("Target ball distance", -1d);
         colorConfidenceProp = propMan.createEphemeralProperty("Target ball color confidence", 0d);
         numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0d);
-        // TODO: Eventually we want to indicate this value to drivers, and do it more often than this
-        maxConfidenceProp = propMan.createEphemeralProperty("Maximum ball confidence", 0);
         visionHealthProp = propMan.createEphemeralProperty("Is vision connection healthy?", false);
     }
     
@@ -71,7 +70,6 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         this.ballDistanceProp.set(targetBall == null ? 0 : targetBall.distanceInches);
         this.colorConfidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.colorConfidence * 100));
         this.numBallsProp.set(ballInfo == null ? 0 : ballInfo.length);
-        this.maxConfidenceProp.set(visionSubsystem.getMaxConfidence());
         this.visionHealthProp.set(visionSubsystem.isConnectionHealthy());
     }
 
@@ -84,6 +82,6 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     }
     
     private boolean isPastLogInterval() {
-        return Timer.getFPGATimestamp() - lastSpewTimestamp > spewInterval;
+        return Timer.getFPGATimestamp() - lastSpewTimestamp > spewInterval.get();
     }
 }
