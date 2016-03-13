@@ -11,7 +11,6 @@ public class DisableSafeArmOperationCommand extends BaseCommand{
     @Inject
     public DisableSafeArmOperationCommand(ArmSubsystem armSubsystem){
         this.armSubsystem = armSubsystem;
-        this.requires(this.armSubsystem);
     }
 
     @Override
@@ -22,5 +21,9 @@ public class DisableSafeArmOperationCommand extends BaseCommand{
     @Override
     public void execute() {
         
+    }
+    
+    public void end(){
+        armSubsystem.enableSafeArmOperation();
     }
 }

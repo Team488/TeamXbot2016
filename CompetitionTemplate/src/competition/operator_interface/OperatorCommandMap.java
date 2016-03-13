@@ -11,7 +11,6 @@ import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.DisableSafeArmOperationCommand;
-import competition.subsystems.arm.arm_commands.EnableSafeArmOperationCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
 import competition.subsystems.autonomous.DriveForDistanceCommand;
@@ -195,9 +194,7 @@ public class OperatorCommandMap {
     public void switchEnableSafeArmOperation(
             OperatorInterface oi,
             ArmSubsystem arm,
-            EnableSafeArmOperationCommand enableSafeArm,
             DisableSafeArmOperationCommand disableSafeArm){
-        oi.operatorPanelButtons.getifAvailable(1).whenPressed(enableSafeArm);
-        oi.operatorPanelButtons.getifAvailable(2).whenPressed(disableSafeArm);
+        oi.operatorPanelButtons.getifAvailable(1).whileHeld(disableSafeArm);
     }
 }
