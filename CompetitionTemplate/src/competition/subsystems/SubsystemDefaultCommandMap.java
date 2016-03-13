@@ -12,12 +12,12 @@ import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.TankDriveWithJoysticksCommand;
 import competition.subsystems.drive.commands.UpdatePoseCommand;
 import competition.subsystems.hanger.HookSubsystem;
+import competition.subsystems.hanger.WinchBrakeSubsystem;
 import competition.subsystems.hanger.WinchSubsystem;
 import competition.subsystems.hanger.hook_commands.HookStopCommand;
 import competition.subsystems.hanger.winch_commands.WinchStopCommand;
 import competition.subsystems.hanger.winch_commands.winch_brake.DisengageBrakeCommand;
 import competition.subsystems.hanger.winch_commands.winch_brake.EngageBrakeCommand;
-import competition.subsystems.hanger.winch_commands.winch_brake.WinchBrakeSubsystem;
 import competition.subsystems.portcullis_wheels.PortcullisWheelsSubsystem;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand;
 import competition.subsystems.portcullis_wheels.commands.SpinPortcullisWheelsCommand.PortcullisDirection;
@@ -89,7 +89,10 @@ public class SubsystemDefaultCommandMap {
             WinchBrakeSubsystem winchBrakeSubsystem,
             EngageBrakeCommand engage,
             DisengageBrakeCommand disengage){
-        winchBrakeSubsystem.setDefaultCommand(engage);
+        winchBrakeSubsystem.setDefaultCommand(disengage);
+        
+        engage.includeOnSmartDashboard();
+        disengage.includeOnSmartDashboard();
     }
     
 }

@@ -1,4 +1,4 @@
-package competition.subsystems.hanger.winch_commands.winch_brake;
+package competition.subsystems.hanger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
