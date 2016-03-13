@@ -1,5 +1,7 @@
 package competition.subsystems.autonomous.selection;
 
+import com.google.inject.Inject;
+
 import competition.subsystems.autonomous.RaiseArmAndTraverseDefenseCommandGroup;
 import competition.subsystems.autonomous.TraversePortcullisCommandGroup;
 import xbot.common.properties.DoubleProperty;
@@ -16,6 +18,7 @@ public class SetupTraversePortcullisCommand extends BaseAutonomousModeSetCommand
     DoubleProperty traversePortcullisMin;
     DoubleProperty traversePortcullisMax;
     
+    @Inject
     public SetupTraversePortcullisCommand(AutonomousModeSelector autonomousModeSelector, 
             XPropertyManager propManager, 
             TraversePortcullisCommandGroup traversePortcullis) {
