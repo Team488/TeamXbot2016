@@ -58,51 +58,51 @@ public class ArmSubsystemTest extends ArmTestBase {
     @Test
     @Ignore
     public void limitSwitchTest() {
-        ((MockDigitalInput)armSubsystem.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
+        ((MockDigitalInput)arm.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
         
-        assertTrue(armSubsystem.isArmAtMaximumHeight()); //say true if the arm is at maximum height
+        assertTrue(arm.isArmAtMaximumHeight()); //say true if the arm is at maximum height
         
-        ((MockDigitalInput)armSubsystem.lowerLimitSwitch).set_value(false); //mocks the lower limit switch being pressed
+        ((MockDigitalInput)arm.lowerLimitSwitch).set_value(false); //mocks the lower limit switch being pressed
         
-        assertTrue(armSubsystem.isArmAtMinimumHeight()); //say true is the arm is at minimum height
+        assertTrue(arm.isArmAtMinimumHeight()); //say true is the arm is at minimum height
     }
      
     @Test
     public void maxAngleHeightTest(){
         setLimitSwitches(false, true);
-        armSubsystem.updateSensors();
+        arm.updateSensors();
         
         setLimitSwitches(false, false);
         setMockEncoder(45);
         
-        armSubsystem.updateSensors();
+        arm.updateSensors();
         
-        armSubsystem.setArmMotorPower(1.0);
+        arm.setArmMotorPower(1.0);
         verifyArmPower(1);
         
         setMockEncoder(100);
-        armSubsystem.setArmMotorPower(1.0);
+        arm.setArmMotorPower(1.0);
         
-        assertTrue(armSubsystem.isCalibrated());
-        assertTrue(armSubsystem.getArmAngle() > 90.0);
-        assertTrue(armSubsystem.isArmAtMaxAngleHeight());
+        assertTrue(arm.isCalibrated());
+        assertTrue(arm.getArmAngle() > 90.0);
+        assertTrue(arm.isArmAtMaxAngleHeight());
         verifyArmPower(0);
     }
     
     @Test
     public void testCalibration() {
         setMockEncoder(0);
-        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+        assertEquals(0, arm.getArmAngle(), 0.001);
         
         setMockEncoder(-100);
-        assertEquals(-100, armSubsystem.getArmAngle(), 0.001);
+        assertEquals(-100, arm.getArmAngle(), 0.001);
         
         setLimitSwitches(false, true);
-        armSubsystem.updateSensors();
+        arm.updateSensors();
         
-        assertEquals(0, armSubsystem.getArmAngle(), 0.001);
+        assertEquals(0, arm.getArmAngle(), 0.001);
         
         setMockEncoder(0);
-        assertEquals(100, armSubsystem.getArmAngle(), 0.001);
+        assertEquals(100, arm.getArmAngle(), 0.001);
     }
 }

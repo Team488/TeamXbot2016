@@ -34,6 +34,13 @@ public class DriveTestBase extends BaseRobotTest {
         assertTrue(driveSubsystem.rightRearDrive.get() > 0);
     }
     
+    protected void verifyGoingForward() {
+        assertTrue(driveSubsystem.leftFrontDrive.get() > 0);
+        assertTrue(driveSubsystem.leftRearDrive.get() > 0);
+        assertTrue(driveSubsystem.rightFrontDrive.get() > 0);
+        assertTrue(driveSubsystem.rightRearDrive.get() > 0);
+    }
+    
     protected void verifyTurningRight()
     {
         assertTrue(driveSubsystem.leftFrontDrive.get() > 0);
