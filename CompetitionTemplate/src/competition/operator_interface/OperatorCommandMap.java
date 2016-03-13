@@ -30,6 +30,8 @@ import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.DisengageBrakeCommand;
+import competition.subsystems.hanger.winch_commands.winch_brake.EngageBrakeCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.collector.commands.CollectorIntakeCommand;
@@ -142,6 +144,8 @@ public class OperatorCommandMap {
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
             WinchRetractCommand winchRetract,
+            EngageBrakeCommand engageBrake,
+            DisengageBrakeCommand disengageBrake,
             WinchFollowHookProportionallyCommand winchFollow,
             ScaleViaWinch scale){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
@@ -149,6 +153,9 @@ public class OperatorCommandMap {
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
+
+        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBrake);
+        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBrake);
         
         oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
@@ -167,10 +174,10 @@ public class OperatorCommandMap {
             SetupLowBarCommand setupLowBarCommand,
             SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
             SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
-        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceToTurningPoint.get());
+        driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceFromWallToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
-        turnToHeading.setTargetHeading(lowBarScoreGroup.targetHeading.get());
+        turnToHeading.setTargetHeading(lowBarScoreGroup.headingToFaceLowGoal.get());
         turnToHeading.includeOnSmartDashboard();
         
         driveToLowGoal.setTargetDistance(lowBarScoreGroup.distanceToLowGoal.get());

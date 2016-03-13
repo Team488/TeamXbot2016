@@ -20,7 +20,7 @@ public class TurnToHeadingTest extends DriveTestBase{
     public void testTurnToHeadingCommand(){
         TurnToHeadingCommand turnToHeadingCommand = this.injector.getInstance(TurnToHeadingCommand.class);
         
-        turnToHeadingCommand.setTargetHeading(lowScoreCommands.distanceToTurningPoint.get());
+        turnToHeadingCommand.setTargetHeading(lowScoreCommands.headingToFaceLowGoal.get());
         
         setMockGyroHeading(0);
         
@@ -28,7 +28,15 @@ public class TurnToHeadingTest extends DriveTestBase{
         
         verifyTurningRight();
         
-        setMockGyroHeading(lowScoreCommands.distanceToTurningPoint.get());
+        turnToHeadingCommand.setTargetHeading(lowScoreCommands.headingToFaceLowGoal.get());
+        
+        setMockGyroHeading(0);
+        
+        turnToHeadingCommand.execute();
+        
+        verifyTurningRight();
+        
+        setMockGyroHeading(lowScoreCommands.headingToFaceLowGoal.get());
         
         turnToHeadingCommand.execute();
         
