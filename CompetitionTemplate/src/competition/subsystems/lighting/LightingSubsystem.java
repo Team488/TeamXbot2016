@@ -15,7 +15,7 @@ public class LightingSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(LightingSubsystem.class);
     
     public enum LightingState {
-        Disabled(0), Enabled(2), BallCaptured(1);
+        Disabled(0), BallCaptured(1), Enabled(2);
         
         private int value; 
         private LightingState(int value) { this.value = value; }
