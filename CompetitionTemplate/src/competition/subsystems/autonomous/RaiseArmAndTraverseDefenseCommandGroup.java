@@ -3,6 +3,7 @@ package competition.subsystems.autonomous;
 import com.google.inject.Inject;
 
 import competition.subsystems.arm.arm_commands.ArmAngleMaintainerCommand;
+import competition.subsystems.arm.arm_commands.DropKickstandCommand;
 import competition.subsystems.arm.arm_commands.SetArmToAngleCommand;
 import competition.subsystems.arm.arm_commands.WaitForArmCalibrationCommand;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
@@ -17,6 +18,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     TraverseDefenseCommand traverse;
     SetArmToAngleCommand setArm;
     CalibrateHeadingCommand calibrateHeading;
+    DropKickstandCommand dropKickstand;
     
     DoubleProperty moveFirstDuration;
     
@@ -24,6 +26,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     
     @Inject
     public RaiseArmAndTraverseDefenseCommandGroup(
+            DropKickstandCommand dropKickstand,
             TraverseDefenseCommand moveFirst,
             WaitForArmCalibrationCommand waitForArmCalibration,
             SetArmToAngleCommand setArm,
@@ -35,10 +38,12 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         this.setArm = setArm;
         this.calibrateHeading = calibrateHeading;
         this.moveFirst = moveFirst;
+        this.dropKickstand = dropKickstand;
         
         moveFirstDuration = propMan.createPersistentProperty("MoveFirstDuration", 0.75);
         
         this.addSequential(this.calibrateHeading);
+        this.addSequential(dropKickstand);
         this.addSequential(moveFirst);
         this.addSequential(waitForArmCalibration);
         this.addSequential(this.setArm);
@@ -47,10 +52,10 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     
     public void setTraversalProperties(double power, double heading, double minSeconds, double maxSeconds) {
         traverse.setPower(power);
-        traverse.setTarget(heading);
+        traverse.setTargetHeading(heading);
         traverse.setTimeLimits(minSeconds, maxSeconds);
         
-        moveFirst.setTarget(heading);
+        moveFirst.setTargetHeading(heading);
         moveFirst.setTimeLimits(moveFirstDuration.get(), moveFirstDuration.get() + 0.05);
         
         double moveFirstPower = 0.4;

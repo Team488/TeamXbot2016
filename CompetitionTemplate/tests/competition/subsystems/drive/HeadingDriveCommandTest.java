@@ -20,7 +20,7 @@ public class HeadingDriveCommandTest extends DriveSubsystemTest {
     
     @Test
     public void checkStraight() {
-        command.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
+        command.setTargetHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS);
         command.setPower(0.5);
         
         command.initialize();
@@ -30,7 +30,7 @@ public class HeadingDriveCommandTest extends DriveSubsystemTest {
     
     @Test
     public void checkRight() {
-        command.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS - 90);
+        command.setTargetHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS - 90);
         command.setPower(0.0);
         
         command.initialize();
@@ -41,7 +41,7 @@ public class HeadingDriveCommandTest extends DriveSubsystemTest {
     
     @Test
     public void checkLeft() {
-        command.setTarget(PoseSubsystem.FACING_AWAY_FROM_DRIVERS + 90);
+        command.setTargetHeading(PoseSubsystem.FACING_AWAY_FROM_DRIVERS + 90);
         command.setPower(0.0);
         
         command.initialize();
