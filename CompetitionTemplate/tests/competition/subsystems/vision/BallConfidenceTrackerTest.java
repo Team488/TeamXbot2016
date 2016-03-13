@@ -14,14 +14,13 @@ import org.junit.Test;
 import competition.BaseRobotTest;
 
 public class BallConfidenceTrackerTest extends BaseRobotTest {
-    private static final double confidenceErrorMargin = 0.0001;
     
     @Test
     public void testEmptyBehavior() {
         BallConfidenceTracker tracker = new BallConfidenceTracker();
         
         assertEquals(0, tracker.getTrackedBalls().length);
-        assertEquals(0, tracker.getMaxConfidence(), confidenceErrorMargin);
+        assertEquals(0, tracker.getMaxConfidence());
     }
     
     @Test
@@ -30,15 +29,15 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
         
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 50, 0));
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.3, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(30, tracker.getTrackedBalls()[0].getTemporalConfidence());
 
         processNewBallInfoWithDefaults(tracker);
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.2, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(20, tracker.getTrackedBalls()[0].getTemporalConfidence());
 
         processNewBallInfoWithDefaults(tracker);
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.1, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(10, tracker.getTrackedBalls()[0].getTemporalConfidence());
         
 
         processNewBallInfoWithDefaults(tracker);
@@ -52,12 +51,12 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
         // Add a ball
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 50, 0));
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.3, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(30, tracker.getTrackedBalls()[0].getTemporalConfidence());
 
         // Reinforce the ball once and make sure the confidence increases
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 50, 0));
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.4, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(40, tracker.getTrackedBalls()[0].getTemporalConfidence());
         
         // Reinforce 5 more times
         for(int i = 0; i < 5; i++) {
@@ -66,16 +65,16 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
         
         // Make sure that the confidence has continued + continues to increment
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(0.9, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(90, tracker.getTrackedBalls()[0].getTemporalConfidence());
 
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 50, 0));
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(1, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(100, tracker.getTrackedBalls()[0].getTemporalConfidence());
 
         // Make sure that the confidence doesn't go above 1
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 50, 0));
         assertEquals(1, tracker.getTrackedBalls().length);
-        assertEquals(1, tracker.getTrackedBalls()[0].getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(100, tracker.getTrackedBalls()[0].getTemporalConfidence());
     }
     
     @Test
@@ -86,13 +85,13 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 51, 0), new BallSpatialInfo(0, 50, 0), new BallSpatialInfo(0, 52, 0));
         assertEquals(3, tracker.getTrackedBalls().length);
         assertNotNull(getBallAtDistanceFromTracker(tracker, 50));
-        assertEquals(0.3, getBallAtDistanceFromTracker(tracker, 50).getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(30, getBallAtDistanceFromTracker(tracker, 50).getTemporalConfidence());
         
         // Report a single ball within merge range of the first 3 and assert that there is now a ball with the new distance
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 55, 0));
         assertEquals(3, tracker.getTrackedBalls().length);
         assertNotNull(getBallAtDistanceFromTracker(tracker, 55));
-        assertEquals(0.4, getBallAtDistanceFromTracker(tracker, 55).getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(40, getBallAtDistanceFromTracker(tracker, 55).getTemporalConfidence());
         
         // Report a ball and make sure that the others haven't been pruned yet
         processNewBallInfoWithDefaults(tracker, new BallSpatialInfo(0, 56, 0));
@@ -104,7 +103,7 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
         
         // Make sure that the final ball inherited the most recent position
         assertNotNull(getBallAtDistanceFromTracker(tracker, 53));
-        assertEquals(0.6, getBallAtDistanceFromTracker(tracker, 53).getTemporalConfidence(), confidenceErrorMargin);
+        assertEquals(60, getBallAtDistanceFromTracker(tracker, 53).getTemporalConfidence());
     }
     
     protected void processNewBallInfoWithDefaults(BallConfidenceTracker tracker, BallSpatialInfo ...newBalls) {
@@ -112,7 +111,7 @@ public class BallConfidenceTrackerTest extends BaseRobotTest {
             newBalls = new BallSpatialInfo[0];
         }
         
-        tracker.processNewBallInfo(Arrays.stream(newBalls).collect(Collectors.toList()), 10, 10, 0.1, -0.1, 0.3);
+        tracker.processNewBallInfo(Arrays.stream(newBalls).collect(Collectors.toList()), 10, 10, 10, -10, 30);
     }
     
     protected BallSpatialTemporalInfo getBallAtDistanceFromTracker(BallConfidenceTracker tracker, float targetDistance) {

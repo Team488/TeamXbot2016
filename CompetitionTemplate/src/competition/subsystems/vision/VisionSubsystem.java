@@ -49,9 +49,9 @@ public class VisionSubsystem extends BaseSubsystem {
         maxHeadingCorrelationDifference = propMan.createPersistentProperty("Max heading correlation diff", 5);
         maxDistanceCorrelationDifference = propMan.createPersistentProperty("Max dist correlation diff", 24);
 
-        confidenceIncrement = propMan.createPersistentProperty("Ball confidence increment", 0.1);
-        confidenceDecrement = propMan.createPersistentProperty("Ball confidence decrement", -0.1);
-        initialConfidence = propMan.createPersistentProperty("Ball initial confidence", 0.3);
+        confidenceIncrement = propMan.createPersistentProperty("Ball confidence increment", 10);
+        confidenceDecrement = propMan.createPersistentProperty("Ball confidence decrement", -10);
+        initialConfidence = propMan.createPersistentProperty("Ball initial confidence", 30);
         
     }
     
@@ -61,9 +61,9 @@ public class VisionSubsystem extends BaseSubsystem {
                         Arrays.asList(jetsonServer.getLastSpatialInfoArray()),
                         maxHeadingCorrelationDifference.get(),
                         maxDistanceCorrelationDifference.get(),
-                        confidenceIncrement.get(),
-                        confidenceDecrement.get(),
-                        initialConfidence.get()
+                        (int)confidenceIncrement.get(),
+                        (int)confidenceDecrement.get(),
+                        (int)initialConfidence.get()
                     );
         }
     }    
@@ -94,7 +94,7 @@ public class VisionSubsystem extends BaseSubsystem {
         return jetsonServer.isConnectionHealthy();
     }
 
-    public double getMaxConfidence() {
+    public int getMaxConfidence() {
         return ballTracker.getMaxConfidence();
     }
 

@@ -18,9 +18,9 @@ public class BallConfidenceTracker {
             List<BallSpatialInfo> newBalls,
             double maxHeadingCorrelationDifference,
             double maxDistanceCorrelationDifference,
-            double confidenceIncrement,
-            double confidenceDecrement,
-            double initialConfidence) {
+            int confidenceIncrement,
+            int confidenceDecrement,
+            int initialConfidence) {
         
         Set<BallSpatialInfo> uncorrelatedBalls = new HashSet<>(newBalls);
         Set<BallSpatialTemporalInfo> ballsToPrune = new HashSet<>();
@@ -55,8 +55,7 @@ public class BallConfidenceTracker {
                 existingBall.adjustTemporalConfidence(confidenceIncrement);
             }
             
-            // Comparing doubles, so give it some margin for error
-            if (existingBall.getTemporalConfidence() <= 0.00001) {
+            if (existingBall.getTemporalConfidence() < 1) {
                 ballsToPrune.add(existingBall);
             }
         }
@@ -66,12 +65,10 @@ public class BallConfidenceTracker {
         for(BallSpatialInfo newBall : uncorrelatedBalls) {
             BallSpatialTemporalInfo newTemporalBall = new BallSpatialTemporalInfo(newBall, initialConfidence);
             
-            // Keep array in sorted order
-            // TODO: Figure out what order this is (we want it to be ascending)
-            int searchResult = Collections.binarySearch(currentBalls, newBall, Comparator.comparingDouble(x -> x.distanceInches));
-            int targetPos = searchResult >= 0 ? searchResult : -searchResult - 1;
-            currentBalls.add(targetPos, newTemporalBall);
+            currentBalls.add(newTemporalBall);
         }
+        
+        currentBalls.sort(Comparator.comparingInt(ball -> -ball.getTemporalConfidence()));
     }
     
     public void resetTrackedBalls() {
@@ -82,8 +79,8 @@ public class BallConfidenceTracker {
         return this.currentBalls.toArray(new BallSpatialTemporalInfo[currentBalls.size()]);
     }
     
-    public double getMaxConfidence() {
-        double maxConfidence = 0;
+    public int getMaxConfidence() {
+        int maxConfidence = 0;
         
         for(BallSpatialTemporalInfo ball : currentBalls) {
             maxConfidence = Math.max(maxConfidence, ball.getTemporalConfidence());
