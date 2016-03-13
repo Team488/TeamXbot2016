@@ -157,7 +157,7 @@ public class OperatorCommandMap {
         oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBrake);
         oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBrake);
         
-        oi.leftButtons.getifAvailable(12).whileHeld(scale);
+        oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
         winchFollow.includeOnSmartDashboard();
         scale.includeOnSmartDashboard();
