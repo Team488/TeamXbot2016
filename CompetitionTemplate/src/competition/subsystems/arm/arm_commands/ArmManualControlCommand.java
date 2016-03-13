@@ -26,7 +26,15 @@ public class ArmManualControlCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        armSubsystem.setArmMotorPower(-oi.operatorJoystick.getVector().y/2);
+        double power = -oi.operatorJoystick.getVector().y;
+
+        // square input
+        power *= Math.abs(power);
+        
+        // and scale down
+        power *= 0.5;
+        
+        armSubsystem.setArmMotorPower(power);
     }
     
     @Override
