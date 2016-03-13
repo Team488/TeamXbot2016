@@ -150,7 +150,7 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
         
-        oi.leftButtons.getifAvailable(12).whileHeld(scale);
+        oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
         winchFollow.includeOnSmartDashboard();
         scale.includeOnSmartDashboard();

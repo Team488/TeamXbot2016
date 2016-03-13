@@ -3,17 +3,19 @@ package competition.subsystems.lighting;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XDigitalOutput;
 import xbot.common.injection.wpi_factories.WPIFactory;
 
+@Singleton
 public class LightingSubsystem extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(LightingSubsystem.class);
     
     public enum LightingState {
-        Disabled(0), Enabled(1), BallCaptured(2);
+        Disabled(0), BallCaptured(1), Enabled(2);
         
         private int value; 
         private LightingState(int value) { this.value = value; }
