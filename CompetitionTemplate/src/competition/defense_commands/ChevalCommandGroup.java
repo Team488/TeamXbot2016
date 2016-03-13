@@ -11,37 +11,40 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class ChevalCommandGroup extends CommandGroup{
-
-    DriveToDistanceCommand backUp;
-    ArmToBottomCommand dropArm;
-    DriveToDistanceCommand crossDefense;
     
     DoubleProperty chevalBackUpDistance;
-    DoubleProperty chevalCrossDefenseDistance;
+    DoubleProperty chevalBeginCrossDefenseDistance;
+    DoubleProperty chevalFinishCrossDefenseDistance;
     DoubleProperty chevalWaitTime;
+    DoubleProperty chevalSafeArmHeight;
     
     @Inject
     public ChevalCommandGroup(
             DriveToDistanceCommand backUp,
             ArmToBottomCommand dropArm,
-            DriveToDistanceCommand crossDefense,
+            DriveToDistanceCommand beginCrossDefense,
+            SetArmToAngleCommand raiseArmSafely,
+            DriveToDistanceCommand finishCrossDefense,
             XPropertyManager propMan) {
         
-        this.backUp = backUp;
-        this.dropArm = dropArm;
-        this.crossDefense = crossDefense;
         
-        chevalBackUpDistance = propMan.createPersistentProperty("ChevalBackUpDistance", -6.0);
-        chevalCrossDefenseDistance = propMan.createPersistentProperty("ChevalCrossDefenseDistance", 20.0);
+        chevalBackUpDistance = propMan.createPersistentProperty("ChevalBackUpDistance", -2.0);
+        chevalBeginCrossDefenseDistance = propMan.createPersistentProperty("ChevalBeginCrossDefenseDistance", 10.0);
+        chevalFinishCrossDefenseDistance = propMan.createPersistentProperty("ChevalFinishCrossDefenseDistance", 30.0);
         chevalWaitTime = propMan.createPersistentProperty("ChevalWaitTime", 0.5);
+        chevalSafeArmHeight = propMan.createPersistentProperty("ChevalSafeArmHeight", 25.0);
         
         backUp.setTargetDistance(chevalBackUpDistance.get());
-        crossDefense.setTargetDistance(chevalCrossDefenseDistance.get());
+        beginCrossDefense.setTargetDistance(chevalBeginCrossDefenseDistance.get());
+        finishCrossDefense.setTargetDistance(chevalFinishCrossDefenseDistance.get());
+        raiseArmSafely.setGoalAngle(chevalSafeArmHeight.get());
         WaitCommand wait = new WaitCommand(chevalWaitTime.get());
         
-        this.addSequential(backUp);
+        this.addParallel(backUp);
         this.addSequential(dropArm);
         this.addSequential(wait);
-        this.addSequential(crossDefense);
+        this.addSequential(beginCrossDefense);
+        this.addParallel(raiseArmSafely);
+        this.addParallel(finishCrossDefense);
     }
 }
