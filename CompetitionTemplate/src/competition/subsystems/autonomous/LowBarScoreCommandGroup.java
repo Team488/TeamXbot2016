@@ -7,7 +7,11 @@ import competition.subsystems.collector.CollectorSubsystem;
 import competition.subsystems.collector.commands.CollectorEjectCommand;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
+
 import competition.subsystems.drive.commands.DriveToWallCommand;
+import competition.subsystems.drive.commands.DriveToDistanceCommand;
+import competition.subsystems.drive.commands.HeadingModule;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -25,6 +29,7 @@ public class LowBarScoreCommandGroup extends CommandGroup{
             XPropertyManager propManager,
             PoseSubsystem pose,
             DriveSubsystem drive,
+            HeadingModule headingModule,
             CollectorSubsystem collector,
             Provider<DriveToWallCommand> driveToWallProvider,
             Provider<TurnToHeadingCommand> turnToHeadingProvider){
@@ -53,7 +58,7 @@ public class LowBarScoreCommandGroup extends CommandGroup{
         this.addSequential(turnToLowGoal);
         
         distanceToLowGoal = propManager.createPersistentProperty("distance to low goal from turning point", 139.03);
-        DriveForDistanceCommand driveToLowGoal = new DriveForDistanceCommand(pose, drive, propManager);
+        DriveToDistanceCommand driveToLowGoal = new DriveToDistanceCommand(drive, pose, propManager, headingModule);
         driveToLowGoal.setTargetDistance(distanceToLowGoal.get());
         
         this.addSequential(driveToLowGoal);

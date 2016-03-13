@@ -32,7 +32,7 @@ public class SetupTraverseDefenseCommand extends BaseAutonomousModeSetCommand {
 
     @Override
     public void initialize() {
-        traverseDefenseCommand.setTarget(traverseDefenseHeading.get());
+        traverseDefenseCommand.setTargetHeading(traverseDefenseHeading.get());
         traverseDefenseCommand.setPower(traverseDefensePower.get());
         traverseDefenseCommand.setTimeLimits(traverseMinTime.get(), traverseMaxTime.get());
         this.autonomousModeSelector.setCurrentAutonomousCommand(traverseDefenseCommand);
