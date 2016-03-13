@@ -6,9 +6,11 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import xbot.common.command.BaseSubsystem;
+import xbot.common.controls.actuators.XSolenoid;
 import xbot.common.controls.actuators.XSpeedController;
 import xbot.common.controls.sensors.XEncoder;
 import xbot.common.injection.wpi_factories.WPIFactory;
+import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
@@ -17,7 +19,11 @@ public class WinchSubsystem extends BaseSubsystem{
     public XSpeedController winchMotor;
     private static Logger log = Logger.getLogger(WinchSubsystem.class);
     public XEncoder winchEncoder;
+    public XSolenoid winchBreak;
+    
     public DoubleProperty winchDistance;
+    public DoubleProperty winchMaxSafeDistance;
+    public BooleanProperty enableSafeWinchOperation;
     
     @Inject
     public WinchSubsystem(WPIFactory factory, XPropertyManager propMan) {
@@ -35,6 +41,14 @@ public class WinchSubsystem extends BaseSubsystem{
         double distance = winchEncoder.getDistance();
         winchDistance.set(distance);
         return distance;
+    }
+    
+    public void openBreak(){
+        winchBreak.set(true);
+    }
+    
+    public void closeBreak(){
+        winchBreak.set(false);
     }
 
 }

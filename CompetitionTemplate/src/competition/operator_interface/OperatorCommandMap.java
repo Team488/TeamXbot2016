@@ -26,6 +26,8 @@ import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.winch_commands.DisengageBreakCommand;
+import competition.subsystems.hanger.winch_commands.EngageBreakCommand;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchRetractCommand;
 import competition.subsystems.drive.commands.ResetRobotPositionCommand;
@@ -136,12 +138,17 @@ public class OperatorCommandMap {
             HookExtendCommand hookExtend,
             HookRetractCommand hookRetract,
             WinchExtendCommand winchExtend,
-            WinchRetractCommand winchRetract){
+            WinchRetractCommand winchRetract,
+            EngageBreakCommand engageBreak,
+            DisengageBreakCommand disengageBreak){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
+        
+        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBreak);
+        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBreak);
     }
     
     @Inject
