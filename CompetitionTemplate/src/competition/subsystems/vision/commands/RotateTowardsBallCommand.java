@@ -10,6 +10,7 @@ import competition.subsystems.drive.commands.HeadingModule;
 import competition.subsystems.vision.BallSpatialInfo;
 import competition.subsystems.vision.VisionSubsystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.math.ContiguousHeading;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -34,12 +35,13 @@ public class RotateTowardsBallCommand extends BaseCommand {
             HeadingModule headingModule) {
         this.visionSubsystem = visionSubsystem;
         this.driveSubsystem = driveSubsystem;
+        this.poseSubsystem = poseSubsystem;
         this.headingModule = headingModule;
         requires(driveSubsystem);
         
         this.headingModule.setPIDPropertyName("Ball rotate");
         
-        cameraCenterHeading = propMan.createEphemeralProperty("Centered cam heading", -15d);
+        cameraCenterHeading = propMan.createEphemeralProperty("Centered cam heading", 15d);
         currentBallHeadingTarget = propMan.createEphemeralProperty("Current ball target", Double.POSITIVE_INFINITY);
     }
     
@@ -52,12 +54,13 @@ public class RotateTowardsBallCommand extends BaseCommand {
             log.warn("No target ball found! Nothing to track.");
             currentBallHeadingTarget.set(Double.POSITIVE_INFINITY);
         }
-        
-        currentBallHeadingTarget.set(
-                poseSubsystem.getCurrentHeading()
-                    .shiftValue(targetBall.relativeHeading)
-                    .shiftValue(-cameraCenterHeading.get())
-                    .getValue());
+        else {
+            currentBallHeadingTarget.set(
+                    poseSubsystem.getCurrentHeading()
+                        .shiftValue(-targetBall.relativeHeading)
+                        .shiftValue(-cameraCenterHeading.get())
+                        .getValue());
+        }
     }
 
     @Override

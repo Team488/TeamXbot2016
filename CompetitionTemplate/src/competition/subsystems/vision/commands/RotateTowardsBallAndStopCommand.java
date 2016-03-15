@@ -1,5 +1,7 @@
 package competition.subsystems.vision.commands;
 
+import com.google.inject.Inject;
+
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import competition.subsystems.drive.commands.HeadingModule;
@@ -10,6 +12,7 @@ import xbot.common.properties.XPropertyManager;
 public class RotateTowardsBallAndStopCommand extends RotateTowardsBallCommand {
     private DoubleProperty headingTolerance;
     
+    @Inject
     public RotateTowardsBallAndStopCommand(
             VisionSubsystem visionSubsystem,
             DriveSubsystem driveSubsystem,
@@ -21,8 +24,15 @@ public class RotateTowardsBallAndStopCommand extends RotateTowardsBallCommand {
     }
     
     @Override
-    public boolean isFinished() {        
-        return Math.abs(poseSubsystem.getCurrentHeading().difference(currentBallHeadingTarget.get()))
+    public boolean isFinished() {
+        // TODO: Check rotational speed
+        return !Double.isFinite(currentBallHeadingTarget.get()) || Math.abs(poseSubsystem.getCurrentHeading().difference(currentBallHeadingTarget.get()))
                 <= headingTolerance.get();
+    }
+    
+    @Override
+    public void end() {
+        super.end();
+        log.info("Ending");
     }
 }
