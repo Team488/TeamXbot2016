@@ -14,6 +14,9 @@ public class LightingSubsystem extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(LightingSubsystem.class);
     
+    public static final int initialOutputPin = 2;
+    public static final int numOutputPins = 2;
+    
     public enum LightingState {
         Disabled(0), BallCaptured(1), Enabled(2);
         
@@ -27,13 +30,10 @@ public class LightingSubsystem extends BaseSubsystem {
     
     @Inject
     public LightingSubsystem(WPIFactory factory) {
-        int initialPin = 2;
-        int numPins = 2;
-        outputPins = new XDigitalOutput[numPins];
-        for(int i=0; i < numPins; i++) {
-            outputPins[i] = factory.getDigitalOutput(i + initialPin);
+        outputPins = new XDigitalOutput[numOutputPins];
+        for(int i = 0; i < numOutputPins; i++) {
+            outputPins[i] = factory.getDigitalOutput(i + initialOutputPin);
         }
-        
     }
     
     public void setLightingState(LightingState state) {
