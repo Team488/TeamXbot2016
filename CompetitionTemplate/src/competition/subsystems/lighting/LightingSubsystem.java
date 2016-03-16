@@ -8,11 +8,15 @@ import com.google.inject.Singleton;
 import xbot.common.command.BaseSubsystem;
 import xbot.common.controls.actuators.XDigitalOutput;
 import xbot.common.injection.wpi_factories.WPIFactory;
+import xbot.common.properties.DoubleProperty;
+import xbot.common.properties.XPropertyManager;
 
 @Singleton
 public class LightingSubsystem extends BaseSubsystem {
 
     private static Logger log = Logger.getLogger(LightingSubsystem.class);
+    
+    private DoubleProperty ledSignalProp;
     
     public static final int initialOutputPin = 2;
     public static final int numOutputPins = 2;
@@ -29,7 +33,9 @@ public class LightingSubsystem extends BaseSubsystem {
     public final XDigitalOutput[] outputPins;
     
     @Inject
-    public LightingSubsystem(WPIFactory factory) {
+    public LightingSubsystem(WPIFactory factory, XPropertyManager propMan) {
+        ledSignalProp = propMan.createEphemeralProperty("LED signal state", 0);
+        
         outputPins = new XDigitalOutput[numOutputPins];
         for(int i = 0; i < numOutputPins; i++) {
             outputPins[i] = factory.getDigitalOutput(i + initialOutputPin);
@@ -52,10 +58,14 @@ public class LightingSubsystem extends BaseSubsystem {
             log.warn("LED data lost (not enough pins!)");
         }
         
+        // Send over DIO
         for(int i = 0; i < outputPins.length; i++)
         {
             outputPins[i].set((data & (1 << i)) != 0);
         }
+        
+        // Send over Network Tables (in Smart Dashboard table)
+        ledSignalProp.set(data);
     }
     
     public boolean isRobotEnabled() {
