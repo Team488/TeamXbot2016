@@ -41,6 +41,7 @@ import competition.subsystems.shifting.commands.ShiftHighCommand;
 import competition.subsystems.shifting.commands.ShiftLowCommand;
 import competition.subsystems.vision.commands.AcquireBallCommand;
 import competition.subsystems.vision.commands.CollectForwardBallCommand;
+import competition.subsystems.vision.commands.RotateTowardsBallAndStopCommand;
 import competition.subsystems.vision.commands.RotateTowardsBallCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristDownCommand;
 import competition.subsystems.wrist.wrist_commands.MoveWristUpCommand;
@@ -196,8 +197,8 @@ public class OperatorCommandMap {
     @Inject
     public void setupVisionCommands(
             OperatorInterface oi,
-            AcquireBallCommand acquireCommand) {
-        //oi.rightButtons.getifAvailable(3).whileHeld(acquireCommand);
+            RotateTowardsBallCommand rotateCommand) {
+        oi.rightButtons.getifAvailable(3).whileHeld(rotateCommand);
     }
     
     @Inject

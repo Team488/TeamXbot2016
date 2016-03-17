@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import competition.BaseRobotTest;
-import xbot.common.injection.BaseWPITest;
 
 public class JetsonServerManagerTest extends BaseRobotTest {
     
@@ -28,12 +27,12 @@ public class JetsonServerManagerTest extends BaseRobotTest {
        BallSpatialInfo parsedInfoA = serverManager.getLastSpatialInfoArray()[0];
        assertEquals(10, parsedInfoA.relativeHeading, 0.001);
        assertEquals(5, parsedInfoA.distanceInches, 0.001);
-       assertEquals(0.5, parsedInfoA.confidence, 0.001);
+       assertEquals(0.5, parsedInfoA.colorConfidence, 0.001);
 
        BallSpatialInfo parsedInfoB = serverManager.getLastSpatialInfoArray()[1];
        assertEquals(2, parsedInfoB.relativeHeading, 0.001);
        assertEquals(1, parsedInfoB.distanceInches, 0.001);
-       assertEquals(0.8, parsedInfoB.confidence, 0.001);
+       assertEquals(0.8, parsedInfoB.colorConfidence, 0.001);
     }
     
     @Test

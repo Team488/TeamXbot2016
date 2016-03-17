@@ -13,16 +13,24 @@ public class HeadingModule {
 
     final PoseSubsystem pose;
     private PIDManager headingDrivePid;
+    private XPropertyManager propMan;
     
     private ContiguousHeading targetHeading;
+    
+    public final double defaultPValue = 1/80d;
     
     @Inject
     public HeadingModule(PoseSubsystem pose, XPropertyManager propMan)
     {
         this.pose = pose;
+        this.propMan = propMan;
         
-        headingDrivePid = new PIDManager("HeadingModule", propMan, 1, 0, 0);
+        headingDrivePid = new PIDManager("HeadingModule", propMan, defaultPValue, 0, 0);
         targetHeading = new ContiguousHeading();
+    }
+    
+    public void setPIDPropertyName(String propertyName) {
+        headingDrivePid = new PIDManager(propertyName, propMan, defaultPValue, 0, 0);
     }
     
     public void reset() {
