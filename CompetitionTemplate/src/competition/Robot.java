@@ -70,8 +70,11 @@ public class Robot extends BaseRobot {
     
     @Override
     public void autonomousInit() {
-        this.lightingSubsystem.setRobotEnabled(true);
         logMatchInfo();
+        
+        this.lightingSubsystem.setRobotEnabled(true);
+        this.lightingSubsystem.setCurrentAlliance(DriverStation.getInstance().getAlliance());
+        
         this.autonomousCommand = this.autonomousModeSelector.getCurrentAutonomousCommand();
         
         // Base implementation will run the command
@@ -83,16 +86,22 @@ public class Robot extends BaseRobot {
     
     @Override
     public void teleopInit() {
-        this.lightingSubsystem.setRobotEnabled(true);
         logMatchInfo();
+        
+        this.lightingSubsystem.setRobotEnabled(true);
+        this.lightingSubsystem.setCurrentAlliance(DriverStation.getInstance().getAlliance());
+        
         super.teleopInit();
+        
         resetSystems();
     }
     
     @Override
     public void disabledInit() {
         super.disabledInit();
+        
         this.lightingSubsystem.setRobotEnabled(false);
+        this.lightingSubsystem.setCurrentAlliance(DriverStation.getInstance().getAlliance());
     }
     
     private void resetSystems() {
