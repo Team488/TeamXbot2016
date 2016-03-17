@@ -21,7 +21,7 @@ public class LightingSubsystem extends BaseSubsystem {
     private DoubleProperty ledSignalProp;
     private BooleanProperty enableVisionLEDProp;
     
-    public static final int initialOutputPin = 2;
+    public static final int initialOutputPin = 15;
     public static final int numOutputPins = 4;
     
     public static enum LightingState {

@@ -75,9 +75,9 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     }
     
     private void updateLighting() {
-        BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
-        // TODO: Merge and fix this
-        if(targetBall != null && 0 >= minLightConfidenceProp.get()) {
+        BallSpatialTemporalInfo targetBall = visionSubsystem.findTargetBall();
+        
+        if(targetBall != null && targetBall.getTemporalConfidence() >= minLightConfidenceProp.get()) {
             double ballAngle = targetBall.relativeHeading;
             
             if(ballAngle > ballDeflectionProp.get()) {
