@@ -108,6 +108,8 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
             switch (calibration) {
                 case NotCalibrated:
                     beginCalibrationTime = Timer.getFPGATimestamp();
+                    // Swap these lines if we have a kickstand and need to raise arm before lowering it
+                    //calibration = AttemptCalibrationState.WaitForArmToLower;
                     calibration = AttemptCalibrationState.RaiseArmToLowerKickstand;
                     armSubsystem.setArmMotorToCalibratePower();
                     break;

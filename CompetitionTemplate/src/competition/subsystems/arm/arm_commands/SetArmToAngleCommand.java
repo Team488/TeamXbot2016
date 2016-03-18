@@ -38,6 +38,7 @@ public class SetArmToAngleCommand extends BaseCommand{
     
     @Override
     public void initialize() {
+        log.info("Initializing SetArmToAngleCommand to angle: " + goalAngle);
         armTarget.setTargetAngle(goalAngle);
     }
 
