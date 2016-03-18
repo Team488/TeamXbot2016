@@ -20,7 +20,7 @@ public class WinchSubsystem extends BaseSubsystem{
     public XSpeedController winchMotor;
     private static Logger log = Logger.getLogger(WinchSubsystem.class);
     public XEncoder winchEncoder;
-    public XDigitalInput hallEffect;
+    //public XDigitalInput hallEffect;
 
     public final DoubleProperty winchDistance;
     public final DoubleProperty winchMaxSafeDistance;
@@ -33,7 +33,7 @@ public class WinchSubsystem extends BaseSubsystem{
         winchMotor = factory.getSpeedController(9);
         winchEncoder = factory.getEncoder("Winch", 2, 3, 1.0);
         winchDistance = propMan.createEphemeralProperty("WinchDistance", 0.0);
-        hallEffect = factory.getDigitalInput(16);
+        //hallEffect = factory.getDigitalInput(16);
         
         winchMaxSafeDistance = propMan.createPersistentProperty("WinchMaxSafeDistance", 100.0);
         enableSafeWinchOperation = propMan.createPersistentProperty("EnableSafeWinchOperation", false);
@@ -58,7 +58,7 @@ public class WinchSubsystem extends BaseSubsystem{
         double distance = winchEncoder.getDistance();
         winchDistance.set(distance);
         
-        winchAtLimit.set(hallEffect.get());
+        //winchAtLimit.set(hallEffect.get());
     }
     
     public double getWinchDistance() {
