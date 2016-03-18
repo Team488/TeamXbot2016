@@ -1,13 +1,18 @@
 package competition.subsystems.drive.commands;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
+import competition.subsystems.autonomous.selection.AutonomousModeSelector;
 import competition.subsystems.drive.DriveSubsystem;
 import competition.subsystems.drive.PoseSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 import xbot.common.properties.XPropertyManager;
 
 public class TraverseDefenseCommand extends HeadingDriveCommand {
+    
+    private static Logger log = Logger.getLogger(TraverseDefenseCommand.class);
     
     double minTraversalTimeSec;
     double maxTraversalTimeSec;
@@ -50,9 +55,14 @@ public class TraverseDefenseCommand extends HeadingDriveCommand {
         } else if(timeElapsed < maxTraversalTimeSec) {
             // Between min and max, keep trying until we're off the defenses
             boolean offDefense = this.pose.getDefenseState() == MonitorDefenseTraversalModule.DefenseState.NotOnDefense;
-            return wasEverOnDefense && offDefense;
+            boolean result = wasEverOnDefense && offDefense;
+            if(result) {
+                log.info("TraverseDefense Finished because Not on defense state detected and min time has elapsed.");
+            }
+            return result;
         } else {
             // If it's been longer than max, give up and stop
+            log.info("TraverseDefense Finished because maxTraversalTime exceeded.");;
             return true;
         }
     }
