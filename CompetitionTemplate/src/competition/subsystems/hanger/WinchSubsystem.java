@@ -28,7 +28,7 @@ public class WinchSubsystem extends BaseSubsystem{
     public WinchSubsystem(WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating WinchSubsystem");
         winchMotor = factory.getSpeedController(9);
-        winchEncoder = factory.getEncoder("Winch", 12, 13, 1.0);
+        winchEncoder = factory.getEncoder("Winch", 2, 3, 1.0);
         winchDistance = propMan.createEphemeralProperty("WinchDistance", 0.0);
         
         winchMaxSafeDistance = propMan.createPersistentProperty("WinchMaxSafeDistance", 100.0);

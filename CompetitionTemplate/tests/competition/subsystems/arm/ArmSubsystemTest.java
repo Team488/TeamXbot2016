@@ -58,7 +58,7 @@ public class ArmSubsystemTest extends ArmTestBase {
     @Test
     @Ignore
     public void limitSwitchTest() {
-        ((MockDigitalInput)arm.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
+        //((MockDigitalInput)arm.upperLimitSwitch).set_value(false); //mocks the upper limit switch being pressed
         
         assertTrue(arm.isArmAtMaximumHeight()); //say true if the arm is at maximum height
         

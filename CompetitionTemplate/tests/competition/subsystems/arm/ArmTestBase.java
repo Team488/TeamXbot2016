@@ -25,7 +25,7 @@ public class ArmTestBase extends BaseRobotTest {
     }
     
     protected void setLimitSwitches(boolean up, boolean down) {
-        ((MockDigitalInput)arm.upperLimitSwitch).set_value(!up);
+        //((MockDigitalInput)arm.upperLimitSwitch).set_value(!up);
         ((MockDigitalInput)arm.lowerLimitSwitch).set_value(!down);
     }
     
