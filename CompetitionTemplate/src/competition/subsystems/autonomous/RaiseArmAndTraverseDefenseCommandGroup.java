@@ -49,6 +49,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         this.addSequential(waitForArmCalibration);
         this.addSequential(this.setArm);
         this.addSequential(this.traverse);
+        // TODO: have this timeout be in the command itself vs part of the sequencing. Then we could use it for move first as well
         this.addSequential(this.moveToClearDefense, this.moveToClearDefenseDuration.get());
     }
     
@@ -62,6 +63,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         
         moveToClearDefense.setTargetHeading(heading);
         
+        // Have the moving power match the sign of the tarversal power but be generally lower
         double moveFirstPower = 0.4;
         if (power < 0) {
             moveFirstPower *= -1;
