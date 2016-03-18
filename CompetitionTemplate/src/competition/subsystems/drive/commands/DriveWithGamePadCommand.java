@@ -24,7 +24,7 @@ public class DriveWithGamePadCommand extends BaseCommand{
 
     @Override
     public void execute() {
-        driveSubsystem.tankDrive(oi.driverGamePad.getRawAxis(1) * -1, oi.driverGamePad.getRawAxis(5) * -1);
+        //driveSubsystem.tankDrive(oi.driverGamePad.getRawAxis(1) * -1, oi.driverGamePad.getRawAxis(5) * -1);
     }
     
 }

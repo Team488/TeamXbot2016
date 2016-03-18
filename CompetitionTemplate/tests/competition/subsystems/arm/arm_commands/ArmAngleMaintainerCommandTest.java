@@ -97,7 +97,7 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         angleMaintainer.execute();
         angleMaintainer.execute();
         // should be going up as normal now, since it gave up
-        verifyArmGoingUp();
+        verifyArmPower(0.0);
         
         assertTrue(!waitForCalibrate.isFinished());
         assertTrue(angleMaintainer.hasGivenUpCalibration());
@@ -123,8 +123,7 @@ public class ArmAngleMaintainerCommandTest extends ArmTestBase {
         assertTrue(angleMaintainer.hasGivenUpCalibration());
         
         angleMaintainer.execute();
-        verifyArmGoingUp();
-        
+        verifyArmPower(0);
     }
 
 }

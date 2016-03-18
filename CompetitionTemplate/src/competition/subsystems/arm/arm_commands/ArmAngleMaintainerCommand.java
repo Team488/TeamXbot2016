@@ -12,7 +12,6 @@ import xbot.common.properties.BooleanProperty;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-@Singleton
 public class ArmAngleMaintainerCommand extends BaseCommand{
     public ArmSubsystem armSubsystem;
     public ArmTargetSubsystem armTargetSubsystem;
@@ -151,6 +150,7 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     private void giveUpCalibrating() {
         armSubsystem.setArmMotorPower(0);
         gaveUpCalibrating.set(true);
+        armTargetSubsystem.setTargetAngle(armSubsystem.getArmAngle());
     }
     
     public boolean hasGivenUpCalibration() {

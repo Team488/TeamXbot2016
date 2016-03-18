@@ -18,7 +18,7 @@ public class OperatorInterface {
     public XJoystick rightJoystick;
     public XJoystick operatorJoystick;
     public XJoystick operatorPanel;
-    public XJoystick driverGamePad;
+    //public XJoystick driverGamePad;
     
     public JoystickButtonManager leftButtons; 
     public JoystickButtonManager rightButtons;
@@ -32,7 +32,7 @@ public class OperatorInterface {
         rightJoystick = factory.getJoystick(2);
         operatorJoystick = factory.getJoystick(3);
         operatorPanel = factory.getJoystick(4);
-        driverGamePad = factory.getJoystick(5);
+        //driverGamePad = factory.getJoystick(5);
 
         leftJoystick.setXInversion(true);
         leftJoystick.setYInversion(true);
@@ -45,7 +45,7 @@ public class OperatorInterface {
         rightButtons = new JoystickButtonManager(12, factory, assertionManager, rightJoystick);
         operatorButtons = new JoystickButtonManager(13, factory, assertionManager, operatorJoystick);
         operatorPanelButtons = new JoystickButtonManager(13, factory, assertionManager, operatorPanel);
-        driverGamePadButtons = new JoystickButtonManager(10, factory, assertionManager, driverGamePad);
+        //driverGamePadButtons = new JoystickButtonManager(10, factory, assertionManager, driverGamePad);
     }
 }
 

@@ -8,7 +8,7 @@ import xbot.common.command.BaseCommand;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
-@Singleton
+
 public class ArmToBottomCommand extends SetArmToAngleCommand {
     DoubleProperty position;
 
