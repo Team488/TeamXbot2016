@@ -20,7 +20,7 @@ public class ArmSubsystem extends BaseSubsystem {
     private static Logger log = Logger.getLogger(ArmSubsystem.class);
     public XSpeedController leftArmMotor;
     public XSpeedController rightArmMotor;
-    public XDigitalInput upperLimitSwitch;
+    //public XDigitalInput upperLimitSwitch;
     public XDigitalInput lowerLimitSwitch;
     public XEncoder encoder;
     
@@ -49,7 +49,7 @@ public class ArmSubsystem extends BaseSubsystem {
         rightArmMotor = factory.getSpeedController(7);
         leftArmMotor.setInverted(true);
         
-        upperLimitSwitch = factory.getDigitalInput(2);
+        //upperLimitSwitch = factory.getDigitalInput(2);
         lowerLimitSwitch = factory.getDigitalInput(0);
         encoder = factory.getEncoder("ArmEncoder", 5, 4, 1.0);
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
