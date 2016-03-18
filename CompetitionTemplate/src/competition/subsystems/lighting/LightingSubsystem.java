@@ -76,11 +76,11 @@ public class LightingSubsystem extends BaseSubsystem {
         else if (currentLightingState == LightingState.Enabled) {            
             if(currentAlliance == Alliance.Red) {
                 // Robot is on the red alliance
-                outputSignal = 2;
+                outputSignal = 6;
             }
             else {
                 // Robot is on the blue alliance
-                outputSignal = 6;
+                outputSignal = 2;
             }
 
             outputSignal += getDirectionSignalOffset();
