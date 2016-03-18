@@ -26,7 +26,9 @@ public class HookSubsystem extends BaseSubsystem{
     public HookSubsystem(WPIFactory factory, XPropertyManager propMan) {
         log.info("Creating HookSubsystem");
         hookMotor = factory.getSpeedController(8);
+        hookMotor.setInverted(true);
         hookEncoder = factory.getEncoder("Hook", 10, 11, 1.0);
+        hookEncoder.setInverted(true);
         
         hookHeight = propMan.createEphemeralProperty("HookHeight", 0.0);
         maxSafeHookHeight = propMan.createPersistentProperty("MaxSafeHookHeight", 100.0);

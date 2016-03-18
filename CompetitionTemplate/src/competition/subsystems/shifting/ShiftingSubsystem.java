@@ -12,26 +12,22 @@ import xbot.common.injection.wpi_factories.WPIFactory;
 
 @Singleton
 public class ShiftingSubsystem extends BaseSubsystem {
-    public final XSolenoid shiftHighSolenoid;
-    public final XSolenoid shiftLowSolenoid;
+    public final XSolenoid shifSolenoid;
     
     private static Logger log = Logger.getLogger(ShiftingSubsystem.class);
     
     @Inject
     public ShiftingSubsystem(WPIFactory factory){
         log.info("Creating ShiftingSubsystem");
-        shiftHighSolenoid = factory.getSolenoid(0);
-        shiftLowSolenoid = factory.getSolenoid(1);
+        shifSolenoid = factory.getSolenoid(0);
     }
     
     public void shiftHigh(){
-        shiftHighSolenoid.set(true);
-        shiftLowSolenoid.set(false);
+        shifSolenoid.set(true);
     }
     
     public void shiftLow(){
-        shiftHighSolenoid.set(false);
-        shiftLowSolenoid.set(true);
+        shifSolenoid.set(false);
     }
     
 }
