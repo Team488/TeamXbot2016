@@ -9,13 +9,13 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 @Singleton
-public class ArmToBottomCommand extends SetArmToAngleCommand {
+public class ArmToSallyPortHeightCommand extends SetArmToAngleCommand {
     DoubleProperty position;
 
     @Inject
-    public ArmToBottomCommand(ArmTargetSubsystem armTargetSubsystem, XPropertyManager propManager) {
+    public ArmToSallyPortHeightCommand(ArmTargetSubsystem armTargetSubsystem, XPropertyManager propManager) {
         super(armTargetSubsystem);
-        position = propManager.createPersistentProperty("ArmHeight Bottom", 0.0);
+        position = propManager.createPersistentProperty("ArmHeight SallyPort", 50.0);
         
     }
 

@@ -3,16 +3,22 @@ package competition.operator_interface;
 import xbot.common.controls.sensors.AnalogHIDButton.AnalogHIDDescription;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import competition.defense_commands.ChevalCommandGroup;
 import competition.defense_commands.ChevalCommandThatNeverStops;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
+import competition.subsystems.arm.arm_commands.ArmToDrawBridgeHeightCommand;
+import competition.subsystems.arm.arm_commands.ArmToSallyPortHeightCommand;
+import competition.subsystems.arm.arm_commands.ArmToScalingHeightCommand;
 import competition.subsystems.arm.arm_commands.ArmToTopCommand;
+import competition.subsystems.arm.arm_commands.ArmToTravelHeightCommand;
 import competition.subsystems.arm.arm_commands.CalibrateArmLowCommand;
 import competition.subsystems.arm.arm_commands.LowerArmCommand;
 import competition.subsystems.arm.arm_commands.RaiseArmCommand;
+import competition.subsystems.arm.arm_commands.SetArmToAngleCommand;
 import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
@@ -85,10 +91,11 @@ public class OperatorCommandMap {
     @Inject
     public void setupArmCommands (
             OperatorInterface operatorInterface,
-            RaiseArmCommand raiseArmCommand,
-            LowerArmCommand lowerArmCommand,
-            ArmToTopCommand armToTopCommand,
             ArmToBottomCommand armToBottomCommand,
+            ArmToDrawBridgeHeightCommand armToDrawBridgeHeightCommand,
+            ArmToSallyPortHeightCommand armToSallyPortHeightCommand,
+            ArmToScalingHeightCommand armToScalingHeightCommand,
+            ArmToTravelHeightCommand armToTravelHeightCommand,
             ArmManualControlCommand armManual,
             CalibrateArmLowCommand calibrateArmLow)
     {
@@ -103,8 +110,15 @@ public class OperatorCommandMap {
         
         operatorInterface.operatorButtons.getifAvailable(7).whenPressed(calibrateArmLow);
         
-//        operatorInterface.operatorButtons.getifAvailable(3).whenPressed(armToTopCommand);
-//        operatorInterface.operatorButtons.getifAvailable(4).whenPressed(armToBottomCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(1).whenPressed(armToBottomCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(2).whenPressed(armToTravelHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(3).whenPressed(armToDrawBridgeHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(4).whenPressed(armToSallyPortHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(5).whenPressed(armToScalingHeightCommand);
+        
+        
+        
+        
     }
     
     @Inject
@@ -155,8 +169,8 @@ public class OperatorCommandMap {
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
 
-        oi.operatorPanelButtons.getifAvailable(3).whenPressed(engageBrake);
-        oi.operatorPanelButtons.getifAvailable(4).whenPressed(disengageBrake);
+        oi.rightButtons.getifAvailable(9).whenPressed(engageBrake);
+        oi.rightButtons.getifAvailable(10).whenPressed(disengageBrake);
         
         oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
