@@ -58,6 +58,13 @@ public class OperatorCommandMap {
 
     // Example for setting up a command to fire when a button is pressed:
     
+    /*
+     * OI panel saftey switch mappings (physical location to button number
+     * 1:10 2:11 3:12
+     * 4:8 5:9 
+     * Auto-pot: x-axis
+     */
+    
     @Inject
     public void setupDriveCommands(
             OperatorInterface operatorInterface,
@@ -110,12 +117,11 @@ public class OperatorCommandMap {
         
         operatorInterface.operatorButtons.getifAvailable(7).whenPressed(calibrateArmLow);
         
-        operatorInterface.operatorPanelButtons.getifAvailable(1).whenPressed(armToBottomCommand);
-        operatorInterface.operatorPanelButtons.getifAvailable(2).whenPressed(armToTravelHeightCommand);
-        operatorInterface.operatorPanelButtons.getifAvailable(3).whenPressed(armToDrawBridgeHeightCommand);
-        operatorInterface.operatorPanelButtons.getifAvailable(4).whenPressed(armToSallyPortHeightCommand);
-        operatorInterface.operatorPanelButtons.getifAvailable(5).whenPressed(armToScalingHeightCommand);
-        
+        operatorInterface.operatorPanelButtons.getifAvailable(5).whenPressed(armToBottomCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(6).whenPressed(armToTravelHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(2).whenPressed(armToDrawBridgeHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(3).whenPressed(armToSallyPortHeightCommand);
+        operatorInterface.operatorPanelButtons.getifAvailable(4).whenPressed(armToScalingHeightCommand);
         
         
         
