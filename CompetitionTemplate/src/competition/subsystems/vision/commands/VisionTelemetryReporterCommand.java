@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 
+import competition.subsystems.lighting.LightingSubsystem;
+import competition.subsystems.lighting.LightingSubsystem.BallDetectionDirection;
 import competition.subsystems.vision.BallSpatialInfo;
 import competition.subsystems.vision.BallSpatialTemporalInfo;
 import competition.subsystems.vision.VisionStateMonitor;
@@ -30,9 +32,15 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     private VisionSubsystem visionSubsystem;
     private VisionStateMonitor monitor;
     
+    private LightingSubsystem lightingSubsystem;
+    private DoubleProperty minLightConfidenceProp;
+    private DoubleProperty ballDeflectionProp;
+    
     @Inject
-    public VisionTelemetryReporterCommand(VisionSubsystem visionSubsystem, XPropertyManager propMan) {
+    public VisionTelemetryReporterCommand(VisionSubsystem visionSubsystem, LightingSubsystem lightingSubsystem, XPropertyManager propMan) {
         this.visionSubsystem = visionSubsystem;
+        this.lightingSubsystem = lightingSubsystem;
+        
         setRunWhenDisabled(true);
         requires(visionSubsystem);
         
@@ -45,6 +53,9 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         colorConfidenceProp = propMan.createEphemeralProperty("Target ball color confidence", 0d);
         numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0d);
         visionHealthProp = propMan.createEphemeralProperty("Is vision connection healthy?", false);
+        
+        minLightConfidenceProp = propMan.createPersistentProperty("Min ball confidence for lights", 8);
+        ballDeflectionProp = propMan.createPersistentProperty("Minimum LED ball deflection", 15);
     }
     
     @Override
@@ -60,8 +71,30 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         monitor.update();
         updateSmartDashboardProperties();
+        updateLighting();
     }
     
+    private void updateLighting() {
+        BallSpatialTemporalInfo targetBall = visionSubsystem.findTargetBall();
+        
+        if(targetBall != null && targetBall.getTemporalConfidence() >= minLightConfidenceProp.get()) {
+            double ballAngle = targetBall.relativeHeading;
+            
+            if(ballAngle > ballDeflectionProp.get()) {
+                lightingSubsystem.setCurrentBallDirection(BallDetectionDirection.Left);
+            }
+            else if(ballAngle < -ballDeflectionProp.get()) {
+                lightingSubsystem.setCurrentBallDirection(BallDetectionDirection.Right);
+            }
+            else {
+                lightingSubsystem.setCurrentBallDirection(BallDetectionDirection.Center);
+            }
+        }
+        else {
+            lightingSubsystem.setCurrentBallDirection(BallDetectionDirection.None);
+        }
+    }
+
     private void updateSmartDashboardProperties() {
         BallSpatialTemporalInfo[] ballInfo = visionSubsystem.getTrackedBoulders();
         BallSpatialInfo targetBall = visionSubsystem.findTargetBall();

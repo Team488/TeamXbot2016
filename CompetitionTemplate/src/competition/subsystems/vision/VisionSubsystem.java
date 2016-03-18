@@ -79,7 +79,7 @@ public class VisionSubsystem extends BaseSubsystem {
         return this.ballTracker.getTrackedBalls();
     }
     
-    public BallSpatialInfo findTargetBall() {
+    public BallSpatialTemporalInfo findTargetBall() {
         // TODO: Update this method for intelligent temporal logic
         BallSpatialTemporalInfo[] ballInfo = this.getTrackedBoulders();
         
