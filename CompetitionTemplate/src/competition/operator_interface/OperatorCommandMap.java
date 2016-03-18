@@ -23,6 +23,7 @@ import competition.subsystems.autonomous.LowBarScoreCommandGroup;
 import competition.subsystems.autonomous.TurnToHeadingCommand;
 import competition.subsystems.autonomous.selection.DisableAutonomousCommand;
 import competition.subsystems.autonomous.selection.SetupLowBarCommand;
+import competition.subsystems.autonomous.selection.SetupRockWallCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseBackwardsCommand;
 import competition.subsystems.autonomous.selection.SetupRoughDefenseForwardsCommand;
 import competition.subsystems.drive.commands.CalibrateHeadingCommand;
@@ -178,7 +179,7 @@ public class OperatorCommandMap {
         oi.rightButtons.getifAvailable(9).whenPressed(engageBrake);
         oi.rightButtons.getifAvailable(10).whenPressed(disengageBrake);
         
-        oi.leftButtons.getifAvailable(11).whileHeld(scale);
+        //oi.leftButtons.getifAvailable(11).whileHeld(scale);
         
         winchFollow.includeOnSmartDashboard();
         scale.includeOnSmartDashboard();
@@ -194,7 +195,8 @@ public class OperatorCommandMap {
             DisableAutonomousCommand disableAutonomousCommand,
             SetupLowBarCommand setupLowBarCommand,
             SetupRoughDefenseBackwardsCommand setupRoughDefenseBackwardsCommand,
-            SetupRoughDefenseForwardsCommand setupRoughDefenseCommand){
+            SetupRoughDefenseForwardsCommand setupRoughDefenseCommand,
+            SetupRockWallCommand setupRockWallCommand){
         driveToTurningPoint.setTargetDistance(lowBarScoreGroup.distanceFromWallToTurningPoint.get());
         driveToTurningPoint.includeOnSmartDashboard();
         
@@ -207,11 +209,13 @@ public class OperatorCommandMap {
         disableAutonomousCommand.includeOnSmartDashboard();
         setupLowBarCommand.includeOnSmartDashboard();
         setupRoughDefenseCommand.includeOnSmartDashboard();
+        setupRockWallCommand.includeOnSmartDashboard();
         
         oi.leftButtons.getifAvailable(8).whenPressed(setupLowBarCommand);
         oi.leftButtons.getifAvailable(9).whenPressed(setupRoughDefenseCommand);
         oi.leftButtons.getifAvailable(10).whenPressed(disableAutonomousCommand);
         oi.leftButtons.getifAvailable(7).whenPressed(setupRoughDefenseBackwardsCommand);
+        oi.leftButtons.getifAvailable(11).whenPressed(setupRockWallCommand);
     }
     
     @Inject
