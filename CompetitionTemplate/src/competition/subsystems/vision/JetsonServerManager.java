@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.log4j.Logger;
@@ -20,14 +21,20 @@ public class JetsonServerManager {
     private Rectangle[] lastSentRectArray = null;
     private BallSpatialInfo[] lastSentSpatialInfo = null;
     
+    private Consumer<PacketPayloadType> notifyNewPacket;
+    
     private JetsonServer server;
 
     @Inject
     public JetsonServerManager(JetsonServer server) {
         this.server = server;
-        server.setPacketHandler(packet -> handlePacket(packet));
         
+        server.setPacketHandler(packet -> handlePacket(packet));
         server.startServer();
+    }
+    
+    public void setNewPacketNotification(Consumer<PacketPayloadType> notifyNewPacket) {
+        this.notifyNewPacket = notifyNewPacket;
     }
 
     private <T> ArrayList<T> parseObjectsFromPayload(int[] payload, int intsPerObject,
@@ -66,6 +73,10 @@ public class JetsonServerManager {
             }).toArray(lastSentSpatialInfo);
         } else {
             log.error("Unhandled packet header type!");
+        }
+        
+        if(notifyNewPacket != null) {
+            notifyNewPacket.accept(newPacket.getPayloadType());
         }
     }
 

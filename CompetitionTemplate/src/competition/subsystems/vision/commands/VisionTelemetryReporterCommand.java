@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 
 import competition.subsystems.vision.BallSpatialInfo;
+import competition.subsystems.vision.BallSpatialTemporalInfo;
 import competition.subsystems.vision.VisionStateMonitor;
 import competition.subsystems.vision.VisionSubsystem;
 import edu.wpi.first.wpilibj.Timer;
@@ -17,13 +18,13 @@ import xbot.common.properties.XPropertyManager;
 public class VisionTelemetryReporterCommand extends BaseCommand {
     static Logger log = Logger.getLogger(VisionTelemetryReporterCommand.class);
     
-    private final double spewInterval = 10; // Seconds
+    private DoubleProperty spewInterval;
     private double lastSpewTimestamp = Double.NEGATIVE_INFINITY;
 
     private DoubleProperty ballAngleProp;
     private DoubleProperty ballDistanceProp;
     private DoubleProperty numBallsProp;
-    private DoubleProperty confidenceProp;
+    private DoubleProperty colorConfidenceProp;
     private BooleanProperty visionHealthProp;
     
     private VisionSubsystem visionSubsystem;
@@ -37,9 +38,11 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
         
         monitor = new VisionStateMonitor(visionSubsystem);
         
+        spewInterval = propMan.createPersistentProperty("Ball telemetry interval", 10);
+        
         ballAngleProp = propMan.createEphemeralProperty("Target ball angle", 0d);
         ballDistanceProp = propMan.createEphemeralProperty("Target ball distance", -1d);
-        confidenceProp = propMan.createEphemeralProperty("Target ball confidence", 0d);
+        colorConfidenceProp = propMan.createEphemeralProperty("Target ball color confidence", 0d);
         numBallsProp = propMan.createEphemeralProperty("Number of tracked balls", 0d);
         visionHealthProp = propMan.createEphemeralProperty("Is vision connection healthy?", false);
     }
@@ -60,18 +63,18 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     }
     
     private void updateSmartDashboardProperties() {
-        BallSpatialInfo[] ballInfo = visionSubsystem.getBoulderInfo();
+        BallSpatialTemporalInfo[] ballInfo = visionSubsystem.getTrackedBoulders();
         BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
         
         this.ballAngleProp.set(targetBall == null ? 0 : targetBall.relativeHeading);
         this.ballDistanceProp.set(targetBall == null ? 0 : targetBall.distanceInches);
-        this.confidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.confidence * 100));
+        this.colorConfidenceProp.set(targetBall == null ? 0 : Math.round(targetBall.colorConfidence * 100));
         this.numBallsProp.set(ballInfo == null ? 0 : ballInfo.length);
         this.visionHealthProp.set(visionSubsystem.isConnectionHealthy());
     }
 
     public void updateLogInfo() {
-        int numSpatial = visionSubsystem.getBoulderInfo() == null ? 0 : visionSubsystem.getBoulderInfo().length;
+        int numSpatial = visionSubsystem.getTrackedBoulders() == null ? 0 : visionSubsystem.getTrackedBoulders().length;
         log.info("Currently has " + numSpatial + " spatial coords"
                 + " (connection is " + (visionSubsystem.isConnectionHealthy() ? "healthy" : "unhealthy") + ")");
         
@@ -79,6 +82,6 @@ public class VisionTelemetryReporterCommand extends BaseCommand {
     }
     
     private boolean isPastLogInterval() {
-        return Timer.getFPGATimestamp() - lastSpewTimestamp > spewInterval;
+        return Timer.getFPGATimestamp() - lastSpewTimestamp > spewInterval.get();
     }
 }

@@ -1,5 +1,7 @@
 package competition.subsystems.vision.commands;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import competition.subsystems.collector.CollectorSubsystem;
@@ -12,7 +14,8 @@ import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 public class CollectForwardBallCommand extends BaseCommand {
-
+    static Logger log = Logger.getLogger(CollectForwardBallCommand.class);
+    
     protected PoseSubsystem poseSubsystem;
     protected DriveSubsystem driveSubsystem;
     protected VisionSubsystem visionSubsystem;
@@ -39,18 +42,12 @@ public class CollectForwardBallCommand extends BaseCommand {
 
     @Override
     public void initialize() {
+        log.info("Initializing...");
+        
         poseSubsystem.resetDistanceTraveled();
         
-        BallSpatialInfo targetBall = visionSubsystem.findTargetBall();
-        
-        if(targetBall == null || targetBall.distanceInches > visionSubsystem.getMaxBallAcquireDistance()) {
-            targetDistance = 0;
-            isInvalid = true;
-            
-            return;
-        }
-        
-        targetDistance = targetBall.distanceInches + 12;
+        // Travel for max distance -- driver should release the button as needed.
+        targetDistance = visionSubsystem.getMaxBallAcquireDistance();
     }
 
     @Override
@@ -63,10 +60,5 @@ public class CollectForwardBallCommand extends BaseCommand {
     public void end() {
         collectorSubsystem.stopCollector();
         driveSubsystem.stopDrive();
-    }
-    
-    @Override
-    public boolean isFinished() {
-        return isInvalid || poseSubsystem.getRobotOrientedTotalDistanceTraveled().y >= targetDistance;
     }
 }

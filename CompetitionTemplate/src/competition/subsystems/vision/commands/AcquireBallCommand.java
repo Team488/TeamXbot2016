@@ -15,7 +15,7 @@ public class AcquireBallCommand extends BaseCommandGroup {
     public AcquireBallCommand(DriveSubsystem driveSubsystem, HeadingModule headingModule, PoseSubsystem pose,
             CollectorSubsystem collector, VisionSubsystem visionSubsystem, XPropertyManager propMan) {
         
-        RotateTowardsBallAndStopCommand rotateCommand = new RotateTowardsBallAndStopCommand(visionSubsystem, driveSubsystem, propMan);
+        RotateTowardsBallAndStopCommand rotateCommand = new RotateTowardsBallAndStopCommand(visionSubsystem, driveSubsystem, pose, headingModule, propMan);
         this.addSequential(rotateCommand);
         
         CollectForwardBallCommand collectCommand = new CollectForwardBallCommand(pose, driveSubsystem, visionSubsystem, collector, propMan);
