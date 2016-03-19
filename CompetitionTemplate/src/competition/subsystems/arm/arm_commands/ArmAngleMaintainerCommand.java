@@ -71,27 +71,31 @@ public class ArmAngleMaintainerCommand extends BaseCommand{
     @Override
     public void execute() {
         
-        boolean isCurrentlyCalibrated = armSubsystem.isCalibrated();
+        if(!this.armSubsystem.maintainerEnabled.get()) {
+            armSubsystem.setArmMotorPower(0);
+        } else {
+            boolean isCurrentlyCalibrated = armSubsystem.isCalibrated();
+            
+            if (!oldIsCalibrated && isCurrentlyCalibrated) {
+                // we just got calibrated!
+                armTargetSubsystem.setTargetAngle(0);
+            }
+            
+            oldIsCalibrated = isCurrentlyCalibrated;
+            
+            // just in case the system underneath is not running        
+            if (isCurrentlyCalibrated || gaveUpCalibrating.get()) {
+            
+                double currentArmAngle = armSubsystem.getArmAngle();
+                double targetArmAngle = armTargetSubsystem.getTargetAngle();
         
-        if (!oldIsCalibrated && isCurrentlyCalibrated) {
-            // we just got calibrated!
-            armTargetSubsystem.setTargetAngle(0);
-        }
+                double armPower = pidManager.calculate(targetArmAngle, currentArmAngle);
         
-        oldIsCalibrated = isCurrentlyCalibrated;
-        
-        // just in case the system underneath is not running        
-        if (isCurrentlyCalibrated || gaveUpCalibrating.get()) {
-        
-            double currentArmAngle = armSubsystem.getArmAngle();
-            double targetArmAngle = armTargetSubsystem.getTargetAngle();
-    
-            double armPower = pidManager.calculate(targetArmAngle, currentArmAngle);
-    
-            armSubsystem.setArmMotorPower(armPower);
-        }
-        else {
-            attemptCalibration();
+                armSubsystem.setArmMotorPower(armPower);
+            }
+            else {
+                attemptCalibration();
+            }
         }
          
     }
