@@ -3,15 +3,16 @@ package competition.subsystems.hanger.hook_commands;
 import com.google.inject.Inject;
 
 import competition.subsystems.arm.ArmSubsystem;
+import competition.subsystems.hanger.HookPoseSubsystem;
 import competition.subsystems.hanger.HookSubsystem;
 import xbot.common.command.BaseCommand;
 
 public class UpdateHookSensorsCommand extends BaseCommand {
-    HookSubsystem hookSubsystem;
+    HookPoseSubsystem hookPose;
     
     @Inject
-    public UpdateHookSensorsCommand(HookSubsystem hookSubsystem) {
-        this.hookSubsystem = hookSubsystem;
+    public UpdateHookSensorsCommand(HookPoseSubsystem hookPose) {
+        this.hookPose = hookPose;
         this.setRunWhenDisabled(true);
     }
     
@@ -22,7 +23,7 @@ public class UpdateHookSensorsCommand extends BaseCommand {
 
     @Override
     public void execute() {
-        hookSubsystem.updateHookSensors();
+        hookPose.updateHookSensors();
     }
 
 }

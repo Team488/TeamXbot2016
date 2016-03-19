@@ -16,33 +16,30 @@ import xbot.common.properties.XPropertyManager;
 public class HookSubsystem extends BaseSubsystem{
     
     public XSpeedController hookMotor;
-    private static Logger log = Logger.getLogger(HookSubsystem.class);
-    public XEncoder hookEncoder;
-    final DoubleProperty hookHeight;
+    private static Logger log = Logger.getLogger(HookSubsystem.class);    
     final DoubleProperty maxSafeHookHeight;
     final BooleanProperty enableSafeHookOperation;
     
+    HookPoseSubsystem hookPose;
+    
     @Inject
-    public HookSubsystem(WPIFactory factory, XPropertyManager propMan) {
+    public HookSubsystem(WPIFactory factory, XPropertyManager propMan, HookPoseSubsystem hookPose) {
+        this.hookPose = hookPose;
+        
         log.info("Creating HookSubsystem");
-        hookMotor = factory.getSpeedController(8);
-        hookMotor.setInverted(true);
-        hookEncoder = factory.getEncoder("Hook", 10, 11, 1.0);
-        hookEncoder.setInverted(true);
+        hookMotor = factory.getSpeedController(8);        
         
-        hookHeight = propMan.createEphemeralProperty("HookHeight", 0.0);
         maxSafeHookHeight = propMan.createPersistentProperty("MaxSafeHookHeight", 100.0);
-        
         enableSafeHookOperation = propMan.createPersistentProperty("EnableSafeHookOperation", false);
     }
     
     public void setHookMotorPower(double power) {
         if (enableSafeHookOperation.get()) {
-            if (getHookDistance() > maxSafeHookHeight.get()) {
+            if (hookPose.getHookDistance() > maxSafeHookHeight.get()) {
                 // We're at the max safe extension - only allow negative (retracting) power
                 power = Math.min(power, 0);
             }
-            if (getHookDistance() < 0) {
+            if (hookPose.getHookDistance() < 0) {
                 // We're all the way at the bottom - don't try to pull any more!
                 power = Math.max(power, 0);
             }
@@ -51,14 +48,5 @@ public class HookSubsystem extends BaseSubsystem{
         hookMotor.set(power);
     }
     
-    public void updateHookSensors() {
-        double distance = hookEncoder.getDistance();
-        hookHeight.set(distance);
-    }
-    
-    public double getHookDistance() {
-        updateHookSensors();
-        return hookHeight.get();
-    }
 
 }

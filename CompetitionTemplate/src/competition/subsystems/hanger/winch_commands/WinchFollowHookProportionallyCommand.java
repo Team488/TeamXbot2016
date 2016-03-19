@@ -2,6 +2,7 @@ package competition.subsystems.hanger.winch_commands;
 
 import com.google.inject.Inject;
 
+import competition.subsystems.hanger.HookPoseSubsystem;
 import competition.subsystems.hanger.HookSubsystem;
 import competition.subsystems.hanger.WinchSubsystem;
 import xbot.common.command.BaseCommand;
@@ -12,6 +13,7 @@ import xbot.common.properties.XPropertyManager;
 public class WinchFollowHookProportionallyCommand extends BaseCommand{
 
     HookSubsystem hook;
+    HookPoseSubsystem hookPose;
     WinchSubsystem winch;
     
     final DoubleProperty winchFollowHookOffset;
@@ -22,10 +24,12 @@ public class WinchFollowHookProportionallyCommand extends BaseCommand{
     @Inject
     public WinchFollowHookProportionallyCommand(
             HookSubsystem hook, 
+            HookPoseSubsystem hookPose,
             WinchSubsystem winch, 
             XPropertyManager propMan) {
         this.hook = hook;
         this.winch = winch;
+        this.hookPose = hookPose;
         
         winchFollowHookOffset = propMan.createPersistentProperty("WinchFollowHookOffset", 5.0);
         winchFollowHookRatio = propMan.createPersistentProperty("WinchFollowHookRatio", 1.0);
@@ -44,7 +48,7 @@ public class WinchFollowHookProportionallyCommand extends BaseCommand{
     @Override
     public void execute() {
         // where is the hook?
-        double hookPosition = hook.getHookDistance();
+        double hookPosition = hookPose.getHookDistance();
         double targetWinchPosition = 
                 (hookPosition * winchFollowHookRatio.get()) + winchFollowHookOffset.get(); 
         // where is the winch?

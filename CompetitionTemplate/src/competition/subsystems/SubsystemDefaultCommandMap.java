@@ -14,6 +14,7 @@ import competition.subsystems.drive.commands.UpdatePoseCommand;
 import competition.subsystems.hanger.HookSubsystem;
 import competition.subsystems.hanger.WinchBrakeSubsystem;
 import competition.subsystems.hanger.WinchSubsystem;
+import competition.subsystems.hanger.hook_commands.HookMaintainerCommand;
 import competition.subsystems.hanger.hook_commands.HookStopCommand;
 import competition.subsystems.hanger.winch_commands.WinchStopCommand;
 import competition.subsystems.hanger.winch_commands.winch_brake.DisengageBrakeCommand;
@@ -80,8 +81,9 @@ public class SubsystemDefaultCommandMap {
     @Inject
     public void setupHookSubsystem(
             HookSubsystem hookSubsystem,
-            HookStopCommand hookStop){
-        hookSubsystem.setDefaultCommand(hookStop);
+            HookStopCommand hookStop,
+            HookMaintainerCommand hookMaintainer){
+        hookSubsystem.setDefaultCommand(hookMaintainer);
     }
     
     @Inject

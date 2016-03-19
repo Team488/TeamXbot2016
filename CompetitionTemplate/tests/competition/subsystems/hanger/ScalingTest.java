@@ -13,6 +13,7 @@ import xbot.common.injection.BaseWPITest;
 public class ScalingTest extends BaseWPITest {
 
     HookSubsystem hook;
+    HookPoseSubsystem hookPose;
     WinchSubsystem winch;
     
     WinchFollowHookProportionallyCommand follow;
@@ -23,12 +24,13 @@ public class ScalingTest extends BaseWPITest {
         
         hook = injector.getInstance(HookSubsystem.class);
         winch = injector.getInstance(WinchSubsystem.class);
+        hookPose = injector.getInstance(HookPoseSubsystem.class);
         
         follow = injector.getInstance(WinchFollowHookProportionallyCommand.class);
     }
     
     private void setEncoders(double hookDistance, double winchDistance) {
-        ((MockEncoder)hook.hookEncoder).setDistance(hookDistance);
+        ((MockEncoder)hookPose.hookEncoder).setDistance(hookDistance);
         ((MockEncoder)winch.winchEncoder).setDistance(winchDistance);
     }
     

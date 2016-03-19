@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.subsystems.arm.ArmSubsystem;
@@ -22,10 +23,12 @@ public class HookSubsystemTest extends BaseWPITest{
     HookStopCommand stop;
     
     HookSubsystem hook;
+    HookPoseSubsystem hookPose;
     
     @Before
     public void setup() {
         hook = injector.getInstance(HookSubsystem.class);
+        hookPose = injector.getInstance(HookPoseSubsystem.class);
         
         extend = injector.getInstance(HookExtendCommand.class);
         retract = injector.getInstance(HookRetractCommand.class);
@@ -60,8 +63,8 @@ public class HookSubsystemTest extends BaseWPITest{
     
     @Test
     public void testDistance() {
-        assertEquals(0, hook.getHookDistance(), 0.001);
-        ((MockEncoder)hook.hookEncoder).setDistance(100);
-        assertEquals(100, hook.getHookDistance(), 0.001);
+        assertEquals(0, hookPose.getHookDistance(), 0.001);
+        ((MockEncoder)hookPose.hookEncoder).setDistance(100);
+        assertEquals(100, hookPose.getHookDistance(), 0.001);
     }
 }
