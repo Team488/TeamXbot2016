@@ -34,6 +34,7 @@ import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.hook_commands.SetHookPositionGoalCommand;
 import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
 import competition.subsystems.hanger.winch_commands.WinchFollowHookProportionallyCommand;
@@ -113,7 +114,9 @@ public class OperatorCommandMap {
             ArmToScalingHeightCommand armToScalingHeightCommand,
             ArmToTravelHeightCommand armToTravelHeightCommand,
             ArmManualControlCommand armManual,
-            CalibrateArmLowCommand calibrateArmLow)
+            CalibrateArmLowCommand calibrateArmLow,
+            SetHookPositionGoalCommand setMedium,
+            SetHookPositionGoalCommand setLarge)
     {
         double minValue = 0.15;
         AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
@@ -124,7 +127,10 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getAnalogIfAvailable(yUp).whileHeld(armManual);
         operatorInterface.operatorButtons.getAnalogIfAvailable(yDown).whileHeld(armManual);
         
-        operatorInterface.operatorButtons.getifAvailable(7).whenPressed(calibrateArmLow);
+        setMedium.setTargetPosition(15);
+        setLarge.setTargetPosition(30);
+        operatorInterface.operatorButtons.getifAvailable(7).whenPressed(setMedium);
+        operatorInterface.operatorButtons.getifAvailable(8).whenPressed(setLarge);
         
         operatorInterface.operatorPanelButtons.getifAvailable(5).whenPressed(armToBottomCommand);
         operatorInterface.operatorPanelButtons.getifAvailable(6).whenPressed(armToTravelHeightCommand);
