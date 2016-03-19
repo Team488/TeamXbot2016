@@ -28,6 +28,7 @@ public class HookSubsystem extends BaseSubsystem{
         
         log.info("Creating HookSubsystem");
         hookMotor = factory.getSpeedController(8);        
+        hookMotor.setInverted(true);
         
         maxSafeHookHeight = propMan.createPersistentProperty("MaxSafeHookHeight", 100.0);
         enableSafeHookOperation = propMan.createPersistentProperty("EnableSafeHookOperation", false);

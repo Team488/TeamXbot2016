@@ -46,6 +46,8 @@ public class HookMaintainerCommand extends BaseCommand {
     public void initialize() {
         velocityPID.reset();
         positionPID.reset();
+        
+        this.positionTarget.setTargetPosition(pose.getHookDistance());
     }
 
     @Override
