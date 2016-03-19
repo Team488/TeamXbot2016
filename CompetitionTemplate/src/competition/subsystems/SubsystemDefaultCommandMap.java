@@ -45,7 +45,7 @@ public class SubsystemDefaultCommandMap {
     public void setupShiftingSubsystem(
             ShiftingSubsystem shiftingSubsystem,
             ShiftHighCommand shiftHighCommand) {
-        shiftingSubsystem.setDefaultCommand(shiftHighCommand);
+        
     }
     
     @Inject

@@ -24,7 +24,7 @@ public class ShiftingSubsystemTest extends BaseRobotTest {
         
         shiftHighCommand.initialize();
         
-        assertTrue(shiftingSubsystem.shifSolenoid.get());
+        assertTrue(!shiftingSubsystem.shifSolenoid.get());
     }
     
     @Test
@@ -33,6 +33,6 @@ public class ShiftingSubsystemTest extends BaseRobotTest {
         
         shiftLowCommand.initialize();
         
-        assertTrue(!(shiftingSubsystem.shifSolenoid.get()));
+        assertTrue((shiftingSubsystem.shifSolenoid.get()));
     }
 }

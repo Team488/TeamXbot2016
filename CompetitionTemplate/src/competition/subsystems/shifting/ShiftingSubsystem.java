@@ -23,11 +23,11 @@ public class ShiftingSubsystem extends BaseSubsystem {
     }
     
     public void shiftHigh(){
-        shifSolenoid.set(true);
+        shifSolenoid.set(false);
     }
     
     public void shiftLow(){
-        shifSolenoid.set(false);
+        shifSolenoid.set(true);
     }
     
 }
