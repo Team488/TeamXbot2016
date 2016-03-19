@@ -3,6 +3,7 @@ package competition.subsystems.wrist;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import competition.subsystems.arm.ArmSubsystem;
@@ -35,6 +36,7 @@ public class WristSubsystemTest extends BaseWPITest{
     }
     
     @Test
+    @Ignore
     public void tryMoveWristUpInDangerZone() {
         MoveWristUpCommand moveWristUpCommand = this.injector.getInstance(MoveWristUpCommand.class);
         

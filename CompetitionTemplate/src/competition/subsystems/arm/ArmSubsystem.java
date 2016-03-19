@@ -61,7 +61,7 @@ public class ArmSubsystem extends BaseSubsystem {
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);
         upperAngleLimit = propManager.createPersistentProperty("upperArmAngleLimit", 90.0);
                
-        armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", 0.0);
+        armEncoderCalibrationHeight = propManager.createEphemeralProperty("armEncoderCalibrationHeight", -90.0);
         armEncoderCalibrated = propManager.createEphemeralProperty("armEncoderCalibrated", false);
         armCalibrationPower = propManager.createPersistentProperty("armCalibrationPower", -0.2);
         

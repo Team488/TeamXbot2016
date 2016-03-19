@@ -92,10 +92,10 @@ public class ArmSubsystemTest extends ArmTestBase {
     @Test
     public void testCalibration() {
         setMockEncoder(0);
-        assertEquals(0, arm.getArmAngle(), 0.001);
+        assertEquals(90, arm.getArmAngle(), 0.001);
         
         setMockEncoder(-100);
-        assertEquals(-100, arm.getArmAngle(), 0.001);
+        assertEquals(-10, arm.getArmAngle(), 0.001);
         
         setLimitSwitches(false, true);
         arm.updateSensors();
