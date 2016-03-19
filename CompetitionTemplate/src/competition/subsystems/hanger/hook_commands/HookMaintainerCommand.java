@@ -7,6 +7,7 @@ import competition.subsystems.hanger.HookPositionTargetSubsystem;
 import competition.subsystems.hanger.HookSubsystem;
 import competition.subsystems.hanger.HookVelocityTargetSystem;
 import xbot.common.command.BaseCommand;
+import xbot.common.math.MathUtils;
 import xbot.common.math.PIDManager;
 import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
@@ -22,6 +23,9 @@ public class HookMaintainerCommand extends BaseCommand {
     private final PIDManager positionPID;
     
     private final DoubleProperty maxHookVelocity;
+    private final DoubleProperty maxHookThrottle;
+    
+    private double throttle;
     
     @Inject
     public HookMaintainerCommand(XPropertyManager propMan,
@@ -40,6 +44,7 @@ public class HookMaintainerCommand extends BaseCommand {
         positionPID = new PIDManager("HookPosition", propMan, 1.0, 0, 0);
         
         maxHookVelocity = propMan.createPersistentProperty("MaxHookVelocity", 5.0);
+        maxHookThrottle = propMan.createPersistentProperty("MaxHookThrottle", 1.0);
     }
 
     @Override
@@ -65,7 +70,9 @@ public class HookMaintainerCommand extends BaseCommand {
         
         double power = velocityPID.calculate(adjustedGoalVelocity, currentVelocity);
         
-        hook.setHookMotorPower(power);
+        throttle += power;
+        throttle = MathUtils.constrainDouble(throttle, -maxHookThrottle.get(), maxHookThrottle.get());
+        hook.setHookMotorPower(throttle);
     }
     
     

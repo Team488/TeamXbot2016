@@ -34,6 +34,8 @@ import competition.subsystems.drive.commands.DriveToWallCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
+import competition.subsystems.hanger.hook_commands.ModifyHookTargetGoalCommand;
+import competition.subsystems.hanger.hook_commands.RaiseHookToBarCommand;
 import competition.subsystems.hanger.hook_commands.SetHookPositionGoalCommand;
 import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
 import competition.subsystems.hanger.winch_commands.WinchExtendCommand;
@@ -178,22 +180,27 @@ public class OperatorCommandMap {
             DisengageBrakeCommand disengageBrake,
             WinchFollowHookProportionallyCommand winchFollow,
             ScaleViaWinch scale,
-            SetHookPositionGoalCommand setMedium,
-            SetHookPositionGoalCommand setLarge){
+            RaiseHookToBarCommand raiseToBar,
+            ModifyHookTargetGoalCommand raiseHookOneInch,
+            ModifyHookTargetGoalCommand lowerHookOneInch){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
+        /*
         oi.operatorButtons.getifAvailable(10).whileHeld(winchExtend);
         oi.operatorButtons.getifAvailable(12).whileHeld(winchRetract);
-
+        */
+        
+        oi.operatorButtons.getifAvailable(10).whileHeld(raiseHookOneInch);
+        oi.operatorButtons.getifAvailable(12).whileHeld(lowerHookOneInch);
+        
         oi.rightButtons.getifAvailable(9).whenPressed(engageBrake);
         oi.rightButtons.getifAvailable(10).whenPressed(disengageBrake);
         
+        raiseHookOneInch.setIncrement(1);
+        lowerHookOneInch.setIncrement(-1);
 
-        setMedium.setTargetPosition(15);
-        setLarge.setTargetPosition(30);
-        oi.operatorButtons.getifAvailable(7).whenPressed(setMedium);
-        oi.operatorButtons.getifAvailable(8).whenPressed(setLarge);
+        oi.operatorButtons.getifAvailable(7).whenPressed(raiseToBar);
         
         //oi.leftButtons.getifAvailable(11).whileHeld(scale);
         oi.operatorPanelButtons.getifAvailable(8).whileHeld(winchFollow);
