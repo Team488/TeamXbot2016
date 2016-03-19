@@ -31,7 +31,9 @@ import competition.subsystems.drive.commands.CalibrateHeadingCommand;
 import competition.subsystems.drive.commands.DriveToDistanceCommand;
 import competition.subsystems.drive.commands.CalibrateInherentRioRotationCommand;
 import competition.subsystems.drive.commands.DriveToWallCommand;
+import competition.subsystems.drive.commands.EndPrecisionDriveCommand;
 import competition.subsystems.drive.commands.HeadingDriveCommand;
+import competition.subsystems.drive.commands.PrecisionDriveCommand;
 import competition.subsystems.hanger.hook_commands.HookExtendCommand;
 import competition.subsystems.hanger.hook_commands.HookRetractCommand;
 import competition.subsystems.hanger.winch_commands.ScaleViaWinch;
@@ -90,11 +92,20 @@ public class OperatorCommandMap {
             ShiftHighCommand shiftHighCommand,
             ShiftLowCommand shiftLowCommand)
     {
-        operatorInterface.rightButtons.getifAvailable(1).whenPressed(shiftLowCommand);
-        operatorInterface.leftButtons.getifAvailable(1).whenPressed(shiftHighCommand);
+        //operatorInterface.rightButtons.getifAvailable(1).whenPressed(shiftLowCommand);
+        //operatorInterface.leftButtons.getifAvailable(1).whenPressed(shiftHighCommand);
         
         //operatorInterface.driverGamePadButtons.getifAvailable(5).whenPressed(shiftLowCommand);
         //operatorInterface.driverGamePadButtons.getifAvailable(6).whenPressed(shiftHighCommand);
+    }
+    
+    @Inject
+    public void setupPrecisionDrive(
+            OperatorInterface oi,
+            PrecisionDriveCommand precisionDrive,
+            EndPrecisionDriveCommand endPrecision){
+        oi.rightButtons.getifAvailable(1).whenPressed(precisionDrive);
+        oi.leftButtons.getifAvailable(1).whenPressed(endPrecision);
     }
     
     @Inject
@@ -244,4 +255,6 @@ public class OperatorCommandMap {
         acquire.includeOnSmartDashboard();
         rioRotationCalibration.includeOnSmartDashboard();
     }
+    
+    
 }
