@@ -40,6 +40,7 @@ public class ArmSubsystem extends BaseSubsystem {
     DoubleProperty upperAngleLimit;
     
     BooleanProperty enableSafeArmOperation;
+    public BooleanProperty maintainerEnabled;
 
     @Inject
     public ArmSubsystem(WPIFactory factory, XPropertyManager propManager) {
@@ -52,6 +53,9 @@ public class ArmSubsystem extends BaseSubsystem {
         //upperLimitSwitch = factory.getDigitalInput(2);
         lowerLimitSwitch = factory.getDigitalInput(0);
         encoder = factory.getEncoder("ArmEncoder", 5, 4, 1.0);
+        
+        maintainerEnabled = propManager.createPersistentProperty("ArmAngleMaintainer isEnabled", true);
+        
         armAngleDegrees = propManager.createEphemeralProperty("armAngleDegrees", 0.0);
         lowerLimitSwitchProperty = propManager.createEphemeralProperty("armLowerLimitSwitchProperty", false);
         upperLimitSwitchProperty = propManager.createEphemeralProperty("armUpperLimitSwitchProperty", false);

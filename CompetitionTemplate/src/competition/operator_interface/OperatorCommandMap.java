@@ -8,6 +8,7 @@ import com.google.inject.Singleton;
 
 import competition.defense_commands.ChevalCommandGroup;
 import competition.defense_commands.ChevalCommandThatNeverStops;
+import competition.subsystems.arm.ArmSubsystem;
 import competition.subsystems.arm.arm_commands.ArmManualControlCommand;
 import competition.subsystems.arm.arm_commands.ArmToBottomCommand;
 import competition.subsystems.arm.arm_commands.ArmToDrawBridgeHeightCommand;
@@ -93,6 +94,13 @@ public class OperatorCommandMap {
         
         //operatorInterface.driverGamePadButtons.getifAvailable(5).whenPressed(shiftLowCommand);
         //operatorInterface.driverGamePadButtons.getifAvailable(6).whenPressed(shiftHighCommand);
+    }
+    
+    @Inject
+    public void setupSafetyOverrides(OperatorInterface operatorInterface, 
+            ArmSubsystem armSubsystem) {
+        operatorInterface.operatorPanelButtons.getifAvailable(10).whileHeld(
+                new BooleanPropertySetCommand(armSubsystem.maintainerEnabled, false));
     }
     
     @Inject
