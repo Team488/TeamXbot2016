@@ -114,9 +114,7 @@ public class OperatorCommandMap {
             ArmToScalingHeightCommand armToScalingHeightCommand,
             ArmToTravelHeightCommand armToTravelHeightCommand,
             ArmManualControlCommand armManual,
-            CalibrateArmLowCommand calibrateArmLow,
-            SetHookPositionGoalCommand setMedium,
-            SetHookPositionGoalCommand setLarge)
+            CalibrateArmLowCommand calibrateArmLow)
     {
         double minValue = 0.15;
         AnalogHIDDescription yUp = new AnalogHIDDescription(1, minValue, 1);
@@ -127,10 +125,6 @@ public class OperatorCommandMap {
         operatorInterface.operatorButtons.getAnalogIfAvailable(yUp).whileHeld(armManual);
         operatorInterface.operatorButtons.getAnalogIfAvailable(yDown).whileHeld(armManual);
         
-        setMedium.setTargetPosition(15);
-        setLarge.setTargetPosition(30);
-        operatorInterface.operatorButtons.getifAvailable(7).whenPressed(setMedium);
-        operatorInterface.operatorButtons.getifAvailable(8).whenPressed(setLarge);
         
         operatorInterface.operatorPanelButtons.getifAvailable(5).whenPressed(armToBottomCommand);
         operatorInterface.operatorPanelButtons.getifAvailable(6).whenPressed(armToTravelHeightCommand);
@@ -183,7 +177,9 @@ public class OperatorCommandMap {
             EngageBrakeCommand engageBrake,
             DisengageBrakeCommand disengageBrake,
             WinchFollowHookProportionallyCommand winchFollow,
-            ScaleViaWinch scale){
+            ScaleViaWinch scale,
+            SetHookPositionGoalCommand setMedium,
+            SetHookPositionGoalCommand setLarge){
         oi.operatorButtons.getifAvailable(9).whileHeld(hookExtend);
         oi.operatorButtons.getifAvailable(11).whileHeld(hookRetract);
         
@@ -192,6 +188,12 @@ public class OperatorCommandMap {
 
         oi.rightButtons.getifAvailable(9).whenPressed(engageBrake);
         oi.rightButtons.getifAvailable(10).whenPressed(disengageBrake);
+        
+
+        setMedium.setTargetPosition(15);
+        setLarge.setTargetPosition(30);
+        oi.operatorButtons.getifAvailable(7).whenPressed(setMedium);
+        oi.operatorButtons.getifAvailable(8).whenPressed(setLarge);
         
         //oi.leftButtons.getifAvailable(11).whileHeld(scale);
         oi.operatorPanelButtons.getifAvailable(8).whileHeld(winchFollow);
