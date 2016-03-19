@@ -11,6 +11,7 @@ public class BooleanPropertySetCommand extends BaseCommand {
     public BooleanPropertySetCommand(BooleanProperty property, boolean toValue) {
         this.property = property;
         this.toValue = toValue;
+        this.setRunWhenDisabled(true);
     }
 
     @Override
