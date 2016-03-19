@@ -18,7 +18,8 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
     SetArmToAngleCommand setArm;
     CalibrateHeadingCommand calibrateHeading;
     
-    DoubleProperty moveFirstDuration;
+    final DoubleProperty moveFirstDuration;
+    final DoubleProperty moveFirstPower;
     
     public String label;
     
@@ -37,6 +38,7 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         this.moveFirst = moveFirst;
         
         moveFirstDuration = propMan.createPersistentProperty("MoveFirstDuration", 0.75);
+        moveFirstPower = propMan.createPersistentProperty("MoveFirstPower", 0.4);
         
         this.addSequential(this.calibrateHeading);
         this.addSequential(moveFirst);
@@ -53,12 +55,13 @@ public class RaiseArmAndTraverseDefenseCommandGroup extends CommandGroup{
         moveFirst.setTargetHeading(heading);
         moveFirst.setTimeLimits(moveFirstDuration.get(), moveFirstDuration.get() + 0.05);
         
-        double moveFirstPower = 0.4;
+        double finalMoveFirstPower = this.moveFirstPower.get();
+        // Match sign
         if (power < 0) {
-            moveFirstPower *= -1;
+            finalMoveFirstPower *= -1;
         }
         
-        moveFirst.setPower(moveFirstPower);
+        moveFirst.setPower(finalMoveFirstPower);
     }
     
     public void setArmAngle(double goalAngle) {
