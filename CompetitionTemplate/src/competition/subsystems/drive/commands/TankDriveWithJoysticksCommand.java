@@ -6,6 +6,7 @@ import competition.operator_interface.OperatorInterface;
 import competition.subsystems.drive.DriveSubsystem;
 import xbot.common.command.BaseCommand;
 import xbot.common.properties.BooleanProperty;
+import xbot.common.properties.DoubleProperty;
 import xbot.common.properties.XPropertyManager;
 
 
@@ -14,6 +15,7 @@ public class TankDriveWithJoysticksCommand extends BaseCommand {
     final DriveSubsystem driveSubsystem;
     final OperatorInterface oi;
     final BooleanProperty enableSquaredTankInputs;
+    final DoubleProperty precisionFactor;
     
     @Inject
     public TankDriveWithJoysticksCommand(
@@ -26,6 +28,7 @@ public class TankDriveWithJoysticksCommand extends BaseCommand {
         this.requires(this.driveSubsystem);
         
         enableSquaredTankInputs = propMan.createPersistentProperty("EnableSquaredTankInputs-Joystick", false);
+        precisionFactor = propMan.createPersistentProperty("precisionFactor", 0.5);
     }
     
     @Override
@@ -42,6 +45,11 @@ public class TankDriveWithJoysticksCommand extends BaseCommand {
         if (enableSquaredTankInputs.get()) {
             left = left * Math.abs(left);
             right = right * Math.abs(right);
+        }
+        
+        if(this.driveSubsystem.enablePrecisionDrive.get()) {
+            left *= precisionFactor.get();
+            right *= precisionFactor.get();
         }
         
         driveSubsystem.tankDrive(left, right);

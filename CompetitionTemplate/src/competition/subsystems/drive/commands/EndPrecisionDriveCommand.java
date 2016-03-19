@@ -7,23 +7,24 @@ import xbot.common.properties.XPropertyManager;
 
 public class EndPrecisionDriveCommand extends BaseCommand{
     public DriveSubsystem drive;
-    DoubleProperty drivePower;
     
     public EndPrecisionDriveCommand(DriveSubsystem drive, XPropertyManager propMan){
         this.drive = drive;
-        drivePower = propMan.createPersistentProperty("drivePowerAfterPrecisionDrive", 1.0);
-        
-        this.requires(this.drive);
     }
 
     @Override
     public void initialize() {
-        drive.tankDrive(drivePower.get(), drivePower.get());
+        drive.enablePrecisionDrive.set(false);
     }
 
     @Override
     public void execute() {
 
+    }
+    
+    @Override
+    public boolean isFinished() {
+        return true;
     }
 
 }

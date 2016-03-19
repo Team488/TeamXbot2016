@@ -36,6 +36,7 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
     private DoubleProperty rightPowerProp;
     
     public BooleanProperty enableSafeTankDrive;
+    public final BooleanProperty enablePrecisionDrive;
     
     private Latch extremePitchLatch;
         
@@ -62,6 +63,9 @@ public class DriveSubsystem extends BaseSubsystem implements Observer {
         rightPowerProp = propManager.createEphemeralProperty("RightPower", 0.0);
         
         enableSafeTankDrive = propManager.createPersistentProperty("EnableSafeTankDrive", false);
+        
+        enablePrecisionDrive = propManager.createEphemeralProperty("EnablePrecisionDrive", false);
+        
         extremePitchLatch = new Latch(false, EdgeType.Both);
         extremePitchLatch.addObserver(this);
     }
