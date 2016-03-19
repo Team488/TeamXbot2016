@@ -21,7 +21,7 @@ public class LightingSubsystem extends BaseSubsystem {
     private DoubleProperty ledSignalProp;
     private BooleanProperty enableVisionLEDProp;
     
-    public static final int initialOutputPin = 15;
+    public static final int initialOutputPin = 19;
     public static final int numOutputPins = 4;
     
     public static enum LightingState {
@@ -128,11 +128,12 @@ public class LightingSubsystem extends BaseSubsystem {
         {
             log.warn("LED data lost (not enough pins!)");
         }
-        
+
         // Send over DIO
         for(int i = 0; i < outputPins.length; i++)
         {
-            outputPins[i].set((data & (1 << i)) != 0);
+            boolean bitValue = (data & (1 << i)) != 0;
+            outputPins[i].set(bitValue);
         }
         
         // Send over Network Tables (in Smart Dashboard table)
